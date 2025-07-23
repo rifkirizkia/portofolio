@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <title>Portofolio Pribadi</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#0A192F", secondary: "#64FFDA" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <style>
+      :where([class^="ri-"])::before {
+        content: "\f3c2";
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        scroll-behavior: smooth;
+      }
+      .fade-up {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .fade-down {
+        opacity: 0;
+        transform: translateY(-30px);
+        transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .fade-left {
+        opacity: 0;
+        transform: translateX(-30px);
+        transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .fade-right {
+        opacity: 0;
+        transform: translateX(30px);
+        transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .fade-in {
+        opacity: 0;
+        transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .scale-up {
+        opacity: 0;
+        transform: scale(0.95);
+        transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1),
+          transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .show {
+        opacity: 1;
+        transform: translate(0) scale(1);
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Poppins", sans-serif;
+      }
+      .hero-section {
+        background-image: linear-gradient(
+            to right,
+            rgba(10, 25, 47, 0.95),
+            rgba(10, 25, 47, 0.8)
+          ),
+          url("https://readdy.ai/api/search-image?query=abstract%20modern%20tech%20background%20with%20subtle%20blue%20gradient%2C%20professional%20clean%20design%2C%20minimalist%20tech%20pattern%2C%20suitable%20for%20portfolio%20website&width=1920&height=1080&seq=1&orientation=landscape");
+        background-size: cover;
+        background-position: center;
+      }
+      .timeline-dot {
+        width: 16px;
+        height: 16px;
+        background-color: #64ffda;
+        border-radius: 50%;
+        position: absolute;
+        left: -8px;
+        top: 24px;
+      }
+      .timeline-line {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background-color: #cbd5e1;
+      }
+      .skill-card {
+        transition: transform 0.3s ease;
+      }
+      .skill-card:hover {
+        transform: translateY(-5px);
+      }
+      .project-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      }
+      .award-card {
+        transition: transform 0.3s ease;
+      }
+      .award-card:hover {
+        transform: scale(1.03);
+      }
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      @media (max-width: 768px) {
+        .timeline-dot {
+          left: 20px;
+        }
+        .timeline-line {
+          left: 28px;
+        }
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Header/Navbar -->
+    <header class="fixed w-full bg-white bg-opacity-95 shadow-sm z-50">
+      <div
+        class="container mx-auto px-4 py-3 flex justify-between items-center"
+      >
+        <a href="#" class="text-2xl font-['Poppins'] font-bold text-primary"
+          >Portofolio</a
+        >
+        <!-- Desktop Menu -->
+        <nav class="hidden md:flex space-x-8">
+          <a
+            href="#tentang"
+            class="font-medium hover:text-secondary transition-colors"
+            >Tentang</a
+          >
+          <a
+            href="#pengalaman"
+            class="font-medium hover:text-secondary transition-colors"
+            >Pengalaman</a
+          >
+          <a
+            href="#projek"
+            class="font-medium hover:text-secondary transition-colors"
+            >Projek</a
+          >
+          <a
+            href="#organisasi"
+            class="font-medium hover:text-secondary transition-colors"
+            >Organisasi</a
+          >
+          <a
+            href="#penghargaan"
+            class="font-medium hover:text-secondary transition-colors"
+            >Penghargaan</a
+          >
+          <a
+            href="#kontak"
+            class="font-medium hover:text-secondary transition-colors"
+            >Kontak</a
+          >
+        </nav>
+        <!-- Mobile Menu Button -->
+        <button
+          id="mobileMenuButton"
+          class="md:hidden w-10 h-10 flex items-center justify-center text-primary"
+        >
+          <i class="ri-menu-line ri-lg"></i>
+        </button>
+      </div>
+      <!-- Mobile Menu -->
+      <div id="mobileMenu" class="hidden md:hidden bg-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
+          <a
+            href="#tentang"
+            class="font-medium py-2 hover:text-secondary transition-colors"
+            >Tentang</a
+          >
+          <a
+            href="#pengalaman"
+            class="font-medium py-2 hover:text-secondary transition-colors"
+            >Pengalaman</a
+          >
+          <a
+            href="#projek"
+            class="font-medium py-2 hover:text-secondary transition-colors"
+            >Projek</a
+          >
+          <a
+            href="#organisasi"
+            class="font-medium py-2 hover:text-secondary transition-colors"
+            >Organisasi</a
+          >
+          <a
+            href="#penghargaan"
+            class="font-medium py-2 hover:text-secondary transition-colors"
+            >Penghargaan</a
+          >
+          <a
+            href="#kontak"
+            class="font-medium py-2 hover:text-secondary transition-colors"
+            >Kontak</a
+          >
+        </div>
+      </div>
+    </header>
+    <!-- Hero Section -->
+    <section class="hero-section min-h-screen flex items-center pt-16">
+      <div class="container mx-auto px-4 py-20 md:py-32 w-full">
+        <div
+          class="flex flex-col md:flex-row items-center justify-between gap-12"
+        >
+          <div class="w-full md:w-1/2 text-center md:text-left">
+            <h1
+              class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 fade-down"
+            >
+              Rifki Rizkia
+            </h1>
+            <p
+              class="text-xl md:text-2xl text-secondary font-medium mb-8 fade-up"
+            >
+              Mobile Developer & DevOps Junior
+            </p>
+            <p class="text-gray-300 mb-10 max-w-lg mx-auto md:mx-0 fade-up"></p>
+
+            <p class="text-gray-300 mb-10 max-w-lg mx-auto md:mx-0">
+              Saya berfokus pada pengembangan aplikasi mobile yang intuitif dan
+              performa tinggi, dengan minat mendalam pada DevOps untuk
+              otomatisasi dan efisiensi pengembangan.
+            </p>
+            <div
+              class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
+            >
+              <a
+                href="#projek"
+                class="bg-secondary text-primary font-medium px-6 py-3 !rounded-button whitespace-nowrap hover:bg-opacity-90 transition-all"
+                >Lihat Portofolio</a
+              >
+              <a
+                href="#kontak"
+                class="border-2 border-secondary text-secondary font-medium px-6 py-3 !rounded-button whitespace-nowrap hover:bg-secondary hover:bg-opacity-10 transition-all"
+                >Hubungi Saya</a
+              >
+            </div>
+          </div>
+          <div class="w-full md:w-1/2 flex justify-center md:justify-end">
+            <div class="relative w-300 h-300 md:w-80 md:h-300 fade-left">
+              <img
+                src="asset/foto.png"
+                alt="Arya Wijaya"
+                class="w-full h-full object-contain object-top"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Tentang Saya Section -->
+    <section id="tentang" class="py-20 bg-white">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 fade-up">
+          Tentang Saya
+        </h2>
+        <div class="flex flex-col lg:flex-row gap-12">
+          <div class="w-full lg:w-1/2">
+            <p class="text-lg leading-relaxed mb-6">
+              Saya adalah seorang Mobile Developer dengan pengalaman lebih dari
+              3 tahun dalam pengembangan aplikasi mobile menggunakan Flutter dan
+              React Native. Saya juga mampu untuk mendeploy aplikasi ke playstore dan appstore mau itu aplikasi baru ataupun pembaharuan aplikasi. Saya memiliki ketertarikan yang kuat pada UI/UX
+              design dan DevOps, yang memungkinkan saya untuk menciptakan
+              aplikasi yang tidak hanya fungsional tetapi juga menarik secara
+              visual.
+            </p>
+            <p class="text-lg leading-relaxed mb-6">
+              Latar belakang saya dalam pengembangan mobile dan minat pada
+              DevOps memungkinkan saya untuk memahami siklus hidup pengembangan
+              perangkat lunak secara menyeluruh, dari desain hingga deployment
+              dan pemeliharaan.
+            </p>
+            <p class="text-lg leading-relaxed">
+              Saya selalu bersemangat untuk belajar teknologi baru dan
+              meningkatkan keterampilan saya. Saat ini, saya sedang memperdalam
+              pengetahuan saya tentang praktik DevOps dan arsitektur cloud untuk
+              meningkatkan efisiensi dan skalabilitas aplikasi yang saya
+              kembangkan.
+            </p>
+          </div>
+          <div class="w-full lg:w-1/2">
+            <h3 class="text-2xl font-semibold mb-8">Keahlian</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Flutter -->
+              <div
+                data-aos="flip-right"
+                data-aos-delay="0"
+                class="skill-card bg-white shadow-md rounded-lg p-6 border border-gray-100"
+              >
+                <div
+                  class="w-12 h-12 flex items-center justify-center bg-blue-100 rounded-full mb-4"
+                >
+                  <i class="ri-code-s-slash-line ri-lg text-blue-600"></i>
+                </div>
+                <h4 class="text-xl font-semibold mb-2">Flutter</h4>
+                <p class="text-gray-600 mb-4">
+                  Pengembangan aplikasi cross-platform dengan UI yang menarik
+                  dan performa tinggi
+                </p>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    class="bg-blue-500 h-2 rounded-full"
+                    style="width: 90%"
+                  ></div>
+                </div>
+              </div>
+              <!-- React Native -->
+              <div
+                data-aos="flip-right"
+                data-aos-delay="300"
+                class="skill-card bg-white shadow-md rounded-lg p-6 border border-gray-100"
+              >
+                <div
+                  class="w-12 h-12 flex items-center justify-center bg-blue-100 rounded-full mb-4"
+                >
+                  <i class="ri-reactjs-line ri-lg text-blue-600"></i>
+                </div>
+                <h4 class="text-xl font-semibold mb-2">React Native</h4>
+                <p class="text-gray-600 mb-4">
+                  Membuat aplikasi native dengan JavaScript dan komponen React
+                </p>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    class="bg-blue-500 h-2 rounded-full"
+                    style="width: 85%"
+                  ></div>
+                </div>
+              </div>
+              <!-- UI/UX -->
+              <div
+                data-aos="flip-right"
+                data-aos-delay="0"
+                class="skill-card bg-white shadow-md rounded-lg p-6 border border-gray-100"
+              >
+                <div
+                  class="w-12 h-12 flex items-center justify-center bg-blue-100 rounded-full mb-4"
+                >
+                  <i class="ri-palette-line ri-lg text-blue-600"></i>
+                </div>
+                <h4 class="text-xl font-semibold mb-2">UI/UX</h4>
+                <p class="text-gray-600 mb-4">
+                  Desain antarmuka yang intuitif dan pengalaman pengguna yang
+                  menyenangkan
+                </p>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    class="bg-blue-500 h-2 rounded-full"
+                    style="width: 80%"
+                  ></div>
+                </div>
+              </div>
+              <!-- DevOps -->
+              <div
+                data-aos="flip-right"
+                data-aos-delay="300"
+                class="skill-card bg-white shadow-md rounded-lg p-6 border border-gray-100"
+              >
+                <div
+                  class="w-12 h-12 flex items-center justify-center bg-blue-100 rounded-full mb-4"
+                >
+                  <i class="ri-server-line ri-lg text-blue-600"></i>
+                </div>
+                <h4 class="text-xl font-semibold mb-2">DevOps</h4>
+                <p class="text-gray-600 mb-4">
+                  Otomatisasi CI/CD, deployment, dan docker. 
+                </p>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    class="bg-blue-500 h-2 rounded-full"
+                    style="width: 75%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Pengalaman Kerja Section -->
+    <section id="pengalaman" class="py-20 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 fade-up">
+          Pengalaman Kerja
+        </h2>
+        <div class="max-w-3xl mx-auto">
+          <!-- Timeline -->
+          <div class="relative">
+            <!-- Timeline Line -->
+            <div class="timeline-line hidden md:block"></div>
+            <!-- Experience 1 -->
+            <div class="flex flex-col md:flex-row mb-12 relative">
+              <div
+                data-aos="fade-right"
+                class="hidden md:block w-1/3 pr-8 text-right"
+              >
+                <p class="text-gray-500">Jan 2023 – Jul 2023</p>
+              </div>
+              <div data-aos="fade-right" class="md:hidden mb-2">
+                <p class="text-gray-500">Jan 2023 – Jul 2023</p>
+              </div>
+              <div class="timeline-dot hidden md:block"></div>
+              <div
+                data-aos="zoom-in-down"
+                class="md:w-2/3 md:pl-8 pl-12 relative"
+              >
+                <div class="timeline-dot md:hidden"></div>
+                <div
+                  class="bg-white p-6 rounded-lg shadow-md border border-gray-100"
+                >
+                  <h3 class="text-xl font-bold text-primary mb-2">
+                    Radya Labs
+                  </h3>
+                  <h4 class="text-lg font-medium text-gray-700 mb-4">
+                    Mobile Developer (Magang)
+                  </h4>
+                  <p class="text-gray-600">
+                    Mengembangkan aplikasi mobile menggunakan Flutter untuk
+                    klien perusahaan. Bertanggung jawab untuk implementasi UI/UX
+                    design, integrasi API, dan pengujian aplikasi. Berkolaborasi
+                    dengan tim design dan backend untuk memastikan kualitas
+                    produk.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- Experience 2 -->
+            <div class="flex flex-col md:flex-row mb-12 relative">
+              <div
+                data-aos="fade-right"
+                class="hidden md:block w-1/3 pr-8 text-right"
+              >
+                <p class="text-gray-500">Nov 2023 – Sekarang</p>
+              </div>
+              <div data-aos="fade-right" class="md:hidden mb-2">
+                <p class="text-gray-500">Nov 2023 – Sekarang</p>
+              </div>
+              <div class="timeline-dot hidden md:block"></div>
+              <div
+                data-aos="zoom-in-down"
+                class="md:w-2/3 md:pl-8 pl-12 relative"
+              >
+                <div class="timeline-dot md:hidden"></div>
+                <div
+                  class="bg-white p-6 rounded-lg shadow-md border border-gray-100"
+                >
+                  <h3 class="text-xl font-bold text-primary mb-2">elSpasial</h3>
+                  <h4 class="text-lg font-medium text-gray-700 mb-4">
+                    Mobile Developer
+                  </h4>
+                  <p class="text-gray-600">
+                    Memimpin pengembangan aplikasi mobile untuk berbagai proyek
+                    perusahaan. Menggunakan Flutter dan React Native untuk
+                    membangun aplikasi yang responsif dan performa tinggi.
+                    Menerapkan best practices dalam pengembangan mobile dan
+                    berkolaborasi dengan tim cross-functional.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <!-- Experience 3 (Current) -->
+            <div class="flex flex-col md:flex-row relative">
+              <div
+                data-aos="fade-right"
+                class="hidden md:block w-1/3 pr-8 text-right"
+              >
+                <p class="text-secondary font-medium">Jun 2025 – Sekarang</p>
+              </div>
+              <div data-aos="fade-right" class="md:hidden mb-2">
+                <p class="text-secondary font-medium">Jun 2025 – Sekarang</p>
+              </div>
+              <div class="timeline-dot hidden md:block bg-secondary"></div>
+              <div
+                data-aos="zoom-in-down"
+                class="md:w-2/3 md:pl-8 pl-12 relative"
+              >
+                <div class="timeline-dot md:hidden bg-secondary"></div>
+                <div
+                  class="bg-white p-6 rounded-lg shadow-md border-2 border-secondary"
+                >
+                  <h3 class="text-xl font-bold text-primary mb-2">elSpasial</h3>
+                  <h4 class="text-lg font-medium text-gray-700 mb-4">
+                    DevOps Engineer
+                  </h4>
+                  <p class="text-gray-600">
+                    Beralih karir ke DevOps untuk fokus pada otomatisasi
+                    deployment, CI/CD pipeline, dan infrastruktur cloud.
+                    Mengelola dan mengoptimalkan infrastruktur menggunakan
+                    Kubernetes, Docker, dan tools DevOps lainnya. Berkolaborasi
+                    dengan tim pengembangan untuk meningkatkan efisiensi dan
+                    kualitas proses delivery software.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Projek Section -->
+    <section id="projek" class="py-20 bg-white">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 fade-up">
+          Projek
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Project 1 -->
+          <!-- <div
+            data-aos="flip-up"
+            data-aos-delay="0"
+            class="project-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-100"
+          >
+            <div class="h-48 overflow-hidden">
+              <img
+                src="https://readdy.ai/api/search-image?query=mobile%20app%20UI%20for%20education%20platform%2C%20clean%20modern%20design%2C%20student%20dashboard%20with%20courses%20and%20test%20preparation%20features%2C%20professional%20UI%20mockup&width=600&height=400&seq=3&orientation=landscape"
+                alt="Go UTBK"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">Go UTBK</h3>
+              <p class="text-gray-600 mb-4">
+                Aplikasi persiapan ujian masuk perguruan tinggi dengan fitur
+                latihan soal, pembahasan, dan prediksi nilai.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >Flutter</span
+                >
+                <span
+                  class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >Firebase</span
+                >
+                <span
+                  class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >REST API</span
+                >
+              </div>
+            </div>
+          </div> -->
+          <!-- Project 2 -->
+          <div
+            data-aos="flip-up"
+            data-aos-delay="300"
+            class="project-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-100"
+          >
+            <div class="h-48 overflow-hidden">
+              <img
+                src="asset/1.png"
+                alt="Evillage"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">Evillage</h3>
+              <p class="text-gray-600 mb-4">
+                Sistem manajemen desa digital untuk memudahkan administrasi dan
+                pelayanan publik di tingkat desa.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >Flutter</span
+                >
+                <span
+                  class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >Firebase</span
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Project 3 -->
+          <div
+            data-aos="flip-up"
+            data-aos-delay="600"
+            class="project-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-100"
+          >
+            <div class="h-48 overflow-hidden">
+              <img
+                src="asset/2.png"
+                alt="Elkopra"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">Elkopra</h3>
+              <p class="text-gray-600 mb-4">
+                Aplikasi manajemen koperasi digital dengan fitur simpan pinjam,
+                laporan keuangan, ppob, dan pos cafe.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span
+                class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                >Flutter</span
+              >
+              </div>
+            </div>
+          </div>
+          <!-- Project 4 -->
+          <div
+            data-aos="flip-up"
+            data-aos-delay="0"
+            class="project-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-100"
+          >
+            <div class="h-48 overflow-hidden">
+              <img
+                src="asset/3.png"
+                alt="Kopkar Toyota"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">Kopkar Toyota</h3>
+              <p class="text-gray-600 mb-4">
+                Aplikasi koperasi karyawan Toyota dengan fitur simpan pinjam,
+                laporan keuangan, integrasi dengan vending machine seperti JumpStart dan PIMA serta fitur pos cafe.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >Flutter</span
+                >
+                
+              </div>
+            </div>
+          </div>
+          <!-- Project 5 -->
+          <div
+            data-aos="flip-up"
+            data-aos-delay="300"
+            class="project-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-100"
+          >
+            <div class="h-48 overflow-hidden">
+              <img
+                src="asset/4.png"
+                alt="Naiq User"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">Naiq User</h3>
+              <p class="text-gray-600 mb-4">
+                Aplikasi antar jemput karyawan Toyota dengan fitur pemesanan jemputan mobil menggunakan pembayaran digital.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >Flutter</span
+                >
+                <span
+                  class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >React Native</span
+                >
+                <span
+                  class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >Google Maps API</span
+                >
+                <span
+                  class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >Firebase</span
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Project 6 -->
+          <div
+            data-aos="flip-up"
+            data-aos-delay="600"
+            class="project-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-100"
+          >
+            <div class="h-48 overflow-hidden">
+              <img
+                src="asset/5.png"
+                alt="Naiq Driver"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">Naiq Driver</h3>
+              <p class="text-gray-600 mb-4">
+                Aplikasi driver untuk menjemput karyawan Toyota dengan fitur tracking jalur, melihat data penumpang, checkin penumpang, dan livetracking.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >Flutter</span
+                >
+                <span
+                  class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >React Native</span
+                >
+                <span
+                  class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >Google Maps API</span
+                >
+                <span
+                  class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >Firebase</span
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Project 7 -->
+          <div
+            data-aos="flip-up"
+            data-aos-delay="0"
+            class="project-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-100"
+          >
+            <div class="h-48 overflow-hidden">
+              <img
+                src="asset/6.png"
+                alt="Keuanganku"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">Keuanganku</h3>
+              <p class="text-gray-600 mb-4">
+                Aplikasi manajemen keuangan pribadi dengan fitur pencatatan pendapatan dan
+                pengeluaran, analisis keuangan, wishlist, dan fitur chat menggunakan realtime database dari firebase.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >Flutter</span
+                >
+                <span
+                  class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >Firebase</span
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Project 8 -->
+          <div
+            data-aos="flip-up"
+            data-aos-delay="300"
+            class="project-card bg-white rounded-lg shadow-md overflow-hidden border border-gray-100"
+          >
+            <div class="h-48 overflow-hidden">
+              <img
+                src="https://readdy.ai/api/search-image?query=restaurant%20and%20store%20management%20app%20UI%2C%20modern%20interface%20with%20inventory%20management%2C%20order%20processing%2C%20and%20sales%20analytics%2C%20professional%20UI%20mockup&width=600&height=400&seq=10&orientation=landscape"
+                alt="Toko Resto"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">Toko Resto</h3>
+              <p class="text-gray-600 mb-4">
+                Aplikasi manajemen toko dan restoran dengan fitur inventaris,
+                pemrosesan pesanan, dan analisis penjualan.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span
+                  class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >Flutter</span
+                >
+                <span
+                  class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >Node.js</span
+                >
+                <span
+                  class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >MongoDB</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Organisasi Section -->
+    <section id="organisasi" class="py-20 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 fade-up">
+          Organisasi
+        </h2>
+        <div
+          class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-8 border border-gray-100"
+        >
+          <div class="flex flex-col md:flex-row items-center gap-8 fade-up">
+            <div
+              class="w-32 h-32 flex items-center justify-center bg-primary rounded-full scale-up"
+            >
+              <i class="ri-team-line ri-3x text-white"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold mb-4">Danurdara</h3>
+              <p class="text-gray-600 mb-4">
+                Aktif sebagai anggota Danurdara, sebuah organisasi yang berfokus
+                pada pengembangan teknologi dan inovasi digital untuk membantu
+                masyarakat. Terlibat dalam berbagai proyek sosial dan edukasi
+                teknologi untuk generasi muda.
+              </p>
+              <p class="text-gray-600">
+                Sebagai bagian dari tim teknologi, saya berkontribusi dalam
+                pengembangan aplikasi mobile untuk mendukung program-program
+                organisasi dan memberikan pelatihan coding untuk anggota baru.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Penghargaan Section -->
+    <section id="penghargaan" class="py-20 bg-white">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 fade-up">
+          Penghargaan
+        </h2>
+        <div
+          class="award-card bg-white rounded-lg flex flex-col justify-center items-center max-w-4xl mx-auto shadow-md p-6 mb-6 border border-gray-100 fade-in"
+        >
+          <div class="w-16 h-16 flex items-center justify-center bg-yellow-100 rounded-full mb-6">
+            <i class="ri-award-line ri-xl text-yellow-600"></i>
+          </div>
+          <h3 class="text-xl font-bold text-center mb-2">Juara 2</h3>
+          <p class="text-gray-700 text-center mb-2">
+            Mahasiswa Berprestasi Program Diploma Tingkat Universitas
+          </p>
+          <p class="text-gray-500 text-center">2023</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <!-- Award 1 -->
+          
+          <div
+            class="award-card bg-white rounded-lg shadow-md p-6 border border-gray-100 fade-in"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mb-4 mx-auto"
+            >
+              <i class="ri-trophy-line ri-xl text-primary"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-2">Juara 1</h3>
+            <p class="text-gray-700 text-center mb-2">Lomba Swichfest UI/UX</p>
+            <p class="text-gray-500 text-center">2023</p>
+          </div>
+          <div
+            class="award-card bg-white rounded-lg shadow-md p-6 border border-gray-100 fade-in"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mb-4 mx-auto"
+            >
+              <i class="ri-trophy-line ri-xl text-primary"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-2">Juara 1</h3>
+            <p class="text-gray-700 text-center mb-2">Lomba Java Business Competition UI/UX Design</p>
+            <p class="text-gray-500 text-center">2022</p>
+          </div>
+          <div
+            class="award-card bg-white rounded-lg shadow-md p-6 border border-gray-100 fade-in"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mb-4 mx-auto"
+            >
+              <i class="ri-trophy-line ri-xl text-primary"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-2">Juara 1</h3>
+            <p class="text-gray-700 text-center mb-2">Lomba Bussiness Plan Competition HMPS tingkat Nasional </p>
+            <p class="text-gray-500 text-center">2021</p>
+          </div>
+          
+          <div
+            class="award-card bg-white rounded-lg shadow-md p-6 border border-gray-100 fade-in"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-yellow-100 rounded-full mb-4 mx-auto"
+            >
+              <i class="ri-award-line ri-xl text-yellow-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-2">Juara 2</h3>
+            <p class="text-gray-700 text-center mb-2">Lomba UI/UX FIKFAIR </p>
+            <p class="text-gray-500 text-center">2022</p>
+          </div>
+          <!-- Award 2 -->
+          <div
+            class="award-card bg-white rounded-lg shadow-md p-6 border border-gray-100 fade-in"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-blue-100 rounded-full mb-4 mx-auto"
+            >
+              <i class="ri-medal-line ri-xl text-blue-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-2">Juara 3</h3>
+            <p class="text-gray-700 text-center mb-2">Inspace UI/UX</p>
+            <p class="text-gray-500 text-center">2023</p>
+          </div>
+          <div
+            class="award-card bg-white rounded-lg shadow-md p-6 border border-gray-100 fade-in"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-blue-100 rounded-full mb-4 mx-auto"
+            >
+              <i class="ri-medal-line ri-xl text-blue-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-2">Juara 3</h3>
+            <p class="text-gray-700 text-center mb-2">FIT Competition Award</p>
+            <p class="text-gray-500 text-center">2022</p>
+          </div>
+          <div
+            class="award-card bg-white rounded-lg shadow-md p-6 border border-gray-100 fade-in"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-blue-100 rounded-full mb-4 mx-auto"
+            >
+              <i class="ri-medal-line ri-xl text-blue-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-2">Juara 3</h3>
+            <p class="text-gray-700 text-center mb-2">Lomba Pembuatan Website LLDIKTI 4</p>
+            <p class="text-gray-500 text-center">2022</p>
+          </div>
+          <div
+            class="award-card bg-white rounded-lg shadow-md p-6 border border-gray-100 fade-in"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-blue-100 rounded-full mb-4 mx-auto"
+            >
+              <i class="ri-medal-line ri-xl text-blue-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-2">Juara 3</h3>
+            <p class="text-gray-700 text-center mb-2">Lomba ByFest web design</p>
+            <p class="text-gray-500 text-center">2021</p>
+          </div>
+          <div
+            class="award-card bg-white rounded-lg shadow-md p-6 border border-gray-100 fade-in"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center bg-blue-100 rounded-full mb-4 mx-auto"
+            >
+              <i class="ri-medal-line ri-xl text-blue-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-center mb-2">Juara 3</h3>
+            <p class="text-gray-700 text-center mb-2">Lomba Teknofest UI/UX </p>
+            <p class="text-gray-500 text-center">2021</p>
+          </div>
+          
+          <!-- Award 3 -->
+          
+        </div>
+      </div>
+          
+        </div>
+      </div>
+      
+    </section>
+    <!-- Kontak Section -->
+    <section id="kontak" class="py-20 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 fade-up">
+          Hubungi Saya
+        </h2>
+        <div class="flex justify-center">
+          <div class="bg-white rounded-lg shadow-md p-8 border border-gray-100 w-full max-w-5xl">
+            
+            <div class="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-gray-200">
+              
+              <!-- Kiri: Email & Lokasi -->
+              <div class="w-full lg:w-1/2 flex justify-center items-center pr-0 lg:pr-6 pb-6 lg:pb-0">
+                <div class="space-y-6">
+                  <h3 class="text-2xl font-bold mb-6 text-center">Informasi Kontak</h3>
+                  <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mt-1">
+                      <i class="ri-mail-line text-primary"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-gray-700 mb-1">Email</h4>
+                      <p class="text-gray-600">rifkirizkia91@gmail.com</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 flex items-center justify-center bg-primary bg-opacity-10 rounded-full mt-1">
+                      <i class="ri-map-pin-line text-primary"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-gray-700 mb-1">Lokasi</h4>
+                      <p class="text-gray-600">Bandung, Indonesia</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+    
+              <!-- Kanan: Media Sosial -->
+              <div class="w-full lg:w-1/2 flex justify-center pl-0 lg:pl-6 pt-6 lg:pt-0">
+                <div>
+                  <h3 class="text-2xl font-bold mb-6 text-center">Media Sosial</h3>
+                  <div class="flex gap-4 justify-center">
+                    <!-- WhatsApp -->
+                    <a href="https://wa.link/v51flf" target="_blank" class="w-12 h-12 flex items-center justify-center bg-green-500 text-white rounded-full hover:bg-opacity-90 transition-all">
+                      <i class="ri-whatsapp-line ri-lg"></i>
+                    </a>
+                    <!-- LinkedIn -->
+                    <a href="https://www.linkedin.com/in/rifki-rizkia/" target="_blank" class="w-12 h-12 flex items-center justify-center bg-blue-600 text-white rounded-full hover:bg-opacity-90 transition-all">
+                      <i class="ri-linkedin-line ri-lg"></i>
+                    </a>
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/rifkirizkia.dart/" target="_blank" class="w-12 h-12 flex items-center justify-center bg-pink-500 text-white rounded-full hover:bg-opacity-90 transition-all">
+                      <i class="ri-instagram-line ri-lg"></i>
+                    </a>
+                    <!-- GitHub -->
+                    <a href="https://github.com/rifkirizkia" target="_blank" class="w-12 h-12 flex items-center justify-center bg-gray-800 text-white rounded-full hover:bg-opacity-90 transition-all">
+                      <i class="ri-github-line ri-lg"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+    
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    
+    
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-6 md:mb-0">
+            <h3 class="text-2xl font-bold mb-2">Rifki Rizkia</h3>
+            <p class="text-gray-300">Mobile Developer & DevOps Junior</p>
+          </div>
+          <div class="text-center md:text-right">
+            <p class="text-gray-300">
+              © 2025 Rifki Rizkia. All rights reserved.
+            </p>
+            <p class="text-gray-400 mt-2">Last updated: 23 Juli 2025</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init();
+    </script>
+    <script id="mobileMenuScript">
+      document.addEventListener("DOMContentLoaded", function () {
+        const mobileMenuButton = document.getElementById("mobileMenuButton");
+        const mobileMenu = document.getElementById("mobileMenu");
+        mobileMenuButton.addEventListener("click", function () {
+          mobileMenu.classList.toggle("hidden");
+          // Toggle icon
+          const icon = mobileMenuButton.querySelector("i");
+          if (icon.classList.contains("ri-menu-line")) {
+            icon.classList.remove("ri-menu-line");
+            icon.classList.add("ri-close-line");
+          } else {
+            icon.classList.remove("ri-close-line");
+            icon.classList.add("ri-menu-line");
+          }
+        });
+        // Close menu when clicking on links
+        const mobileLinks = mobileMenu.querySelectorAll("a");
+        mobileLinks.forEach((link) => {
+          link.addEventListener("click", function () {
+            mobileMenu.classList.add("hidden");
+            const icon = mobileMenuButton.querySelector("i");
+            icon.classList.remove("ri-close-line");
+            icon.classList.add("ri-menu-line");
+          });
+        });
+      });
+    </script>
+    <script id="contactFormScript">
+      document.addEventListener("DOMContentLoaded", function () {
+        const contactForm = document.getElementById("contactForm");
+        const submitBtn = document.getElementById("submitBtn");
+        contactForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          // Get form values
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const message = document.getElementById("message").value;
+          // Validate form
+          if (!name || !email || !message) {
+            alert("Mohon isi semua field yang diperlukan");
+            return;
+          }
+          // Show loading state
+          const originalBtnText = submitBtn.textContent;
+          submitBtn.textContent = "Mengirim...";
+          submitBtn.disabled = true;
+          // Simulate form submission
+          setTimeout(() => {
+            // Reset form
+            contactForm.reset();
+            // Show success message
+            alert(
+              "Pesan berhasil dikirim! Terima kasih telah menghubungi saya."
+            );
+            // Reset button
+            submitBtn.textContent = originalBtnText;
+            submitBtn.disabled = false;
+          }, 1500);
+        });
+      });
+    </script>
+    <script id="scrollAnimationScript">
+      document.addEventListener("DOMContentLoaded", function () {
+        const animateElements = document.querySelectorAll(
+          ".fade-up, .fade-down, .fade-left, .fade-right, .fade-in, .scale-up"
+        );
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry, index) => {
+              if (entry.isIntersecting) {
+                setTimeout(() => {
+                  entry.target.classList.add("show");
+                }, index * 100);
+              }
+            });
+          },
+          {
+            threshold: 0.2,
+            rootMargin: "0px 0px -100px 0px",
+          }
+        );
+        animateElements.forEach((element) => {
+          observer.observe(element);
+        });
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+          anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute("href");
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+              const headerHeight =
+                document.querySelector("header").offsetHeight;
+              const targetPosition =
+                targetElement.getBoundingClientRect().top +
+                window.scrollY -
+                headerHeight;
+              window.scrollTo({
+                top: targetPosition,
+                behavior: "smooth",
+              });
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
