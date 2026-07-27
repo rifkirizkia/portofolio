@@ -115,6 +115,15 @@
         100% { transform: translate(-50px, 20px) scale(0.9); }
       }
 
+      /* Typing Cursor Animation */
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
+      .animate-blink {
+        animation: blink 0.8s infinite;
+      }
+
       /* AOS Animations */
       .fade-up { opacity: 0; transform: translateY(30px); transition: all 1s cubic-bezier(0.4, 0, 0.2, 1); }
       .fade-down { opacity: 0; transform: translateY(-30px); transition: all 1s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -295,12 +304,10 @@
               Rifki Rizkia
             </h1>
             <p class="text-2xl md:text-3xl text-gray-600 dark:text-gray-400 font-medium mb-6 fade-right" data-aos="fade-right" data-aos-delay="200">
-              Mobile Developer & DevOps Junior
+              <span id="typewriter-text"></span><span class="text-secondary dark:text-secondary animate-blink">|</span>
             </p>
             <p class="text-gray-600 dark:text-gray-400 mb-10 max-w-lg mx-auto md:mx-0 text-lg leading-relaxed fade-up" data-aos="fade-up" data-aos-delay="300">
-              Saya berfokus pada pengembangan aplikasi mobile yang intuitif dan
-              performa tinggi, dengan minat mendalam pada DevOps untuk
-              otomatisasi dan efisiensi pengembangan.
+              Berpengalaman dalam pengembangan aplikasi, website, serta infrastruktur server untuk menghadirkan solusi digital yang cepat, aman, dan mudah dikembangkan sesuai kebutuhan bisnis.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start fade-up" data-aos="fade-up" data-aos-delay="400">
               <a href="#projek" class="bg-primary dark:bg-secondary text-white dark:text-primary font-semibold px-8 py-4 rounded-xl whitespace-nowrap hover:shadow-lg hover:-translate-y-1 transition-all interactive-element">
@@ -346,61 +353,109 @@
           <div class="w-full lg:w-1/2" data-aos="fade-right">
             <div class="prose dark:prose-invert max-w-none text-lg text-gray-700 dark:text-gray-300 leading-relaxed space-y-6">
               <p>
-                Saya adalah seorang Mobile Developer dengan pengalaman lebih dari 3 tahun dalam pengembangan aplikasi mobile menggunakan Flutter dan React Native. Saya juga mampu untuk mendeploy aplikasi ke playstore dan appstore baik itu aplikasi baru ataupun pembaruan.
+                Saya adalah Software Engineer dengan pengalaman lebih dari 5 tahun dalam membangun aplikasi mobile, website, dan sistem backend yang siap digunakan di lingkungan produksi.
               </p>
               <p>
-                Saya memiliki ketertarikan yang kuat pada UI/UX design dan DevOps, yang memungkinkan saya untuk menciptakan aplikasi yang tidak hanya fungsional tetapi juga menarik secara visual serta dapat di-deploy dengan efisien.
+                Saya membantu bisnis mengubah ide menjadi produk digital melalui proses end-to-end, mulai dari analisis kebutuhan, desain UI/UX, pengembangan aplikasi, hingga deployment ke server agar sistem dapat berjalan dengan stabil dan aman.
               </p>
               <p>
-                Saat ini, saya sedang memperdalam pengetahuan saya tentang praktik DevOps dan arsitektur cloud untuk meningkatkan efisiensi dan skalabilitas aplikasi yang saya kembangkan.
+                Selain pengembangan aplikasi menggunakan Flutter, React Native, dan teknologi web modern, saya juga berpengalaman dalam pengelolaan server, cloud, dan CI/CD untuk memastikan aplikasi siap digunakan dan mudah dikembangkan ke depannya.
+              </p>
+              <p>
+                Saya fokus membangun solusi yang cepat, aman, dan mudah digunakan untuk mendukung pertumbuhan bisnis klien.
               </p>
             </div>
           </div>
           
-          <div class="w-full lg:w-1/2">
-            <h3 class="text-2xl font-semibold mb-8 text-primary dark:text-white" data-aos="fade-left">Keahlian Utama</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <!-- Flutter -->
-              <div class="glass-card rounded-2xl p-6 interactive-element" data-aos="fade-up" data-aos-delay="0">
-                <div class="w-12 h-12 flex items-center justify-center bg-blue-100 dark:bg-blue-900/30 rounded-xl mb-4 text-blue-600 dark:text-blue-400">
-                  <i class="ri-code-s-slash-line ri-xl"></i>
-                </div>
-                <h4 class="text-xl font-bold mb-2 text-primary dark:text-white">Flutter</h4>
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mb-2">
-                  <div class="bg-secondary h-1.5 rounded-full shadow-[0_0_10px_var(--color-secondary)]" style="width: 90%"></div>
-                </div>
-              </div>
-              
-              <!-- React Native -->
-              <div class="glass-card rounded-2xl p-6 interactive-element" data-aos="fade-up" data-aos-delay="100">
-                <div class="w-12 h-12 flex items-center justify-center bg-cyan-100 dark:bg-cyan-900/30 rounded-xl mb-4 text-cyan-600 dark:text-cyan-400">
-                  <i class="ri-reactjs-line ri-xl"></i>
-                </div>
-                <h4 class="text-xl font-bold mb-2 text-primary dark:text-white">React Native</h4>
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mb-2">
-                  <div class="bg-secondary h-1.5 rounded-full shadow-[0_0_10px_var(--color-secondary)]" style="width: 85%"></div>
-                </div>
-              </div>
-              
-              <!-- UI/UX -->
-              <div class="glass-card rounded-2xl p-6 interactive-element" data-aos="fade-up" data-aos-delay="200">
-                <div class="w-12 h-12 flex items-center justify-center bg-purple-100 dark:bg-purple-900/30 rounded-xl mb-4 text-purple-600 dark:text-purple-400">
-                  <i class="ri-palette-line ri-xl"></i>
-                </div>
-                <h4 class="text-xl font-bold mb-2 text-primary dark:text-white">UI/UX Design</h4>
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mb-2">
-                  <div class="bg-secondary h-1.5 rounded-full shadow-[0_0_10px_var(--color-secondary)]" style="width: 80%"></div>
+          <div class="w-full lg:w-1/2 flex flex-col gap-8">
+            <div data-aos="fade-left">
+              <h3 class="text-2xl font-bold text-primary dark:text-white">Keahlian & Teknologi</h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Berikut adalah ekosistem teknologi yang biasa saya gunakan untuk membangun solusi siap produksi.</p>
+            </div>
+            
+            <div class="flex flex-col gap-6">
+              <!-- Category 1: Mobile & Frontend -->
+              <div class="space-y-3" data-aos="fade-left" data-aos-delay="100">
+                <h4 class="text-xs font-semibold tracking-wider uppercase text-gray-400 dark:text-gray-500">Mobile & Frontend</h4>
+                <div class="flex flex-wrap gap-3">
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-blue-500/50 dark:hover:border-blue-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-code-s-slash-line text-blue-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Flutter</span>
+                  </div>
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-cyan-500/50 dark:hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-reactjs-line text-cyan-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">React Native</span>
+                  </div>
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-purple-500/50 dark:hover:border-purple-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-palette-line text-purple-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">UI/UX Design</span>
+                  </div>
                 </div>
               </div>
-              
-              <!-- DevOps -->
-              <div class="glass-card rounded-2xl p-6 interactive-element" data-aos="fade-up" data-aos-delay="300">
-                <div class="w-12 h-12 flex items-center justify-center bg-orange-100 dark:bg-orange-900/30 rounded-xl mb-4 text-orange-600 dark:text-orange-400">
-                  <i class="ri-server-line ri-xl"></i>
+
+              <!-- Category 2: Backend & Automation -->
+              <div class="space-y-3" data-aos="fade-left" data-aos-delay="200">
+                <h4 class="text-xs font-semibold tracking-wider uppercase text-gray-400 dark:text-gray-500">Backend & Automation</h4>
+                <div class="flex flex-wrap gap-3">
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-amber-500/50 dark:hover:border-amber-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-database-2-line text-amber-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Firebase</span>
+                  </div>
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-red-500/50 dark:hover:border-red-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-node-tree text-red-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">n8n</span>
+                  </div>
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-slate-500/50 dark:hover:border-slate-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-github-fill text-slate-700 dark:text-slate-300 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">CI/CD GitHub</span>
+                  </div>
                 </div>
-                <h4 class="text-xl font-bold mb-2 text-primary dark:text-white">DevOps</h4>
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mb-2">
-                  <div class="bg-secondary h-1.5 rounded-full shadow-[0_0_10px_var(--color-secondary)]" style="width: 75%"></div>
+              </div>
+
+              <!-- Category 3: DevOps & Infrastructure -->
+              <div class="space-y-3" data-aos="fade-left" data-aos-delay="300">
+                <h4 class="text-xs font-semibold tracking-wider uppercase text-gray-400 dark:text-gray-500">DevOps & Infrastructure</h4>
+                <div class="flex flex-wrap gap-3">
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-orange-500/50 dark:hover:border-orange-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-server-line text-orange-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">DevOps</span>
+                  </div>
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-blue-500/50 dark:hover:border-blue-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <img src="asset/docker.png" alt="Docker" class="w-5 h-5 object-contain mr-2.5 group-hover:scale-110 transition-transform" />
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Docker</span>
+                  </div>
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-cyan-500/50 dark:hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <img src="asset/docker_swarm.png" alt="Docker Swarm" class="w-5 h-5 object-contain mr-2.5 group-hover:scale-110 transition-transform" />
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Docker Swarm</span>
+                  </div>
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-sky-500/50 dark:hover:border-sky-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-box-3-line text-sky-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Docker Hub</span>
+                  </div>
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-green-500/50 dark:hover:border-green-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-global-line text-green-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Nginx</span>
+                  </div>
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-sky-500/50 dark:hover:border-sky-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-shield-keyhole-line text-sky-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Setup SSL</span>
+                  </div>
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-slate-500/50 dark:hover:border-slate-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-terminal-box-line text-slate-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Linux</span>
+                  </div>
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-yellow-500/50 dark:hover:border-yellow-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-line-chart-line text-yellow-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Grafana</span>
+                  </div>
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-pink-500/50 dark:hover:border-pink-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-pulse-line text-pink-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Prometheus</span>
+                  </div>
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-indigo-500/50 dark:hover:border-indigo-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-search-eye-line text-indigo-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">SonarQube</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -613,6 +668,25 @@
               <div class="flex flex-wrap gap-2">
                 <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">Flutter</span>
                 <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">Firebase</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 7 -->
+          <div class="glass-card rounded-2xl overflow-hidden group interactive-element" data-aos="fade-up" data-aos-delay="0">
+            <div class="h-56 overflow-hidden relative">
+              <div class="absolute inset-0 bg-primary/20 group-hover:bg-transparent transition-colors z-10"></div>
+              <img src="asset/7.png" alt="Monitoring Server" class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700" />
+            </div>
+            <div class="p-6">
+              <h3 class="text-2xl font-bold mb-2 text-primary dark:text-white group-hover:text-secondary transition-colors">Monitoring Server</h3>
+              <p class="text-gray-600 dark:text-gray-400 mb-6">
+                Aplikasi untuk memonitoring banyak server dalam satu dashboard sudah terintegrasi dengan n8n ke whatsapp dan telegram, dan AI chat.
+              </p>
+              <div class="flex flex-wrap gap-2">
+                <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">React JS</span>
+                <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">Node JS</span>
+                <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">n8n</span>
               </div>
             </div>
           </div>
@@ -955,6 +1029,49 @@
             el.style.transform = `translateY(${offset}px)`;
           });
         });
+
+        // --- Typewriter Effect ---
+        const words = ["Mobile Developer", "Web Developer", "Devops Engineer", "Software Engineer"];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typewriterEl = document.getElementById("typewriter-text");
+
+        function type() {
+          if (!typewriterEl) return;
+          const currentWord = words[wordIndex];
+          
+          if (isDeleting) {
+            // Delete character
+            typewriterEl.textContent = currentWord.substring(0, charIndex - 1);
+            charIndex--;
+          } else {
+            // Type character
+            typewriterEl.textContent = currentWord.substring(0, charIndex + 1);
+            charIndex++;
+          }
+
+          let typeSpeed = isDeleting ? 50 : 100;
+
+          if (!isDeleting && charIndex === currentWord.length) {
+            // Word completed, pause for 3 seconds before deleting
+            typeSpeed = 3000;
+            isDeleting = true;
+          } else if (isDeleting && charIndex === 0) {
+            // Word deleted, move to next word
+            isDeleting = false;
+            wordIndex = (wordIndex + 1) % words.length;
+            typeSpeed = 500; // Small pause before starting to type next word
+          }
+
+          setTimeout(type, typeSpeed);
+        }
+
+        // Start typewriter
+        if (typewriterEl) {
+          typewriterEl.textContent = "";
+          type();
+        }
 
       });
     </script>
