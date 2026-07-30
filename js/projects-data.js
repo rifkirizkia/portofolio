@@ -546,6 +546,126 @@ const PROJECTS_DATA = [
       solutions: "Menyusun file aturan pengecualian `.sonarcloud.properties` secara rinci.",
       improvements: "Integrasi pemindaian kontainer otomatis dengan Trivy security scanner."
     }
+  },
+
+  // 10. DEVOPS & INFRASTRUCTURE - ERP Kopkar Toyota
+  {
+    id: "erp-kopkar-toyota",
+    slug: "erp-kopkar-toyota",
+    title: "ERP Kopkar Toyota Infrastructure & Deployment",
+    category: "devops",
+    categoryLabel: "DevOps & Infrastructure",
+    role: "DevOps Engineer",
+    status: "Production",
+    timeline: "2025 - 2026",
+    isFeatured: true,
+    thumbnailUrl: "asset/docker_swarm.png",
+    shortDescription: "Infrastruktur ERPNext & Frappe terpusat untuk Koperasi Karyawan Toyota, mencakup otomatisasi deployment Docker, reverse proxy Nginx, dan backup otomatis.",
+    githubUrl: "",
+    demoUrl: "",
+    techStack: [
+      { name: "Frappe / ERPNext", icon: "ri-server-line", color: "text-blue-500" },
+      { name: "Docker", icon: "ri-box-3-line", color: "text-blue-500" },
+      { name: "Nginx", icon: "ri-global-line", color: "text-emerald-500" },
+      { name: "MariaDB", icon: "ri-database-2-line", color: "text-amber-500" },
+      { name: "Redis", icon: "ri-flashlight-line", color: "text-red-500" },
+      { name: "Linux", icon: "ri-terminal-box-line", color: "text-slate-400" }
+    ],
+    overview: {
+      what: "Implementasi dan pengadaan infrastruktur ERP berbasis Frappe / ERPNext untuk otomatisasi proses bisnis Koperasi Karyawan Toyota.",
+      who: "Anggota koperasi, pengurus, dan tim keuangannya Koperasi Karyawan Toyota.",
+      problemSolved: "Mengintegrasikan sistem simpan pinjam, inventaris, dan transaksi keuangan secara terpusat dengan reliabilitas tinggi dan zero-downtime."
+    },
+    problem: "Sebelumnya pengolahan data koperasi dilakukan secara terpisah-pisah, berisiko kehilangan data transaksi dan membutuhkan penanganan manual yang lambat.",
+    architecture: [
+      { step: 1, title: "Edge Nginx Gateway", icon: "ri-global-line", desc: "Reverse proxy & TLS/SSL encryption" },
+      { step: 2, title: "Frappe Bench Container", icon: "ri-box-3-line", desc: "Python WSGI app server & background workers" },
+      { step: 3, title: "MariaDB Database", icon: "ri-database-2-line", desc: "Penyimpanan relational data transaksi & master record" },
+      { step: 4, title: "Redis Cache & Queue", icon: "ri-flashlight-line", desc: "Caching session & job queue background processing" },
+      { step: 5, title: "Automated Daily Backup", icon: "ri-cloud-upload-line", desc: "Backup otomatis database & site files ke offsite storage" }
+    ],
+    responsibilities: [
+      "Deployment Frappe / ERPNext framework di lingkungan Docker container",
+      "Konfigurasi Nginx reverse proxy dan otomatisasi SSL Certbot",
+      "Pengaturan Redis in-memory cache dan Celery background worker",
+      "Implementasi strategi backup database MariaDB harian terotomasikan",
+      "Monitoring kesehatan server VPS dan performa kueri database"
+    ],
+    results: [
+      "99.9% Server Uptime untuk sistem operasional koperasi",
+      "Otomatisasi backup database harian teruji tanpa kehilangan data",
+      "Performa respon kueri ERP di bawah 200ms",
+      "Standardisasi lingkungan deployment berbasis kontainer Docker"
+    ],
+    gallery: [
+      { title: "Cetak Biru Infrastruktur ERP Kopkar Toyota", image: "asset/docker_swarm.png", category: "Architecture" }
+    ],
+    learnings: {
+      challenges: "Mengoptimalkan penggunaan RAM dan CPU MariaDB & Redis di server VPS agar Frappe workers dapat menangani beban puncak saat jam kerja.",
+      mistakes: "Awalnya batas koneksi MariaDB belum disesuaikan untuk background worker Frappe.",
+      solutions: "Menyesuaikan max_connections dan innodb_buffer_pool_size pada konfigurasi MariaDB.",
+      improvements: "Integrasi pemantauan Prometheus & Grafana untuk visualisasi metrik server ERP."
+    }
+  },
+
+  // 11. DEVOPS & INFRASTRUCTURE - ERP Itekraf
+  {
+    id: "erp-itekraf",
+    slug: "erp-itekraf",
+    title: "ERP Itekraf Enterprise Infrastructure",
+    category: "devops",
+    categoryLabel: "DevOps & Infrastructure",
+    role: "DevOps Engineer",
+    status: "Production",
+    timeline: "2025 - 2026",
+    isFeatured: true,
+    thumbnailUrl: "asset/foto1.png",
+    shortDescription: "Infrastruktur ERP Enterprise Itekraf dengan kontainerisasi Frappe / ERPNext, manajemen SSL otomatis, dan pengerasan keamanan server VPS.",
+    githubUrl: "",
+    demoUrl: "",
+    techStack: [
+      { name: "Frappe / ERPNext", icon: "ri-server-line", color: "text-blue-500" },
+      { name: "Python", icon: "ri-code-s-slash-line", color: "text-yellow-400" },
+      { name: "MariaDB", icon: "ri-database-2-line", color: "text-amber-500" },
+      { name: "Docker", icon: "ri-box-3-line", color: "text-blue-500" },
+      { name: "Nginx", icon: "ri-global-line", color: "text-emerald-500" },
+      { name: "Certbot", icon: "ri-key-2-line", color: "text-yellow-400" }
+    ],
+    overview: {
+      what: "Pengembangan dan pengadaan infrastruktur server ERP Enterprise berbasis Frappe/ERPNext untuk mengelola alur kerja operasional Itekraf.",
+      who: "Manajemen, tim operasional, dan pemangku kepentingan Itekraf.",
+      problemSolved: "Menyediakan sistem ERP yang aman, cepat, dan selalu tersedia tanpa gangguan downtime saat transaksi berkapasitas tinggi."
+    },
+    problem: "Kebutuhan akan platform ERP terintegrasi yang mampu menangani transaksi bisnis berskala enterprise dengan standar keamanan tinggi dan pemulihan bencana instan.",
+    architecture: [
+      { step: 1, title: "Cloudflare WAF Proxy", icon: "ri-cloud-line", desc: "Perlindungan DDoS & DNS routing enterprise" },
+      { step: 2, title: "Nginx Edge Reverse Proxy", icon: "ri-shield-check-line", desc: "Reverse proxy, rate limiting, & SSL termination" },
+      { step: 3, title: "Frappe App Service", icon: "ri-server-line", desc: "Engine aplikasi ERP berbasis Python & WSGI gunicorn" },
+      { step: 4, title: "MariaDB Database Server", icon: "ri-database-2-line", desc: "Penyimpanan data relational terenkripsi" },
+      { step: 5, title: "Automated Offsite Backup", icon: "ri-cloud-upload-line", desc: "Sinkronisasi backup terenkripsi berkala" }
+    ],
+    responsibilities: [
+      "Infrastruktur server VPS Ubuntu & hardening keamanan SSH/firewall",
+      "Deployment kontainer Docker Frappe / ERPNext",
+      "Konfigurasi SSL/TLS otomatis Certbot & Nginx reverse proxy",
+      "Pengaturan sistem backup otomatis dan disaster recovery plan",
+      "Optimasi kueri MariaDB dan penanganan beban kerja Redis cache"
+    ],
+    results: [
+      "100% Ketersediaan layanan selama jam operasional bisnis",
+      "Mekanisme pemulihan bencana (disaster recovery) teruji",
+      "Respon latency sub-150ms untuk transaksi ERP",
+      "Pengerasan keamanan server sesuai standar enterprise"
+    ],
+    gallery: [
+      { title: "Cetak Biru Infrastruktur ERP Itekraf", image: "asset/foto1.png", category: "Architecture" }
+    ],
+    learnings: {
+      challenges: "Menjamin ketersediaan tinggi dan mengisolasi environment staging vs produksi pada server yang sama.",
+      mistakes: "Awalnya belum memisahkan port Redis queue antar site ERP.",
+      solutions: "Isolasi port Redis dan penamaan site Frappe terpisah di Docker network.",
+      improvements: "Implementasi pemantauan otomatis berbasis webhook Telegram untuk alert insiden."
+    }
   }
 ];
 

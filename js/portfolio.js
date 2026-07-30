@@ -191,6 +191,8 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "DOMS", category: "Platform Operasional", tech: "Linux, Nginx, PostgreSQL", logo: "asset/logo/logo-doms.svg" },
       { name: "Elkopra", category: "PWA Koperasi", tech: "Laravel, Docker, PWA", logo: "asset/logo/logo-elkopra.svg" },
       { name: "Kopkar Anggota", category: "Koperasi Mobile", tech: "Flutter, IoT Vending API", logo: "asset/logo/logo-kopkar.png" },
+      { name: "ERP Kopkar Toyota", category: "Sistem ERP Koperasi", tech: "Frappe, ERPNext, Docker", logo: "asset/logo/logo-kopkar.png" },
+      { name: "ERP Itekraf", category: "Sistem ERP Enterprise", tech: "Frappe, Python, MariaDB", logo: "" },
       { name: "NAIQ User", category: "Aplikasi Mobile", tech: "Flutter, Firebase, REST API", logo: "asset/logo/naiq-logo.png" },
       { name: "NAIQ Driver", category: "Tracking Pengemudi", tech: "React Native, Google Maps", logo: "asset/logo/logo-naiq-driver.png" },
       { name: "Walagiri", category: "Sistem Pertanian", tech: "Vue.js, Docker, Nginx", logo: "asset/logo/logo-wallagri.png" },
@@ -656,11 +658,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const scrollContainer = caseStudyModal.querySelector(".modal-scroll-area") || caseStudyModal;
     scrollContainer.scrollTop = 0;
 
-    // Attach internal listeners inside modal (close button, gallery lightbox)
-    const closeBtn = caseStudyContainer.querySelector(".close-modal-btn");
-    if (closeBtn) {
-      closeBtn.addEventListener("click", () => closeCaseStudy());
-    }
+    // Attach internal listeners inside modal (close buttons, gallery lightbox)
+    caseStudyContainer.querySelectorAll(".close-modal-btn").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        closeCaseStudy(true);
+      });
+    });
 
     // Attach lightbox to gallery thumbnails
     caseStudyContainer.querySelectorAll(".gallery-item").forEach(item => {
@@ -679,9 +684,22 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.classList.remove("overflow-hidden");
 
     if (updateHash && window.location.hash.startsWith("#case-study/")) {
-      history.pushState("", document.title, window.location.pathname + window.location.search);
+      if (window.history.pushState) {
+        window.history.pushState("", document.title, window.location.pathname + window.location.search);
+      } else {
+        window.location.hash = "";
+      }
     }
   }
+
+  // Delegated event listener for any close modal button click
+  document.addEventListener("click", (e) => {
+    const closeBtn = e.target.closest(".close-modal-btn");
+    if (closeBtn && caseStudyModal && !caseStudyModal.classList.contains("hidden")) {
+      e.preventDefault();
+      closeCaseStudy(true);
+    }
+  });
 
   // Build Comprehensive Case Study HTML Page
   function buildCaseStudyHTML(project) {
