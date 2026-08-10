@@ -16,10 +16,6 @@ jobs:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      id-token: write
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -27,8 +23,9 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE_ARN }}
 
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
@@ -62,13 +59,13 @@ jobs:
             set -e
             cd /home/ubuntu/apps/portofolio
 
-            echo "Pulling latest image..."
+            echo "Pulling latest Docker image..."
             docker compose pull
 
             echo "Starting application..."
             docker compose up -d
 
-            echo "Cleaning unused images..."
+            echo "Cleaning unused Docker images..."
             docker image prune -f
 
             echo "================================="
