@@ -189,11 +189,11 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "SweetEscape", category: "Aplikasi Mobile & Web", tech: "Node.js, Docker, Nginx", logo: "asset/logo/sweet-escape-logo.svg" },
       { name: "Kosmik", category: "Platform Enterprise", tech: "Docker, Nginx, SSL", logo: "asset/logo/logo-kosmik.png" },
       { name: "DOMS", category: "Platform Operasional", tech: "Linux, Nginx, PostgreSQL", logo: "asset/logo/logo-doms.svg" },
-      { name: "Elkopra", category: "PWA Koperasi", tech: "Laravel, Docker, PWA", logo: "asset/logo/logo-elkopra.svg" },
-      { name: "Kopkar Anggota", category: "Koperasi Mobile", tech: "Flutter, IoT Vending API", logo: "asset/logo/logo-kopkar.png" },
-      { name: "ERP Kopkar Toyota", category: "Sistem ERP Koperasi", tech: "Frappe, ERPNext, Docker", logo: "asset/logo/logo-kopkar.png" },
-      { name: "ERP Itekraf", category: "Sistem ERP Enterprise", tech: "Frappe, Python, MariaDB", logo: "" },
-      { name: "NAIQ User", category: "Aplikasi Mobile", tech: "Flutter, Firebase, REST API", logo: "asset/logo/naiq-logo.png" },
+      { name: "Elkopra", category: "PWA Koperasi", tech: "Laravel, Docker, PWA", logo: "asset/logo/logo-elkopra.svg", slug: "elkopra-financial-system" },
+      { name: "Kopkar Anggota", category: "Koperasi Mobile", tech: "Flutter, IoT Vending API", logo: "asset/logo/logo-kopkar.png", slug: "kopkar-toyota" },
+      { name: "ERP Kopkar Toyota", category: "Sistem ERP Koperasi", tech: "Frappe, ERPNext, Docker", logo: "asset/logo/logo-kopkar.png", slug: "erp-kopkar-toyota" },
+      { name: "ERP Itekraf", category: "Sistem ERP Enterprise", tech: "Frappe, Python, MariaDB", logo: "", slug: "erp-itekraf" },
+      { name: "NAIQ User", category: "Aplikasi Mobile", tech: "Flutter, Firebase, REST API", logo: "asset/logo/naiq-logo.png", slug: "naiq-shuttle-app" },
       { name: "NAIQ Driver", category: "Tracking Pengemudi", tech: "React Native, Google Maps", logo: "asset/logo/logo-naiq-driver.png" },
       { name: "Walagiri", category: "Sistem Pertanian", tech: "Vue.js, Docker, Nginx", logo: "asset/logo/logo-wallagri.png" },
       { name: "Dapen", category: "Sistem Dana Pensiun", tech: "Laravel, MySQL, Docker", logo: "asset/logo/logo-dapen.svg" },
@@ -204,11 +204,11 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "RPSM", category: "Sistem Manajemen", tech: "Laravel, MariaDB, Docker", logo: "" },
       { name: "Flexa", category: "Aplikasi SaaS", tech: "Node.js, Redis, Docker Swarm", logo: "" },
       { name: "Presensy", category: "Sistem Presensi", tech: "Laravel, MySQL, Certbot", logo: "" },
-      { name: "Spendora", category: "Aplikasi Keuangan", tech: "Flutter, REST API", logo: "asset/logo/logo-ios.png" }
+      { name: "Spendora", category: "Aplikasi Keuangan", tech: "Flutter, REST API", logo: "asset/logo/logo-ios.png", slug: "spendora-finance-app" }
     ];
 
     const logoGridHTML = managedApps.map(app => `
-      <div class="devops-app-badge group relative bg-white/70 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 p-4 rounded-2xl flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 hover:border-secondary/50 hover:shadow-lg hover:bg-white dark:hover:bg-dark-surface cursor-pointer">
+      <div class="devops-app-badge group relative bg-white/70 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 p-4 rounded-2xl flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 hover:border-secondary/50 hover:shadow-lg hover:bg-white dark:hover:bg-dark-surface cursor-pointer" ${app.slug ? `data-slug="${app.slug}"` : ''}>
         <div class="w-14 h-14 rounded-full bg-gray-100 dark:bg-white text-gray-900 flex items-center justify-center font-bold mb-2.5 group-hover:scale-110 transition-transform overflow-hidden p-2.5 shadow-sm border border-gray-200/60 dark:border-white">
           ${app.logo 
             ? `<img src="${app.logo}" alt="${app.name}" class="w-full h-full object-contain" />`
@@ -218,9 +218,10 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="text-xs font-bold text-primary dark:text-white line-clamp-1 group-hover:text-secondary transition-colors">${app.name}</div>
 
         <!-- Tooltip on hover -->
-        <div class="absolute bottom-full mb-2 hidden group-hover:block z-20 w-40 bg-gray-900 text-white text-[11px] p-2 rounded-xl shadow-xl border border-white/10 pointer-events-none text-center">
+        <div class="absolute bottom-full mb-2 hidden group-hover:block z-20 w-44 bg-gray-900 text-white text-[11px] p-2.5 rounded-xl shadow-xl border border-white/10 pointer-events-none text-center">
           <div class="font-bold text-secondary">${app.name}</div>
           <div class="text-gray-300 text-[10px] mt-0.5">${app.category}</div>
+          ${app.slug ? `<div class="text-emerald-400 text-[9px] mt-1.5 flex items-center justify-center gap-1 font-mono"><i class="ri-eye-line"></i> Lihat Case Study</div>` : ''}
         </div>
       </div>
     `).join("");
@@ -312,6 +313,140 @@ document.addEventListener("DOMContentLoaded", function () {
               <div class="pt-4 border-t border-gray-200/60 dark:border-white/10">
                 <button class="view-case-study-btn bg-primary text-white dark:bg-secondary dark:text-primary font-semibold text-xs px-6 py-3 rounded-xl hover:shadow-lg transition-all flex items-center gap-2 interactive-element" data-slug="website-monitoring-platform">
                   Baca Case Study Selengkapnya <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2.5: DEVOPS CASE STUDIES GRID -->
+        <div class="space-y-6">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xl md:text-2xl font-bold text-primary dark:text-white">
+              Studi Kasus Proyek Infrastruktur
+            </h3>
+            <span class="text-xs text-gray-400 font-mono">Arsitektur &amp; Deployment Enterprise</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- ERP Kopkar Toyota -->
+            <div class="bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl p-6 flex flex-col justify-between hover:border-secondary/40 transition-all shadow-md group">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">
+                    Sistem ERP Koperasi
+                  </span>
+                  <span class="text-xs font-mono text-emerald-500 font-semibold flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Produksi
+                  </span>
+                </div>
+                <h4 class="text-xl font-bold text-primary dark:text-white group-hover:text-secondary transition-colors">
+                  ERP Kopkar Toyota Infrastructure &amp; Deployment
+                </h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                  Infrastruktur ERPNext &amp; Frappe terpusat untuk Koperasi Karyawan Toyota, mencakup otomatisasi deployment Docker, reverse proxy Nginx, dan backup otomatis harian.
+                </p>
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Frappe / ERPNext</span>
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Docker</span>
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Nginx</span>
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">MariaDB</span>
+                </div>
+              </div>
+              <div class="pt-4 mt-4 border-t border-gray-200/60 dark:border-white/10">
+                <button class="view-case-study-btn bg-primary text-white dark:bg-secondary dark:text-primary font-semibold text-xs px-5 py-2.5 rounded-xl hover:shadow-md transition-all flex items-center gap-2 interactive-element" data-slug="erp-kopkar-toyota">
+                  Baca Case Study <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- ERP Itekraf -->
+            <div class="bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl p-6 flex flex-col justify-between hover:border-secondary/40 transition-all shadow-md group">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">
+                    Sistem ERP Enterprise
+                  </span>
+                  <span class="text-xs font-mono text-emerald-500 font-semibold flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Produksi
+                  </span>
+                </div>
+                <h4 class="text-xl font-bold text-primary dark:text-white group-hover:text-secondary transition-colors">
+                  ERP Itekraf Enterprise Infrastructure
+                </h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                  Infrastruktur ERP Enterprise Itekraf dengan kontainerisasi Frappe / ERPNext, manajemen SSL otomatis, dan pengerasan keamanan server VPS.
+                </p>
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Frappe / ERPNext</span>
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Python</span>
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Docker</span>
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">MariaDB</span>
+                </div>
+              </div>
+              <div class="pt-4 mt-4 border-t border-gray-200/60 dark:border-white/10">
+                <button class="view-case-study-btn bg-primary text-white dark:bg-secondary dark:text-primary font-semibold text-xs px-5 py-2.5 rounded-xl hover:shadow-md transition-all flex items-center gap-2 interactive-element" data-slug="erp-itekraf">
+                  Baca Case Study <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- CI/CD Swarm -->
+            <div class="bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl p-6 flex flex-col justify-between hover:border-secondary/40 transition-all shadow-md group">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">
+                    Otomatisasi CI/CD
+                  </span>
+                  <span class="text-xs font-mono text-emerald-500 font-semibold flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Produksi
+                  </span>
+                </div>
+                <h4 class="text-xl font-bold text-primary dark:text-white group-hover:text-secondary transition-colors">
+                  CI/CD Automation &amp; Docker Swarm Cluster
+                </h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                  Alur kerja CI/CD otomatis menggunakan GitHub Actions &amp; Docker Registry untuk deployment kluster Docker Swarm tanpa downtime.
+                </p>
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">GitHub Actions</span>
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Docker Swarm</span>
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Portainer</span>
+                </div>
+              </div>
+              <div class="pt-4 mt-4 border-t border-gray-200/60 dark:border-white/10">
+                <button class="view-case-study-btn bg-primary text-white dark:bg-secondary dark:text-primary font-semibold text-xs px-5 py-2.5 rounded-xl hover:shadow-md transition-all flex items-center gap-2 interactive-element" data-slug="cicd-swarm-infrastructure">
+                  Baca Case Study <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- SonarQube Quality Gate -->
+            <div class="bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl p-6 flex flex-col justify-between hover:border-secondary/40 transition-all shadow-md group">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">
+                    Kualitas Kode &amp; SAST
+                  </span>
+                  <span class="text-xs font-mono text-emerald-500 font-semibold flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Produksi
+                  </span>
+                </div>
+                <h4 class="text-xl font-bold text-primary dark:text-white group-hover:text-secondary transition-colors">
+                  SonarQube Code Quality &amp; SAST Pipeline
+                </h4>
+                <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                  Sistem pengujian kualitas kode &amp; keamanan SAST otomatis yang terintegrasi di dalam GitHub Actions CI/CD.
+                </p>
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">SonarQube</span>
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Docker</span>
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">GitHub Actions</span>
+                </div>
+              </div>
+              <div class="pt-4 mt-4 border-t border-gray-200/60 dark:border-white/10">
+                <button class="view-case-study-btn bg-primary text-white dark:bg-secondary dark:text-primary font-semibold text-xs px-5 py-2.5 rounded-xl hover:shadow-md transition-all flex items-center gap-2 interactive-element" data-slug="sonarqube-code-quality-gate">
+                  Baca Case Study <i class="ri-arrow-right-line"></i>
                 </button>
               </div>
             </div>
@@ -568,12 +703,12 @@ document.addEventListener("DOMContentLoaded", function () {
   function setupDevOpsEventListeners() {
     if (!projectsGrid) return;
 
-    // Case study trigger buttons inside DevOps view
-    projectsGrid.querySelectorAll(".view-case-study-btn").forEach(btn => {
+    // Case study trigger buttons & clickable app badges inside DevOps view
+    projectsGrid.querySelectorAll(".view-case-study-btn, .devops-app-badge[data-slug]").forEach(btn => {
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
         const slug = btn.getAttribute("data-slug");
-        openCaseStudy(slug);
+        if (slug) openCaseStudy(slug);
       });
     });
 
