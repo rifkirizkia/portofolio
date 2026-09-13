@@ -42,71 +42,87 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Render Project Cards or Dedicated DevOps View
-  function renderProjects() {
+  // Render Project Cards or Dedicated DevOps View with smooth transitions
+  function renderProjects(animate = false) {
     if (!projectsGrid) return;
 
-    // Ensure section is marked active so scroll-reveal CSS doesn't hide it
-    const projekSection = document.getElementById("projek");
-    if (projekSection) {
-      projekSection.classList.add("active");
-    }
+    const doRender = () => {
+      if (currentCategory === "devops") {
+        // Prepare container for full-width DevOps layout
+        projectsGrid.className = "block w-full space-y-12";
+        projectsGrid.innerHTML = buildDevOpsViewHTML();
 
-    if (currentCategory === "devops") {
-      // Prepare container for full-width DevOps layout
-      projectsGrid.className = "block w-full space-y-12 transition-all duration-300";
-      projectsGrid.innerHTML = buildDevOpsViewHTML();
-
-      if (viewAllBtn) {
-        viewAllBtn.style.display = "none";
-      }
-
-      setupDevOpsEventListeners();
-    } else {
-      // Restore standard 3-column project grid layout for "all", "mobile", and "web"
-      projectsGrid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-300";
-
-      const filtered = getFilteredProjects();
-      if (filtered.length === 0) {
-        projectsGrid.innerHTML = `
-          <div class="col-span-full py-16 text-center text-gray-500 dark:text-gray-400">
-            <i class="ri-folder-open-line text-4xl mb-3 block opacity-50"></i>
-            <p class="text-lg">Tidak ada projek ditemukan untuk kategori ini.</p>
-          </div>
-        `;
-      } else {
-        projectsGrid.innerHTML = filtered.map(project => createProjectCardHTML(project)).join("");
-      }
-
-      setupCardEventListeners();
-
-      // Update "View All Projects" button visibility for standard grid
-      if (viewAllBtn) {
-        const totalInCategory = currentCategory === "all" 
-          ? projectsData.length 
-          : projectsData.filter(p => p.category === currentCategory).length;
-        
-        if (totalInCategory > 6 && showOnlyFeatured) {
-          viewAllBtn.style.display = "inline-flex";
-          viewAllBtn.innerHTML = `Lihat Semua Projek (${totalInCategory}) <i class="ri-arrow-right-line ml-2"></i>`;
-        } else if (!showOnlyFeatured) {
-          viewAllBtn.style.display = "inline-flex";
-          viewAllBtn.innerHTML = `Tampilkan Diringkas <i class="ri-arrow-up-s-line ml-2"></i>`;
-        } else {
+        if (viewAllBtn) {
           viewAllBtn.style.display = "none";
         }
-      }
-    }
 
-    // Refresh AOS animations if active
-    if (window.AOS && typeof window.AOS.refresh === "function") {
-      setTimeout(() => {
-        window.AOS.refresh();
-      }, 50);
+        setupDevOpsEventListeners();
+      } else {
+        // Restore standard 3-column project grid layout for "all", "mobile", and "web"
+        projectsGrid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8";
+
+        const filtered = getFilteredProjects();
+        if (filtered.length === 0) {
+          projectsGrid.innerHTML = `
+            <div class="col-span-full py-16 text-center text-gray-500 dark:text-gray-400">
+              <i class="ri-folder-open-line text-4xl mb-3 block opacity-50"></i>
+              <p class="text-lg">Tidak ada projek ditemukan untuk kategori ini.</p>
+            </div>
+          `;
+        } else {
+          projectsGrid.innerHTML = filtered.map((project, idx) => createProjectCardHTML(project, idx)).join("");
+        }
+
+        setupCardEventListeners();
+
+        // Update "View All Projects" button visibility for standard grid
+        if (viewAllBtn) {
+          const totalInCategory = currentCategory === "all" 
+            ? projectsData.length 
+            : projectsData.filter(p => p.category === currentCategory).length;
+          
+          if (totalInCategory > 6 && showOnlyFeatured) {
+            viewAllBtn.style.display = "inline-flex";
+            viewAllBtn.innerHTML = `Lihat Semua Projek (${totalInCategory}) <i class="ri-arrow-right-line ml-2"></i>`;
+          } else if (!showOnlyFeatured) {
+            viewAllBtn.style.display = "inline-flex";
+            viewAllBtn.innerHTML = `Tampilkan Diringkas <i class="ri-arrow-up-s-line ml-2"></i>`;
+          } else {
+            viewAllBtn.style.display = "none";
+          }
+        }
+      }
+
+      if (animate) {
+        requestAnimationFrame(() => {
+          projectsGrid.style.opacity = "1";
+          projectsGrid.style.transform = "translateY(0)";
+        });
+      }
+
+      // Refresh AOS animations if active
+      if (window.AOS) {
+        setTimeout(() => {
+          if (typeof window.AOS.refreshHard === "function") {
+            window.AOS.refreshHard();
+          } else if (typeof window.AOS.refresh === "function") {
+            window.AOS.refresh();
+          }
+        }, 50);
+      }
+    };
+
+    if (animate) {
+      projectsGrid.style.opacity = "0";
+      projectsGrid.style.transform = "translateY(12px)";
+      setTimeout(doRender, 180);
+    } else {
+      doRender();
     }
   }
 
   // Create Modern Case-Study Card HTML (Linear / Vercel Aesthetic)
-  function createProjectCardHTML(project) {
+  function createProjectCardHTML(project, idx = 0) {
     const statusColor = project.status === "Production" 
       ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
       : project.status === "Completed"
@@ -120,9 +136,10 @@ document.addEventListener("DOMContentLoaded", function () {
     `).join("");
 
     const extraTechCount = project.techStack.length > 5 ? project.techStack.length - 5 : 0;
+    const staggerDelay = (idx % 3) * 100;
 
     return `
-      <div class="project-card group bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between interactive-element" data-aos="fade-up">
+      <div class="project-card group bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between interactive-element" data-aos="fade-up" data-aos-delay="${staggerDelay}">
         
         <!-- Thumbnail & Badges -->
         <div>
@@ -207,8 +224,8 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "Spendora", category: "Aplikasi Keuangan", tech: "Flutter, REST API", logo: "asset/logo/logo-ios.png", slug: "spendora-finance-app" }
     ];
 
-    const logoGridHTML = managedApps.map(app => `
-      <div class="devops-app-badge group relative bg-white/70 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 p-4 rounded-2xl flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 hover:border-secondary/50 hover:shadow-lg hover:bg-white dark:hover:bg-dark-surface cursor-pointer" ${app.slug ? `data-slug="${app.slug}"` : ''}>
+    const logoGridHTML = managedApps.map((app, idx) => `
+      <div class="devops-app-badge group relative bg-white/70 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 p-4 rounded-2xl flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 hover:border-secondary/50 hover:shadow-lg hover:bg-white dark:hover:bg-dark-surface cursor-pointer" ${app.slug ? `data-slug="${app.slug}"` : ''} data-aos="zoom-in" data-aos-delay="${(idx % 4) * 60}">
         <div class="w-14 h-14 rounded-full bg-gray-100 dark:bg-white text-gray-900 flex items-center justify-center font-bold mb-2.5 group-hover:scale-110 transition-transform overflow-hidden p-2.5 shadow-sm border border-gray-200/60 dark:border-white">
           ${app.logo 
             ? `<img src="${app.logo}" alt="${app.name}" class="w-full h-full object-contain" />`
@@ -230,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="space-y-16 w-full text-left">
         
         <!-- SECTION 1: HERO -->
-        <div class="bg-gradient-to-br from-white/80 to-white/40 dark:from-dark-surface/90 dark:to-dark-bg/90 border border-gray-200/80 dark:border-white/10 p-8 md:p-12 rounded-3xl shadow-xl relative overflow-hidden">
+        <div class="bg-gradient-to-br from-white/80 to-white/40 dark:from-dark-surface/90 dark:to-dark-bg/90 border border-gray-200/80 dark:border-white/10 p-8 md:p-12 rounded-3xl shadow-xl relative overflow-hidden" data-aos="fade-up">
           <div class="max-w-3xl relative z-10 space-y-6">
             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-xs font-mono font-semibold">
               <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
@@ -246,19 +263,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
           <!-- Hero Stats Cards -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-8 border-t border-gray-200/60 dark:border-white/10">
-            <div class="bg-white/60 dark:bg-black/30 border border-gray-200/60 dark:border-white/10 p-4 rounded-2xl text-center hover:border-secondary/40 transition-colors">
+            <div class="bg-white/60 dark:bg-black/30 border border-gray-200/60 dark:border-white/10 p-4 rounded-2xl text-center hover:border-secondary/40 transition-colors" data-aos="fade-up" data-aos-delay="50">
               <div class="text-2xl md:text-3xl font-bold text-primary dark:text-secondary font-mono">12+</div>
               <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">Aplikasi Produksi</div>
             </div>
-            <div class="bg-white/60 dark:bg-black/30 border border-gray-200/60 dark:border-white/10 p-4 rounded-2xl text-center hover:border-secondary/40 transition-colors">
+            <div class="bg-white/60 dark:bg-black/30 border border-gray-200/60 dark:border-white/10 p-4 rounded-2xl text-center hover:border-secondary/40 transition-colors" data-aos="fade-up" data-aos-delay="100">
               <div class="text-2xl md:text-3xl font-bold text-primary dark:text-secondary font-mono">50+</div>
               <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">Deployment Sistem</div>
             </div>
-            <div class="bg-white/60 dark:bg-black/30 border border-gray-200/60 dark:border-white/10 p-4 rounded-2xl text-center hover:border-secondary/40 transition-colors">
+            <div class="bg-white/60 dark:bg-black/30 border border-gray-200/60 dark:border-white/10 p-4 rounded-2xl text-center hover:border-secondary/40 transition-colors" data-aos="fade-up" data-aos-delay="150">
               <div class="text-2xl md:text-3xl font-bold text-primary dark:text-secondary font-mono">99%</div>
               <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">Ketersediaan Layanan</div>
             </div>
-            <div class="bg-white/60 dark:bg-black/30 border border-gray-200/60 dark:border-white/10 p-4 rounded-2xl text-center hover:border-secondary/40 transition-colors">
+            <div class="bg-white/60 dark:bg-black/30 border border-gray-200/60 dark:border-white/10 p-4 rounded-2xl text-center hover:border-secondary/40 transition-colors" data-aos="fade-up" data-aos-delay="200">
               <div class="text-2xl md:text-3xl font-bold text-emerald-500 dark:text-emerald-400 font-mono">CI/CD</div>
               <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">Terotomatisasi</div>
             </div>
@@ -266,7 +283,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
 
         <!-- SECTION 2: FEATURED CASE STUDY -->
-        <div class="space-y-6">
+        <div class="space-y-6" data-aos="fade-up">
           <div class="flex items-center justify-between">
             <h3 class="text-xs font-mono font-bold uppercase tracking-widest text-secondary flex items-center gap-2">
               <i class="ri-star-line"></i> Case Study Unggulan
@@ -320,7 +337,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
 
         <!-- SECTION 2.5: DEVOPS CASE STUDIES GRID -->
-        <div class="space-y-6">
+        <div class="space-y-6" data-aos="fade-up">
           <div class="flex items-center justify-between">
             <h3 class="text-xl md:text-2xl font-bold text-primary dark:text-white">
               Studi Kasus Proyek Infrastruktur
@@ -330,7 +347,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- ERP Kopkar Toyota -->
-            <div class="bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl p-6 flex flex-col justify-between hover:border-secondary/40 transition-all shadow-md group">
+            <div class="bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl p-6 flex flex-col justify-between hover:border-secondary/40 transition-all shadow-md group" data-aos="fade-up" data-aos-delay="0">
               <div class="space-y-3">
                 <div class="flex items-center justify-between">
                   <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">
@@ -361,7 +378,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
 
             <!-- ERP Itekraf -->
-            <div class="bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl p-6 flex flex-col justify-between hover:border-secondary/40 transition-all shadow-md group">
+            <div class="bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl p-6 flex flex-col justify-between hover:border-secondary/40 transition-all shadow-md group" data-aos="fade-up" data-aos-delay="100">
               <div class="space-y-3">
                 <div class="flex items-center justify-between">
                   <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">
@@ -392,7 +409,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
 
             <!-- CI/CD Swarm -->
-            <div class="bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl p-6 flex flex-col justify-between hover:border-secondary/40 transition-all shadow-md group">
+            <div class="bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl p-6 flex flex-col justify-between hover:border-secondary/40 transition-all shadow-md group" data-aos="fade-up" data-aos-delay="0">
               <div class="space-y-3">
                 <div class="flex items-center justify-between">
                   <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">
@@ -422,7 +439,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
 
             <!-- SonarQube Quality Gate -->
-            <div class="bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl p-6 flex flex-col justify-between hover:border-secondary/40 transition-all shadow-md group">
+            <div class="bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl p-6 flex flex-col justify-between hover:border-secondary/40 transition-all shadow-md group" data-aos="fade-up" data-aos-delay="100">
               <div class="space-y-3">
                 <div class="flex items-center justify-between">
                   <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">
@@ -454,7 +471,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
 
         <!-- SECTION 3: PRODUCTION INFRASTRUCTURE -->
-        <div class="space-y-6">
+        <div class="space-y-6" data-aos="fade-up">
           <div>
             <h3 class="text-xl md:text-2xl font-bold text-primary dark:text-white">
               Aplikasi Produksi yang Dikelola
@@ -485,7 +502,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
 
         <!-- SECTION 4: INFRASTRUCTURE EXPERTISE -->
-        <div class="space-y-6">
+        <div class="space-y-6" data-aos="fade-up">
           <div>
             <h3 class="text-xl md:text-2xl font-bold text-primary dark:text-white">
               Keahlian &amp; Kapabilitas Infrastruktur
@@ -610,7 +627,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
 
         <!-- SECTION 8: ACHIEVEMENTS -->
-        <div class="space-y-6">
+        <div class="space-y-6" data-aos="fade-up">
           <div>
             <h3 class="text-xl md:text-2xl font-bold text-primary dark:text-white">
               Pencapaian Infrastruktur &amp; DevOps
@@ -737,14 +754,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         currentCategory = btn.getAttribute("data-category");
         showOnlyFeatured = true; // Reset filter state
-        renderProjects();
+        renderProjects(true);
       });
     });
 
     if (viewAllBtn) {
       viewAllBtn.addEventListener("click", () => {
         showOnlyFeatured = !showOnlyFeatured;
-        renderProjects();
+        renderProjects(true);
       });
     }
   }
@@ -771,7 +788,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (hash.startsWith("#case-study/")) {
       const slug = hash.replace("#case-study/", "");
       openCaseStudy(slug, false);
-    } else if (caseStudyModal && !caseStudyModal.classList.contains("hidden")) {
+    } else if (caseStudyModal && caseStudyModal.classList.contains("active")) {
       closeCaseStudy(false);
     }
   }
@@ -787,6 +804,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     caseStudyContainer.innerHTML = buildCaseStudyHTML(project);
     caseStudyModal.classList.remove("hidden");
+    // Ensure smooth frame transition
+    requestAnimationFrame(() => {
+      caseStudyModal.classList.add("active");
+      caseStudyContainer.classList.add("active");
+    });
     document.body.classList.add("overflow-hidden");
 
     // Scroll to top of modal
@@ -815,7 +837,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Close Case Study Modal
   function closeCaseStudy(updateHash = true) {
     if (!caseStudyModal) return;
-    caseStudyModal.classList.add("hidden");
+    caseStudyModal.classList.remove("active");
+    if (caseStudyContainer) caseStudyContainer.classList.remove("active");
     document.body.classList.remove("overflow-hidden");
 
     if (updateHash && window.location.hash.startsWith("#case-study/")) {
@@ -830,7 +853,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Delegated event listener for any close modal button click
   document.addEventListener("click", (e) => {
     const closeBtn = e.target.closest(".close-modal-btn");
-    if (closeBtn && caseStudyModal && !caseStudyModal.classList.contains("hidden")) {
+    if (closeBtn && caseStudyModal && caseStudyModal.classList.contains("active")) {
       e.preventDefault();
       closeCaseStudy(true);
     }
@@ -1115,7 +1138,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!lightboxModal) return;
 
     lightboxModal.addEventListener("click", (e) => {
-      if (e.target === lightboxModal || e.target.classList.contains("close-lightbox")) {
+      if (e.target === lightboxModal || e.target.closest(".close-lightbox")) {
         closeLightbox();
       }
     });
@@ -1123,7 +1146,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
         closeLightbox();
-        if (caseStudyModal && !caseStudyModal.classList.contains("hidden")) {
+        if (caseStudyModal && caseStudyModal.classList.contains("active")) {
           closeCaseStudy();
         }
       }
@@ -1134,12 +1157,16 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!lightboxModal || !lightboxImage) return;
     lightboxImage.src = src;
     if (lightboxCaption) lightboxCaption.textContent = title || "";
-    lightboxModal.classList.remove("hidden");
+    lightboxModal.classList.add("active");
+    const inner = lightboxModal.querySelector(".modal-scale-smooth");
+    if (inner) inner.classList.add("active");
   }
 
   function closeLightbox() {
     if (!lightboxModal) return;
-    lightboxModal.classList.add("hidden");
+    lightboxModal.classList.remove("active");
+    const inner = lightboxModal.querySelector(".modal-scale-smooth");
+    if (inner) inner.classList.remove("active");
   }
 
   // Start initialization
