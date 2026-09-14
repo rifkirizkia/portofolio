@@ -12,7 +12,7 @@ const PROJECTS_DATA = [
     title: "Server Monitoring Platform",
     category: "web",
     categoryLabel: "Web Development",
-    role: "Fullstack & DevOps",
+    role: "Fullstack & DevSecOps",
     status: "Production",
     timeline: "2026 - 2026",
     isFeatured: true,
@@ -32,7 +32,7 @@ const PROJECTS_DATA = [
     ],
     overview: {
       what: "Platform web SaaS dan internal monitoring server untuk memantau uptime, latency, CPU/Memory load, serta masa berlaku sertifikat SSL dari puluhan endpoint server secara terpusat.",
-      who: "Tim IT operations, System Administrator, dan DevOps Engineers yang mengelola infrastruktur multi-server.",
+      who: "Tim IT operations, System Administrator, dan DevSecOps Engineers yang mengelola infrastruktur multi-server.",
       problemSolved: "Mencegah terjadinya downtime tanpa terdeteksi dengan memberikan notifikasi seketika via Telegram dan WhatsApp ketika terjadi kegagalan server atau SSL mendekati kadaluwarsa."
     },
     problem: "Sebelumnya, pemantauan kesehatan server dilakukan secara manual dan terpisah tanpa adanya sistem notifikasi terpusat. Ketika server mengalami downtime di luar jam kerja, tim IT tidak segera mengetahuinya, berpotensi menimbulkan kerugian pada operasional bisnis.",
@@ -365,19 +365,19 @@ const PROJECTS_DATA = [
     }
   },
 
-  // 7. DEVOPS & INFRASTRUCTURE (DUMMY DEMO PROJECT 1)
+  // 7. DEVSECOPS & INFRASTRUCTURE (DUMMY DEMO PROJECT 1)
   {
     id: "cicd-swarm-infrastructure",
     slug: "cicd-swarm-infrastructure",
     title: "CI/CD Automation & Docker Swarm Cluster",
     category: "devops",
-    categoryLabel: "DevOps & Infrastructure",
-    role: "DevOps Engineer",
+    categoryLabel: "DevSecOps & Infrastructure",
+    role: "DevSecOps Engineer",
     status: "Production",
     timeline: "2024 - Present",
     isFeatured: true,
     thumbnailUrl: "asset/docker_swarm.png",
-    shortDescription: "Arsitektur CI/CD otomatis dengan Docker Swarm untuk deployment zero-downtime dan pemindaian keamanan SonarQube. (Infrastructure Demo)",
+    shortDescription: "Arsitektur CI/CD otomatis dengan Docker Swarm untuk deployment zero-downtime dan pemindaian keamanan SonarQube & OWASP ZAP. (Infrastructure Demo)",
     githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
     techStack: [
@@ -392,7 +392,7 @@ const PROJECTS_DATA = [
     ],
     overview: {
       what: "Arsitektur pipeline CI/CD end-to-end yang mengotomatiskan pengujian unit, pemindaian kualitas kode via SonarQube, pembuatan Docker image, hingga deployment ke cluster Docker Swarm.",
-      who: "Tim software developer dan devops engineer.",
+      who: "Tim software developer dan DevSecOps engineer.",
       problemSolved: "Eliminasi rilis manual yang rentan kesalahan manusia serta menjamin zero-downtime rolling update saat pengiriman versi aplikasi baru."
     },
     problem: "Sebelumnya, proses deployment aplikasi dilakukan secara manual via SSH/FTP ke VPS. Metode ini memakan waktu lama (lebih dari 1-2 jam), berisiko salah konfigurasi environment, dan menyebabkan downtime bagi pengguna akhir.",
@@ -434,14 +434,14 @@ const PROJECTS_DATA = [
     }
   },
 
-  // 8. DEVOPS & INFRASTRUCTURE (DUMMY DEMO PROJECT 2)
+  // 8. DEVSECOPS & INFRASTRUCTURE (DUMMY DEMO PROJECT 2)
   {
     id: "reverse-proxy-ssl-infrastructure",
     slug: "reverse-proxy-ssl-infrastructure",
     title: "Reverse Proxy & Automated SSL Infrastructure",
     category: "devops",
-    categoryLabel: "DevOps & Infrastructure",
-    role: "DevOps Engineer",
+    categoryLabel: "DevSecOps & Infrastructure",
+    role: "DevSecOps Engineer",
     status: "Production",
     timeline: "2024",
     isFeatured: false,
@@ -492,70 +492,72 @@ const PROJECTS_DATA = [
     }
   },
 
-  // 9. DEVOPS & INFRASTRUCTURE (DUMMY DEMO PROJECT 3)
+  // 9. DEVSECOPS & INFRASTRUCTURE (DUMMY DEMO PROJECT 3)
   {
     id: "sonarqube-code-quality-gate",
     slug: "sonarqube-code-quality-gate",
-    title: "SonarQube Code Quality & Security Gate",
+    title: "SonarQube & OWASP ZAP DevSecOps Pipeline",
     category: "devops",
-    categoryLabel: "DevOps & Infrastructure",
-    role: "DevOps Engineer",
+    categoryLabel: "DevSecOps & Infrastructure",
+    role: "DevSecOps Engineer",
     status: "Production",
     timeline: "2024",
     isFeatured: false,
     thumbnailUrl: "asset/7.png",
-    shortDescription: "Sistem pengujian kualitas kode & keamanan SAST otomatis yang terintegrasi di dalam GitHub Actions CI/CD. (Infrastructure Demo)",
+    shortDescription: "Sistem pengujian kualitas kode & keamanan SAST (SonarQube) serta DAST (OWASP ZAP) otomatis yang terintegrasi di dalam GitHub Actions CI/CD. (Infrastructure Demo)",
     githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
     techStack: [
       { name: "SonarQube", icon: "ri-search-eye-line", color: "text-indigo-400" },
+      { name: "OWASP ZAP", icon: "ri-shield-check-line", color: "text-blue-400" },
       { name: "Docker", icon: "ri-box-3-line", color: "text-blue-500" },
       { name: "GitHub Actions", icon: "ri-github-fill", color: "text-slate-300" },
-      { name: "PostgreSQL", icon: "ri-database-2-line", color: "text-blue-400" }
+      { name: "PostgreSQL", icon: "ri-database-2-line", color: "text-sky-400" }
     ],
     overview: {
-      what: "Sistem analisis statis otomatis (SAST) yang diintegrasikan dalam CI/CD pipeline untuk memindai potensi celah keamanan, bug, dan kualitas kode pada setiap Pull Request.",
-      who: "Tim developer software & lead software engineers.",
-      problemSolved: "Mencegah masuknya kode berkualitas buruk atau berisiko celah keamanan ke branch utama produksi."
+      what: "Pipeline DevSecOps terintegrasi yang menggabungkan analisis kode statis (SAST) menggunakan SonarQube dan pemindaian kerentanan dinamis (DAST) menggunakan OWASP ZAP untuk memindai celah keamanan web pada setiap Pull Request dan rilis produksi.",
+      who: "Tim software developer, DevSecOps engineers, dan lead security.",
+      problemSolved: "Mendeteksi secara otomatis kerentanan OWASP Top 10 (SQL Injection, XSS, CSRF, insecure headers) serta bug sebelum kode lolos ke branch utama produksi."
     },
-    problem: "Code review manual memerlukan waktu lama dan berpotensi melewatkan celah keamanan tak kasat mata seperti SQL Injection atau kebocoran memori.",
+    problem: "Code review manual memerlukan waktu lama dan sering melewatkan celah keamanan dinamis maupun statis seperti SQL Injection, XSS, atau miskonfigurasi header keamanan yang berisiko dieksploitasi di server produksi.",
     architecture: [
       { step: 1, title: "Git Pull Request", icon: "ri-git-pull-request-line", desc: "Developer buat Pull Request di GitHub Repository" },
-      { step: 2, title: "SonarScanner Execution", icon: "ri-search-eye-line", desc: "Runner membaca source code & unit test coverage" },
-      { step: 3, title: "SonarQube Analysis Server", icon: "ri-shield-keyhole-line", desc: "Evaluasi Quality Gate: Security, Bugs, & Technical Debt" },
-      { step: 4, title: "GitHub PR Status Gate", icon: "ri-checkbox-circle-line", desc: "Komentar otomatis & pass/fail status gate di PR" }
+      { step: 2, title: "SonarQube SAST Scan", icon: "ri-search-eye-line", desc: "Analisis kode statis, code smell, & unit test coverage" },
+      { step: 3, title: "OWASP ZAP DAST Scan", icon: "ri-shield-check-line", desc: "Pemindaian dinamis kerentanan web OWASP Top 10 & API" },
+      { step: 4, title: "Security & Quality Gate", icon: "ri-checkbox-circle-line", desc: "Pass/Fail status gate otomatis & laporan kerentanan di PR" }
     ],
     responsibilities: [
-      "SonarQube server deployment via Docker Swarm",
-      "GitHub Organization integration & webhook setup",
-      "Custom Quality Gate threshold rules design",
-      "Automated Pull Request status check reporting"
+      "SonarQube & OWASP ZAP container deployment via Docker Swarm",
+      "GitHub Actions CI/CD DevSecOps workflow automation",
+      "Automated baseline & active vulnerability scanning setup",
+      "Custom Quality Gate & Security threshold rules design",
+      "Vulnerability triage, issue reporting, and remediation support"
     ],
     results: [
-      "85%+ minimum unit test coverage enforced",
-      "Zero critical security vulnerabilities deployed",
-      "Reduced technical debt by 35%",
-      "Automated code review feedback on PRs"
+      "100% automated SAST & DAST security check on every Pull Request",
+      "Zero critical security vulnerabilities deployed to production",
+      "Comprehensive detection of OWASP Top 10 web vulnerabilities",
+      "Reduced security review cycle from days to under 5 minutes"
     ],
     gallery: [
-      { title: "SonarQube Quality Gate Report", image: "asset/7.png", category: "CI/CD Pipeline" }
+      { title: "SonarQube & OWASP ZAP Security Report", image: "asset/7.png", category: "DevSecOps Pipeline" }
     ],
     learnings: {
-      challenges: "Mengoptimalkan durasi scan SonarScanner agar tidak memperlambat execution pipeline GitHub Actions.",
-      mistakes: "Awalnya melakukan pemindaian pada folder build artifact dan dependencies yang menghabiskan waktu berlebih.",
-      solutions: "Menyusun file aturan pengecualian `.sonarcloud.properties` secara rinci.",
-      improvements: "Integrasi pemindaian kontainer otomatis dengan Trivy security scanner."
+      challenges: "Mengoptimalkan durasi scan OWASP ZAP dan SonarScanner agar tidak memperlambat execution pipeline GitHub Actions dan meminimalkan false positive.",
+      mistakes: "Awalnya menjalankan full active attack scan pada setiap commit reguler yang memakan waktu berlebih.",
+      solutions: "Menerapkan ZAP Baseline Scan untuk Pull Request harian dan ZAP Full Scan terjadwal mingguan pada staging server.",
+      improvements: "Integrasi pemindaian image kontainer otomatis dengan Trivy security scanner."
     }
   },
 
-  // 10. DEVOPS & INFRASTRUCTURE - ERP Kopkar Toyota
+  // 10. DEVSECOPS & INFRASTRUCTURE - ERP Kopkar Toyota
   {
     id: "erp-kopkar-toyota",
     slug: "erp-kopkar-toyota",
     title: "ERP Kopkar Toyota Infrastructure & Deployment",
     category: "devops",
-    categoryLabel: "DevOps & Infrastructure",
-    role: "DevOps Engineer",
+    categoryLabel: "DevSecOps & Infrastructure",
+    role: "DevSecOps Engineer",
     status: "Production",
     timeline: "2025 - 2026",
     isFeatured: true,
@@ -608,14 +610,14 @@ const PROJECTS_DATA = [
     }
   },
 
-  // 11. DEVOPS & INFRASTRUCTURE - ERP Itekraf
+  // 11. DEVSECOPS & INFRASTRUCTURE - ERP Itekraf
   {
     id: "erp-itekraf",
     slug: "erp-itekraf",
     title: "ERP Itekraf Enterprise Infrastructure",
     category: "devops",
-    categoryLabel: "DevOps & Infrastructure",
-    role: "DevOps Engineer",
+    categoryLabel: "DevSecOps & Infrastructure",
+    role: "DevSecOps Engineer",
     status: "Production",
     timeline: "2025 - 2026",
     isFeatured: true,

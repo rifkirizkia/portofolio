@@ -2,17 +2,17 @@
 <html lang="id" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Portofolio Rifki Rizkia - Software Engineer, Mobile Developer, dan DevOps Engineer. Spesialisasi dalam pengembangan Flutter, React Native, Docker Swarm, CI/CD, dan infrastruktur cloud." />
-    <meta name="keywords" content="Rifki Rizkia, Portfolio, Software Engineer, Mobile Developer, DevOps Engineer, Flutter, React Native, Docker, CI/CD, Nginx" />
-    <meta property="og:title" content="Rifki Rizkia - Software Engineer & DevOps Portofolio" />
-    <meta property="og:description" content="Modern, case-study based portfolio showcasing Mobile Development, Web Development, and DevOps Infrastructure projects." />
+    <meta name="description" content="Portofolio Rifki Rizkia - Software Engineer, Mobile Developer, dan DevSecOps Engineer. Spesialisasi dalam pengembangan Flutter, React Native, Docker Swarm, CI/CD, OWASP ZAP, SonarQube, dan infrastruktur cloud." />
+    <meta name="keywords" content="Rifki Rizkia, Portfolio, Software Engineer, Mobile Developer, DevSecOps Engineer, DevOps, OWASP ZAP, SonarQube, Flutter, React Native, Docker, CI/CD, Nginx" />
+    <meta property="og:title" content="Rifki Rizkia - Software Engineer & DevSecOps Portofolio" />
+    <meta property="og:description" content="Modern, case-study based portfolio showcasing Mobile Development, Web Development, and DevSecOps Infrastructure projects." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="asset/foto.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Rifki Rizkia - Software Engineer & DevOps Portofolio" />
-    <meta name="twitter:description" content="Modern, case-study based portfolio showcasing Mobile Development, Web Development, and DevOps Infrastructure projects." />
+    <meta name="twitter:title" content="Rifki Rizkia - Software Engineer & DevSecOps Portofolio" />
+    <meta name="twitter:description" content="Modern, case-study based portfolio showcasing Mobile Development, Web Development, and DevSecOps Infrastructure projects." />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-    <title>Rifki Rizkia - Software Engineer & DevOps Portofolio</title>
+    <title>Rifki Rizkia - Software Engineer & DevSecOps Portofolio</title>
     <script src="https://cdn.tailwindcss.com/3.4.16"></script>
     <script>
       tailwind.config = {
@@ -296,18 +296,45 @@
     <header class="fixed w-full bg-white/80 dark:bg-dark-bg/80 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-gray-800 z-50 transition-all duration-300">
       <div class="container mx-auto px-4 py-3 flex justify-between items-center">
         <a href="#" class="text-2xl font-['Poppins'] font-bold text-primary dark:text-white interactive-element">
-          Portofolio<span class="text-secondary">.</span>
+          <span data-i18n="nav.brand">Portofolio</span><span class="text-secondary">.</span>
         </a>
         
         <!-- Desktop Menu -->
-        <nav class="hidden md:flex space-x-8 items-center">
-          <a href="#tentang" class="font-medium hover:text-secondary dark:hover:text-secondary transition-colors interactive-element">Tentang</a>
-          <a href="#pengalaman" class="font-medium hover:text-secondary dark:hover:text-secondary transition-colors interactive-element">Pengalaman</a>
-          <a href="#projek" class="font-medium hover:text-secondary dark:hover:text-secondary transition-colors interactive-element">Portofolio</a>
-          <a href="#organisasi" class="font-medium hover:text-secondary dark:hover:text-secondary transition-colors interactive-element">Organisasi</a>
-          <a href="#penghargaan" class="font-medium hover:text-secondary dark:hover:text-secondary transition-colors interactive-element">Penghargaan</a>
-          <a href="#kontak" class="font-medium hover:text-secondary dark:hover:text-secondary transition-colors interactive-element">Kontak</a>
+        <nav class="hidden md:flex space-x-7 items-center">
+          <a href="#tentang" data-i18n="nav.about" class="font-medium hover:text-secondary dark:hover:text-secondary transition-colors interactive-element">Tentang</a>
+          <a href="#pengalaman" data-i18n="nav.experience" class="font-medium hover:text-secondary dark:hover:text-secondary transition-colors interactive-element">Pengalaman</a>
+          <a href="#projek" data-i18n="nav.portfolio" class="font-medium hover:text-secondary dark:hover:text-secondary transition-colors interactive-element">Portofolio</a>
+          <a href="#organisasi" data-i18n="nav.organization" class="font-medium hover:text-secondary dark:hover:text-secondary transition-colors interactive-element">Organisasi</a>
+          <a href="#penghargaan" data-i18n="nav.awards" class="font-medium hover:text-secondary dark:hover:text-secondary transition-colors interactive-element">Penghargaan</a>
+          <a href="#kontak" data-i18n="nav.contact" class="font-medium hover:text-secondary dark:hover:text-secondary transition-colors interactive-element">Kontak</a>
           
+          <!-- Language Switcher (Country Logos Only) -->
+          <div class="lang-switcher flex items-center p-1 rounded-full bg-gray-100 dark:bg-dark-surface border border-gray-200/80 dark:border-white/10 shadow-xs backdrop-blur-sm" role="group" aria-label="Language Selector">
+            <button data-lang="id" class="px-2 py-1 rounded-full flex items-center justify-center transition-all duration-300 interactive-element" title="Bahasa Indonesia" aria-label="Bahasa Indonesia">
+              <svg class="w-5 h-3.5 rounded-xs shadow-xs border border-black/10 dark:border-white/10 pointer-events-none" viewBox="0 0 3 2">
+                <rect width="3" height="1" fill="#E70011"/>
+                <rect y="1" width="3" height="1" fill="#FFFFFF"/>
+              </svg>
+            </button>
+            <button data-lang="en" class="px-2 py-1 rounded-full flex items-center justify-center transition-all duration-300 opacity-40 hover:opacity-75 interactive-element" title="English" aria-label="English">
+              <svg class="w-5 h-3.5 rounded-xs shadow-xs border border-black/10 dark:border-white/10 pointer-events-none" viewBox="0 0 60 30">
+                <clipPath id="uk-flag-clip-desktop">
+                  <path d="M0,0 v30 h60 v-30 z"/>
+                </clipPath>
+                <clipPath id="uk-flag-cross-desktop">
+                  <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/>
+                </clipPath>
+                <g clip-path="url(#uk-flag-clip-desktop)">
+                  <path d="M0,0 v30 h60 v-30 z" fill="#012169"/>
+                  <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+                  <path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#uk-flag-cross-desktop)" stroke="#C8102E" stroke-width="4"/>
+                  <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+                  <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+                </g>
+              </svg>
+            </button>
+          </div>
+
           <!-- Theme Toggle -->
           <button id="themeToggle" class="p-2 rounded-full bg-gray-100 dark:bg-dark-surface text-gray-800 dark:text-yellow-400 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors interactive-element">
             <i class="ri-moon-line hidden dark:block"></i>
@@ -315,8 +342,35 @@
           </button>
         </nav>
 
-        <!-- Mobile Menu Button & Theme Toggle -->
-        <div class="md:hidden flex items-center space-x-4">
+        <!-- Mobile Menu Button, Language & Theme Toggle -->
+        <div class="md:hidden flex items-center space-x-2.5">
+          <!-- Mobile Language Switcher (Country Logos Only) -->
+          <div class="lang-switcher flex items-center p-0.5 rounded-full bg-gray-100 dark:bg-dark-surface border border-gray-200/80 dark:border-white/10 shadow-xs" role="group" aria-label="Language Selector">
+            <button data-lang="id" class="px-1.5 py-1 rounded-full flex items-center justify-center transition-all duration-300 interactive-element" title="Bahasa Indonesia" aria-label="Bahasa Indonesia">
+              <svg class="w-4 h-3 rounded-xs shadow-xs border border-black/10 dark:border-white/10 pointer-events-none" viewBox="0 0 3 2">
+                <rect width="3" height="1" fill="#E70011"/>
+                <rect y="1" width="3" height="1" fill="#FFFFFF"/>
+              </svg>
+            </button>
+            <button data-lang="en" class="px-1.5 py-1 rounded-full flex items-center justify-center transition-all duration-300 opacity-40 hover:opacity-75 interactive-element" title="English" aria-label="English">
+              <svg class="w-4 h-3 rounded-xs shadow-xs border border-black/10 dark:border-white/10 pointer-events-none" viewBox="0 0 60 30">
+                <clipPath id="uk-flag-clip-mobile">
+                  <path d="M0,0 v30 h60 v-30 z"/>
+                </clipPath>
+                <clipPath id="uk-flag-cross-mobile">
+                  <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/>
+                </clipPath>
+                <g clip-path="url(#uk-flag-clip-mobile)">
+                  <path d="M0,0 v30 h60 v-30 z" fill="#012169"/>
+                  <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+                  <path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#uk-flag-cross-mobile)" stroke="#C8102E" stroke-width="4"/>
+                  <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+                  <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+                </g>
+              </svg>
+            </button>
+          </div>
+
           <button id="mobileThemeToggle" class="p-2 rounded-full bg-gray-100 dark:bg-dark-surface text-gray-800 dark:text-yellow-400 interactive-element">
             <i class="ri-moon-line hidden dark:block"></i>
             <i class="ri-sun-line block dark:hidden"></i>
@@ -330,18 +384,18 @@
       <!-- Mobile Menu -->
       <div id="mobileMenu" class="md:hidden bg-white/95 dark:bg-dark-bg/95 backdrop-blur-lg shadow-lg border-b border-gray-200 dark:border-gray-800 menu-closed">
         <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
-          <a href="#tentang" class="font-medium py-2 hover:text-secondary dark:text-gray-300 transition-colors">Tentang</a>
-          <a href="#pengalaman" class="font-medium py-2 hover:text-secondary dark:text-gray-300 transition-colors">Pengalaman</a>
-          <a href="#projek" class="font-medium py-2 hover:text-secondary dark:text-gray-300 transition-colors">Projek</a>
-          <a href="#organisasi" class="font-medium py-2 hover:text-secondary dark:text-gray-300 transition-colors">Organisasi</a>
-          <a href="#penghargaan" class="font-medium py-2 hover:text-secondary dark:text-gray-300 transition-colors">Penghargaan</a>
-          <a href="#kontak" class="font-medium py-2 hover:text-secondary dark:text-gray-300 transition-colors">Kontak</a>
+          <a href="#tentang" data-i18n="nav.about" class="font-medium py-2 hover:text-secondary dark:text-gray-300 transition-colors">Tentang</a>
+          <a href="#pengalaman" data-i18n="nav.experience" class="font-medium py-2 hover:text-secondary dark:text-gray-300 transition-colors">Pengalaman</a>
+          <a href="#projek" data-i18n="nav.portfolio" class="font-medium py-2 hover:text-secondary dark:text-gray-300 transition-colors">Portofolio</a>
+          <a href="#organisasi" data-i18n="nav.organization" class="font-medium py-2 hover:text-secondary dark:text-gray-300 transition-colors">Organisasi</a>
+          <a href="#penghargaan" data-i18n="nav.awards" class="font-medium py-2 hover:text-secondary dark:text-gray-300 transition-colors">Penghargaan</a>
+          <a href="#kontak" data-i18n="nav.contact" class="font-medium py-2 hover:text-secondary dark:text-gray-300 transition-colors">Kontak</a>
         </div>
       </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="min-h-screen flex items-center pt-16 relative overflow-hidden" data-bg-dark="#0B192C" data-bg-light="#F9FAFB">
+    <section id="hero" class="min-h-screen flex items-center pt-16 relative overflow-hidden" data-bg-dark="#0B192C" data-bg-light="#F9FAFB">
       <!-- Minimalist grid background with parallax scroll -->
       <div class="absolute inset-0 bg-[linear-gradient(rgba(100,255,218,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(100,255,218,0.03)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" data-parallax-speed="-0.15" style="z-index: 0;"></div>
       
@@ -353,21 +407,21 @@
         <div class="flex flex-col-reverse md:flex-row items-center justify-between gap-12">
           
           <div class="w-full md:w-1/2 text-center md:text-left">
-            <h2 class="text-secondary font-medium tracking-wider mb-2" data-aos="fade-down">Halo, saya</h2>
+            <h2 class="text-secondary font-medium tracking-wider mb-2" data-aos="fade-down" data-i18n="hero.greeting">Halo, saya</h2>
             <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-primary dark:text-white mb-4" data-aos="fade-right" data-aos-delay="100">
               Rifki Rizkia
             </h1>
             <p class="text-2xl md:text-3xl text-gray-600 dark:text-gray-400 font-medium mb-6" data-aos="fade-right" data-aos-delay="200">
               <span id="typewriter-text"></span><span class="text-secondary dark:text-secondary animate-blink">|</span>
             </p>
-            <p class="text-gray-600 dark:text-gray-400 mb-10 max-w-lg mx-auto md:mx-0 text-lg leading-relaxed" data-aos="fade-up" data-aos-delay="300">
+            <p class="text-gray-600 dark:text-gray-400 mb-10 max-w-lg mx-auto md:mx-0 text-lg leading-relaxed" data-aos="fade-up" data-aos-delay="300" data-i18n="hero.bio">
               Berpengalaman dalam pengembangan aplikasi, website, serta infrastruktur server untuk menghadirkan solusi digital yang cepat, aman, dan mudah dikembangkan sesuai kebutuhan bisnis.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start" data-aos="fade-up" data-aos-delay="400">
-              <a href="#projek" class="bg-primary dark:bg-secondary text-white dark:text-primary font-semibold px-8 py-4 rounded-xl whitespace-nowrap hover:shadow-lg hover:-translate-y-1 transition-all interactive-element">
+              <a href="#projek" data-i18n="hero.ctaPortfolio" class="bg-primary dark:bg-secondary text-white dark:text-primary font-semibold px-8 py-4 rounded-xl whitespace-nowrap hover:shadow-lg hover:-translate-y-1 transition-all interactive-element">
                 Lihat Portofolio
               </a>
-              <a href="#kontak" class="border-2 border-primary dark:border-secondary text-primary dark:text-secondary font-semibold px-8 py-4 rounded-xl whitespace-nowrap hover:bg-primary hover:text-white dark:hover:bg-secondary/10 transition-all interactive-element">
+              <a href="#kontak" data-i18n="hero.ctaContact" class="border-2 border-primary dark:border-secondary text-primary dark:text-secondary font-semibold px-8 py-4 rounded-xl whitespace-nowrap hover:bg-primary hover:text-white dark:hover:bg-secondary/10 transition-all interactive-element">
                 Hubungi Saya
               </a>
             </div>
@@ -398,7 +452,7 @@
       <div class="container mx-auto px-4 relative z-10">
         <div class="flex flex-col items-center text-center mb-16" data-aos="fade-up">
           <h2 class="text-3xl md:text-4xl font-bold text-primary dark:text-white relative pb-4">
-            Tentang Saya
+            <span data-i18n="about.title">Tentang Saya</span>
             <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-secondary rounded-full shadow-[0_0_10px_var(--color-secondary)]"></span>
           </h2>
         </div>
@@ -406,16 +460,16 @@
         <div class="flex flex-col lg:flex-row gap-16">
           <div class="w-full lg:w-1/2" data-aos="fade-right">
             <div class="prose dark:prose-invert max-w-none text-lg text-gray-700 dark:text-gray-300 leading-relaxed space-y-6">
-              <p>
+              <p data-i18n="about.p1">
                 Saya adalah Software Engineer dengan pengalaman lebih dari 5 tahun dalam membangun aplikasi mobile, website, dan sistem backend yang siap digunakan di lingkungan produksi.
               </p>
-              <p>
+              <p data-i18n="about.p2">
                 Saya membantu bisnis mengubah ide menjadi produk digital melalui proses end-to-end, mulai dari analisis kebutuhan, desain UI/UX, pengembangan aplikasi, hingga deployment ke server agar sistem dapat berjalan dengan stabil dan aman.
               </p>
-              <p>
+              <p data-i18n="about.p3">
                 Selain pengembangan aplikasi menggunakan Flutter, React Native, dan teknologi web modern, saya juga berpengalaman dalam pengelolaan server, cloud, dan CI/CD untuk memastikan aplikasi siap digunakan dan mudah dikembangkan ke depannya.
               </p>
-              <p>
+              <p data-i18n="about.p4">
                 Saya fokus membangun solusi yang cepat, aman, dan mudah digunakan untuk mendukung pertumbuhan bisnis klien.
               </p>
             </div>
@@ -423,14 +477,14 @@
           
           <div class="w-full lg:w-1/2 flex flex-col gap-8">
             <div data-aos="fade-left">
-              <h3 class="text-2xl font-bold text-primary dark:text-white">Keahlian & Teknologi</h3>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Berikut adalah ekosistem teknologi yang biasa saya gunakan untuk membangun solusi siap produksi.</p>
+              <h3 class="text-2xl font-bold text-primary dark:text-white" data-i18n="about.skillsTitle">Keahlian & Teknologi</h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" data-i18n="about.skillsSubtitle">Berikut adalah ekosistem teknologi yang biasa saya gunakan untuk membangun solusi siap produksi.</p>
             </div>
             
             <div class="flex flex-col gap-6">
               <!-- Category 1: Mobile & Frontend -->
               <div class="space-y-3" data-aos="fade-left" data-aos-delay="100">
-                <h4 class="text-xs font-semibold tracking-wider uppercase text-gray-400 dark:text-gray-500">Mobile & Frontend</h4>
+                <h4 class="text-xs font-semibold tracking-wider uppercase text-gray-400 dark:text-gray-500" data-i18n="about.catMobile">Mobile & Frontend</h4>
                 <div class="flex flex-wrap gap-3">
                   <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-blue-500/50 dark:hover:border-blue-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
                     <i class="ri-code-s-slash-line text-blue-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
@@ -449,7 +503,7 @@
 
               <!-- Category 2: Backend & Automation -->
               <div class="space-y-3" data-aos="fade-left" data-aos-delay="200">
-                <h4 class="text-xs font-semibold tracking-wider uppercase text-gray-400 dark:text-gray-500">Backend & Automation</h4>
+                <h4 class="text-xs font-semibold tracking-wider uppercase text-gray-400 dark:text-gray-500" data-i18n="about.catBackend">Backend & Automation</h4>
                 <div class="flex flex-wrap gap-3">
                   <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-amber-500/50 dark:hover:border-amber-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
                     <i class="ri-database-2-line text-amber-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
@@ -468,11 +522,11 @@
 
               <!-- Category 3: DevOps & Infrastructure -->
               <div class="space-y-3" data-aos="fade-left" data-aos-delay="300">
-                <h4 class="text-xs font-semibold tracking-wider uppercase text-gray-400 dark:text-gray-500">DevOps & Infrastructure</h4>
+                <h4 class="text-xs font-semibold tracking-wider uppercase text-gray-400 dark:text-gray-500" data-i18n="about.catDevops">DevSecOps &amp; Infrastructure</h4>
                 <div class="flex flex-wrap gap-3">
                   <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-orange-500/50 dark:hover:border-orange-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
-                    <i class="ri-server-line text-orange-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
-                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">DevOps</span>
+                    <i class="ri-shield-keyhole-line text-orange-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">DevSecOps</span>
                   </div>
                   <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-blue-500/50 dark:hover:border-blue-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
                     <img src="asset/docker.png" alt="Docker" class="w-5 h-5 object-contain mr-2.5 group-hover:scale-110 transition-transform" />
@@ -491,12 +545,20 @@
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Nginx</span>
                   </div>
                   <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-sky-500/50 dark:hover:border-sky-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
-                    <i class="ri-shield-keyhole-line text-sky-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
-                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Setup SSL</span>
+                    <i class="ri-lock-2-line text-sky-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300" data-i18n="about.sslSetup">Setup SSL</span>
                   </div>
                   <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-slate-500/50 dark:hover:border-slate-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
                     <i class="ri-terminal-box-line text-slate-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Linux</span>
+                  </div>
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-indigo-500/50 dark:hover:border-indigo-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-search-eye-line text-indigo-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">SonarQube (SAST)</span>
+                  </div>
+                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-blue-500/50 dark:hover:border-blue-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
+                    <i class="ri-shield-check-line text-blue-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">OWASP ZAP (DAST)</span>
                   </div>
                   <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-yellow-500/50 dark:hover:border-yellow-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
                     <i class="ri-line-chart-line text-yellow-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
@@ -505,10 +567,6 @@
                   <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-pink-500/50 dark:hover:border-pink-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
                     <i class="ri-pulse-line text-pink-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Prometheus</span>
-                  </div>
-                  <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-indigo-500/50 dark:hover:border-indigo-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
-                    <i class="ri-search-eye-line text-indigo-500 mr-2.5 ri-lg group-hover:scale-110 transition-transform"></i>
-                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">SonarQube</span>
                   </div>
                 </div>
               </div>
@@ -527,7 +585,7 @@
       <div class="container mx-auto px-4 relative z-10">
         <div class="flex flex-col items-center text-center mb-16" data-aos="fade-up">
           <h2 class="text-3xl md:text-4xl font-bold text-primary dark:text-white relative pb-4">
-            Pengalaman Kerja
+            <span data-i18n="experience.title">Pengalaman Kerja</span>
             <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-secondary rounded-full shadow-[0_0_10px_var(--color-secondary)]"></span>
           </h2>
         </div>
@@ -539,18 +597,18 @@
             <!-- Experience 1 -->
             <div class="flex flex-col md:flex-row mb-16 relative group" data-aos="fade-up">
               <div class="hidden md:block w-1/3 pr-12 text-right">
-                <p class="text-secondary font-mono text-sm mt-1">Jan 2023 – Jul 2023</p>
+                <p class="text-secondary font-mono text-sm mt-1" data-i18n="experience.exp1Date">Jan 2023 – Jul 2023</p>
               </div>
               <div class="timeline-dot hidden md:block group-hover:scale-150 transition-transform"></div>
               <div class="md:w-2/3 md:pl-12 pl-8 relative">
                 <div class="timeline-dot md:hidden group-hover:scale-150 transition-transform"></div>
                 <div class="md:hidden mb-2">
-                  <p class="text-secondary font-mono text-sm">Jan 2023 – Jul 2023</p>
+                  <p class="text-secondary font-mono text-sm" data-i18n="experience.exp1Date">Jan 2023 – Jul 2023</p>
                 </div>
                 <div class="glass-card p-8 rounded-2xl interactive-element">
-                  <h3 class="text-2xl font-bold text-primary dark:text-white mb-1">Mobile Developer (Magang)</h3>
+                  <h3 class="text-2xl font-bold text-primary dark:text-white mb-1" data-i18n="experience.exp1Role">Mobile Developer (Magang)</h3>
                   <h4 class="text-lg font-medium text-gray-500 dark:text-gray-400 mb-4">Radya Labs</h4>
-                  <p class="text-gray-700 dark:text-gray-300">
+                  <p class="text-gray-700 dark:text-gray-300" data-i18n="experience.exp1Desc">
                     Mengembangkan aplikasi mobile menggunakan Flutter untuk klien perusahaan. Bertanggung jawab untuk implementasi UI/UX design, integrasi API, dan pengujian aplikasi.
                   </p>
                 </div>
@@ -560,18 +618,18 @@
             <!-- Experience 2 -->
             <div class="flex flex-col md:flex-row mb-16 relative group" data-aos="fade-up">
               <div class="hidden md:block w-1/3 pr-12 text-right">
-                <p class="text-secondary font-mono text-sm mt-1">Nov 2023 – Sekarang</p>
+                <p class="text-secondary font-mono text-sm mt-1" data-i18n="experience.exp2Date">Nov 2023 – Sekarang</p>
               </div>
               <div class="timeline-dot hidden md:block group-hover:scale-150 transition-transform"></div>
               <div class="md:w-2/3 md:pl-12 pl-8 relative">
                 <div class="timeline-dot md:hidden group-hover:scale-150 transition-transform"></div>
                 <div class="md:hidden mb-2">
-                  <p class="text-secondary font-mono text-sm">Nov 2023 – Sekarang</p>
+                  <p class="text-secondary font-mono text-sm" data-i18n="experience.exp2Date">Nov 2023 – Sekarang</p>
                 </div>
                 <div class="glass-card p-8 rounded-2xl interactive-element">
-                  <h3 class="text-2xl font-bold text-primary dark:text-white mb-1">Mobile Developer</h3>
+                  <h3 class="text-2xl font-bold text-primary dark:text-white mb-1" data-i18n="experience.exp2Role">Mobile Developer</h3>
                   <h4 class="text-lg font-medium text-gray-500 dark:text-gray-400 mb-4">elSpasial</h4>
-                  <p class="text-gray-700 dark:text-gray-300">
+                  <p class="text-gray-700 dark:text-gray-300" data-i18n="experience.exp2Desc">
                     Memimpin pengembangan aplikasi mobile untuk berbagai proyek perusahaan menggunakan Flutter dan React Native. Menerapkan best practices dalam pengembangan mobile.
                   </p>
                 </div>
@@ -581,19 +639,19 @@
             <!-- Experience 3 -->
             <div class="flex flex-col md:flex-row relative group" data-aos="fade-up">
               <div class="hidden md:block w-1/3 pr-12 text-right">
-                <p class="text-secondary font-mono text-sm mt-1">Jun 2025 – Sekarang</p>
+                <p class="text-secondary font-mono text-sm mt-1" data-i18n="experience.exp3Date">Jun 2025 – Sekarang</p>
               </div>
               <div class="timeline-dot hidden md:block bg-secondary group-hover:scale-150 transition-transform shadow-[0_0_15px_var(--color-secondary)]"></div>
               <div class="md:w-2/3 md:pl-12 pl-8 relative">
                 <div class="timeline-dot md:hidden bg-secondary group-hover:scale-150 transition-transform"></div>
                 <div class="md:hidden mb-2">
-                  <p class="text-secondary font-mono text-sm">Jun 2025 – Sekarang</p>
+                  <p class="text-secondary font-mono text-sm" data-i18n="experience.exp3Date">Jun 2025 – Sekarang</p>
                 </div>
                 <div class="glass-card border-secondary/50 p-8 rounded-2xl interactive-element">
-                  <h3 class="text-2xl font-bold text-primary dark:text-white mb-1">DevOps Engineer</h3>
+                  <h3 class="text-2xl font-bold text-primary dark:text-white mb-1" data-i18n="experience.exp3Role">DevSecOps Engineer</h3>
                   <h4 class="text-lg font-medium text-gray-500 dark:text-gray-400 mb-4">elSpasial</h4>
-                  <p class="text-gray-700 dark:text-gray-300">
-                    Fokus pada otomatisasi deployment, CI/CD pipeline, dan infrastruktur cloud. Mengelola infrastruktur menggunakan Kubernetes, Docker, dan CI/CD tools.
+                  <p class="text-gray-700 dark:text-gray-300" data-i18n="experience.exp3Desc">
+                    Fokus pada otomatisasi deployment, CI/CD pipeline, keamanan SAST/DAST (SonarQube &amp; OWASP ZAP), serta infrastruktur cloud yang andal dan terproteksi.
                   </p>
                 </div>
               </div>
@@ -613,11 +671,11 @@
       <div class="container mx-auto px-4 relative z-10">
         <div class="flex flex-col items-center text-center mb-12" data-aos="fade-up">
           <h2 class="text-3xl md:text-4xl font-bold text-primary dark:text-white relative pb-4">
-            Portofolio & Case Studies
+            <span data-i18n="portfolio.title">Portofolio & Case Studies</span>
             <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-secondary rounded-full shadow-[0_0_10px_var(--color-secondary)]"></span>
           </h2>
-          <p class="text-gray-600 dark:text-gray-400 mt-4 max-w-xl text-base">
-            Eksplorasi proyek aplikasi mobile, sistem web enterprise, dan arsitektur infrastruktur DevOps yang telah saya selesaikan.
+          <p class="text-gray-600 dark:text-gray-400 mt-4 max-w-xl text-base" data-i18n="portfolio.subtitle">
+            Eksplorasi proyek aplikasi mobile, sistem web enterprise, dan arsitektur infrastruktur DevSecOps yang telah saya selesaikan.
           </p>
         </div>
 
@@ -625,16 +683,16 @@
         <div class="flex items-center justify-center mb-12" data-aos="fade-up" data-aos-delay="100">
           <div class="inline-flex p-1.5 rounded-2xl bg-white/70 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 backdrop-blur-md shadow-sm gap-1 sm:gap-2 max-w-full overflow-x-auto">
             <button class="portfolio-tab-btn active px-4 py-2 sm:px-6 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 bg-primary text-white dark:bg-secondary dark:text-primary shadow-md interactive-element" data-category="all">
-              <i class="ri-apps-line mr-1.5"></i> Semua Projek
+              <i class="ri-apps-line mr-1.5"></i> <span data-i18n="portfolio.tabAll">Semua Projek</span>
             </button>
             <button class="portfolio-tab-btn px-4 py-2 sm:px-6 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 bg-white/60 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-white border-transparent interactive-element" data-category="mobile">
-              <i class="ri-smartphone-line mr-1.5"></i> Mobile
+              <i class="ri-smartphone-line mr-1.5"></i> <span data-i18n="portfolio.tabMobile">Mobile</span>
             </button>
             <button class="portfolio-tab-btn px-4 py-2 sm:px-6 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 bg-white/60 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-white border-transparent interactive-element" data-category="web">
-              <i class="ri-global-line mr-1.5"></i> Web
+              <i class="ri-global-line mr-1.5"></i> <span data-i18n="portfolio.tabWeb">Web</span>
             </button>
             <button class="portfolio-tab-btn px-4 py-2 sm:px-6 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 bg-white/60 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-white border-transparent interactive-element" data-category="devops">
-              <i class="ri-server-line mr-1.5"></i> DevOps
+              <i class="ri-shield-keyhole-line mr-1.5"></i> <span data-i18n="portfolio.tabDevops">DevSecOps</span>
             </button>
           </div>
         </div>
@@ -647,7 +705,7 @@
         <!-- View All Projects Footer Button -->
         <div class="mt-14 text-center">
           <button id="view-all-projects-btn" class="bg-white/80 dark:bg-white/5 hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-primary border border-gray-200/80 dark:border-white/10 text-primary dark:text-secondary font-semibold px-8 py-3.5 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 inline-flex items-center gap-2 interactive-element">
-            Lihat Semua Projek <i class="ri-arrow-right-line ml-1"></i>
+            <span data-i18n="portfolio.viewAll">Lihat Semua Projek</span> <i class="ri-arrow-right-line ml-1"></i>
           </button>
         </div>
 
@@ -663,7 +721,7 @@
       <div class="container mx-auto px-4 relative z-10">
         <div class="flex flex-col items-center text-center mb-16" data-aos="fade-up">
           <h2 class="text-3xl md:text-4xl font-bold text-primary dark:text-white relative pb-4">
-            Pengalaman Organisasi
+            <span data-i18n="organization.title">Pengalaman Organisasi</span>
             <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-secondary rounded-full shadow-[0_0_10px_var(--color-secondary)]"></span>
           </h2>
         </div>
@@ -674,11 +732,11 @@
               <i class="ri-team-line ri-3x text-white dark:text-dark-bg"></i>
             </div>
             <div>
-              <h3 class="text-3xl font-bold mb-4 text-primary dark:text-white">Danurdara</h3>
-              <p class="text-gray-700 dark:text-gray-300 mb-4 text-lg">
+              <h3 class="text-3xl font-bold mb-4 text-primary dark:text-white" data-i18n="organization.name">Danurdara</h3>
+              <p class="text-gray-700 dark:text-gray-300 mb-4 text-lg" data-i18n="organization.p1">
                 Aktif sebagai anggota Danurdara, organisasi yang berfokus pada kegiatan sosial dan kemanusiaan.
               </p>
-              <p class="text-gray-700 dark:text-gray-300 text-lg">
+              <p class="text-gray-700 dark:text-gray-300 text-lg" data-i18n="organization.p2">
                 Sebagai tim teknologi, saya berkontribusi dalam pengembangan website komunitas profile dan publikasi dokumentasi kegiatan.
               </p>
             </div>
@@ -696,7 +754,7 @@
       <div class="container mx-auto px-4 relative z-10">
         <div class="flex flex-col items-center text-center mb-16" data-aos="fade-up">
           <h2 class="text-3xl md:text-4xl font-bold text-primary dark:text-white relative pb-4">
-            Penghargaan & Prestasi
+            <span data-i18n="awards.title">Penghargaan & Prestasi</span>
             <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-secondary rounded-full shadow-[0_0_10px_var(--color-secondary)]"></span>
           </h2>
         </div>
@@ -706,8 +764,8 @@
           <div class="w-20 h-20 flex items-center justify-center bg-yellow-100 dark:bg-yellow-900/30 rounded-full mb-6 shadow-[0_0_20px_rgba(250,204,21,0.3)]">
             <i class="ri-award-fill ri-3x text-yellow-500"></i>
           </div>
-          <h3 class="text-3xl font-bold text-center mb-3 text-primary dark:text-white">Juara 2</h3>
-          <p class="text-xl text-gray-700 dark:text-gray-300 text-center mb-2">Mahasiswa Berprestasi Program Diploma Tingkat Universitas</p>
+          <h3 class="text-3xl font-bold text-center mb-3 text-primary dark:text-white" data-i18n="awards.awardTopTitle">Juara 2</h3>
+          <p class="text-xl text-gray-700 dark:text-gray-300 text-center mb-2" data-i18n="awards.awardTopDesc">Mahasiswa Berprestasi Program Diploma Tingkat Universitas</p>
           <p class="text-secondary font-mono">2023</p>
         </div>
 
@@ -716,29 +774,29 @@
           
           <div class="glass-card rounded-2xl p-6 flex flex-col items-center interactive-element" data-aos="fade-up" data-aos-delay="0">
             <i class="ri-trophy-fill ri-2xl text-yellow-500 mb-4"></i>
-            <h3 class="text-xl font-bold text-primary dark:text-white mb-2">Juara 1</h3>
-            <p class="text-gray-600 dark:text-gray-400 text-center text-sm mb-3 flex-grow">Lomba Swichfest UI/UX</p>
+            <h3 class="text-xl font-bold text-primary dark:text-white mb-2" data-i18n="awards.award1Title">Juara 1</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-center text-sm mb-3 flex-grow" data-i18n="awards.award1Desc">Lomba Swichfest UI/UX</p>
             <span class="text-xs font-mono text-secondary">2023</span>
           </div>
 
           <div class="glass-card rounded-2xl p-6 flex flex-col items-center interactive-element" data-aos="fade-up" data-aos-delay="100">
             <i class="ri-trophy-fill ri-2xl text-yellow-500 mb-4"></i>
-            <h3 class="text-xl font-bold text-primary dark:text-white mb-2">Juara 1</h3>
-            <p class="text-gray-600 dark:text-gray-400 text-center text-sm mb-3 flex-grow">Java Business Competition UI/UX</p>
+            <h3 class="text-xl font-bold text-primary dark:text-white mb-2" data-i18n="awards.award2Title">Juara 1</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-center text-sm mb-3 flex-grow" data-i18n="awards.award2Desc">Java Business Competition UI/UX</p>
             <span class="text-xs font-mono text-secondary">2022</span>
           </div>
 
           <div class="glass-card rounded-2xl p-6 flex flex-col items-center interactive-element" data-aos="fade-up" data-aos-delay="200">
             <i class="ri-trophy-fill ri-2xl text-yellow-500 mb-4"></i>
-            <h3 class="text-xl font-bold text-primary dark:text-white mb-2">Juara 1</h3>
-            <p class="text-gray-600 dark:text-gray-400 text-center text-sm mb-3 flex-grow">Bussiness Plan Competition HMPS Nasional</p>
+            <h3 class="text-xl font-bold text-primary dark:text-white mb-2" data-i18n="awards.award3Title">Juara 1</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-center text-sm mb-3 flex-grow" data-i18n="awards.award3Desc">Bussiness Plan Competition HMPS Nasional</p>
             <span class="text-xs font-mono text-secondary">2021</span>
           </div>
 
           <div class="glass-card rounded-2xl p-6 flex flex-col items-center interactive-element" data-aos="fade-up" data-aos-delay="300">
             <i class="ri-medal-fill ri-2xl text-gray-400 mb-4"></i>
-            <h3 class="text-xl font-bold text-primary dark:text-white mb-2">Juara 2</h3>
-            <p class="text-gray-600 dark:text-gray-400 text-center text-sm mb-3 flex-grow">Lomba UI/UX FIKFAIR</p>
+            <h3 class="text-xl font-bold text-primary dark:text-white mb-2" data-i18n="awards.award4Title">Juara 2</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-center text-sm mb-3 flex-grow" data-i18n="awards.award4Desc">Lomba UI/UX FIKFAIR</p>
             <span class="text-xs font-mono text-secondary">2022</span>
           </div>
 
@@ -755,10 +813,10 @@
       <div class="container mx-auto px-4 relative z-10">
         <div class="flex flex-col items-center text-center mb-16" data-aos="fade-up">
           <h2 class="text-3xl md:text-4xl font-bold text-primary dark:text-white relative pb-4">
-            Mari Terhubung
+            <span data-i18n="contact.title">Mari Terhubung</span>
             <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-secondary rounded-full shadow-[0_0_10px_var(--color-secondary)]"></span>
           </h2>
-          <p class="max-w-xl mx-auto text-gray-600 dark:text-gray-400 mt-4">
+          <p class="max-w-xl mx-auto text-gray-600 dark:text-gray-400 mt-4" data-i18n="contact.subtitle">
             Saya selalu terbuka untuk mendiskusikan peluang kerja baru, kolaborasi proyek, atau sekadar bertukar sapa.
           </p>
         </div>
@@ -774,7 +832,7 @@
                     <i class="ri-mail-line ri-xl text-primary dark:text-secondary"></i>
                   </div>
                   <div>
-                    <h4 class="font-medium text-gray-500 dark:text-gray-400 text-sm mb-1">Email</h4>
+                    <h4 class="font-medium text-gray-500 dark:text-gray-400 text-sm mb-1" data-i18n="contact.emailLabel">Email</h4>
                     <a href="mailto:rifkirizkia91@gmail.com" class="text-lg font-bold text-primary dark:text-white hover:text-secondary dark:hover:text-secondary transition-colors">rifkirizkia91@gmail.com</a>
                   </div>
                 </div>
@@ -783,8 +841,8 @@
                     <i class="ri-map-pin-line ri-xl text-primary dark:text-secondary"></i>
                   </div>
                   <div>
-                    <h4 class="font-medium text-gray-500 dark:text-gray-400 text-sm mb-1">Lokasi</h4>
-                    <p class="text-lg font-bold text-primary dark:text-white">Bandung, Indonesia</p>
+                    <h4 class="font-medium text-gray-500 dark:text-gray-400 text-sm mb-1" data-i18n="contact.locationLabel">Lokasi</h4>
+                    <p class="text-lg font-bold text-primary dark:text-white" data-i18n="contact.locationValue">Bandung, Indonesia</p>
                   </div>
                 </div>
               </div>
@@ -815,9 +873,9 @@
     <footer class="bg-white dark:bg-[#060F1E] border-t border-gray-200 dark:border-gray-800 py-8 transition-colors duration-300">
       <div class="container mx-auto px-4 text-center">
         <p class="text-gray-600 dark:text-gray-400 font-mono text-sm">
-          Didesain & Dibangun oleh <span class="text-primary dark:text-secondary font-bold">Rifki Rizkia</span>
+          <span data-i18n="footer.designedBy">Didesain & Dibangun oleh</span> <span class="text-primary dark:text-secondary font-bold">Rifki Rizkia</span>
         </p>
-        <p class="text-gray-400 dark:text-gray-600 text-xs mt-2">© 2025 All rights reserved.</p>
+        <p class="text-gray-400 dark:text-gray-600 text-xs mt-2" data-i18n="footer.rights">© 2025 All rights reserved.</p>
       </div>
     </footer>
 
@@ -985,7 +1043,7 @@
         });
 
         // --- Typewriter Effect ---
-        const words = ["Mobile Developer", "Web Developer", "Devops Engineer", "Software Engineer"];
+        const words = ["Mobile Developer", "Web Developer", "DevSecOps Engineer", "Software Engineer"];
         let wordIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
@@ -1026,8 +1084,54 @@
           typewriterEl.textContent = "";
           type();
         }
+
+        // --- Floating WhatsApp Action Button Visibility ---
+        const whatsappFab = document.getElementById("whatsapp-floating-btn");
+        const heroSection = document.getElementById("hero");
+        const contactSection = document.getElementById("kontak");
+
+        function updateWhatsappFabVisibility() {
+          if (!whatsappFab || !heroSection || !contactSection) return;
+          const heroRect = heroSection.getBoundingClientRect();
+          const contactRect = contactSection.getBoundingClientRect();
+
+          // User has scrolled past the hero section: bottom of hero is <= 100px from top of viewport
+          const pastHero = heroRect.bottom <= 100;
+          // User has reached "Mari Terhubung": contact section top has entered viewport (70% down)
+          const reachedContact = contactRect.top <= (window.innerHeight * 0.7);
+
+          if (pastHero && !reachedContact) {
+            whatsappFab.classList.remove("opacity-0", "translate-y-8", "scale-75", "pointer-events-none");
+            whatsappFab.classList.add("opacity-100", "translate-y-0", "scale-100", "pointer-events-auto");
+          } else {
+            whatsappFab.classList.remove("opacity-100", "translate-y-0", "scale-100", "pointer-events-auto");
+            whatsappFab.classList.add("opacity-0", "translate-y-8", "scale-75", "pointer-events-none");
+          }
+        }
+
+        window.addEventListener("scroll", updateWhatsappFabVisibility, { passive: true });
+        window.addEventListener("resize", updateWhatsappFabVisibility, { passive: true });
+        updateWhatsappFabVisibility();
       });
     </script>
+
+    <!-- Floating WhatsApp Action Button (Logo Only) -->
+    <aside aria-label="WhatsApp Contact">
+      <a
+        id="whatsapp-floating-btn"
+        href="https://wa.link/v51flf"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-40 w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-[0_4px_20px_rgba(37,211,102,0.4)] hover:shadow-[0_6px_25px_rgba(37,211,102,0.6)] hover:scale-110 active:scale-95 transition-all duration-300 ease-out opacity-0 translate-y-8 scale-75 pointer-events-none group interactive-element"
+        aria-label="Chat via WhatsApp"
+        title="Chat via WhatsApp"
+      >
+        <!-- Soft glowing pulse ring -->
+        <span class="absolute inset-0 rounded-full bg-[#25D366] opacity-30 animate-ping pointer-events-none"></span>
+        <!-- WhatsApp Icon Only -->
+        <i class="ri-whatsapp-fill text-3xl relative z-10 transition-transform duration-300 group-hover:rotate-12"></i>
+      </a>
+    </aside>
 
     <!-- Case Study Fullscreen Modal -->
     <div id="case-study-modal" class="modal-backdrop-smooth fixed inset-0 z-[100] bg-white dark:bg-dark-bg overflow-y-auto modal-scroll-area">
@@ -1049,8 +1153,9 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="js/projects-data.js?v=2.1"></script>
-    <script src="js/portfolio.js?v=2.1"></script>
+    <script src="js/i18n.js?v=2.4"></script>
+    <script src="js/projects-data.js?v=2.4"></script>
+    <script src="js/portfolio.js?v=2.4"></script>
     <script>
       // Initialize AOS with bidirectional smooth in-out transitions
       AOS.init({

@@ -27,6 +27,30 @@ document.addEventListener("DOMContentLoaded", function () {
     setupTabListeners();
     setupHashRouting();
     setupLightboxListeners();
+    setupLanguageListener();
+  }
+
+  // Listen to language change to re-render UI dynamically
+  function setupLanguageListener() {
+    window.addEventListener("languageChanged", function () {
+      renderProjects(false);
+      // If modal is open, re-render modal with new language
+      if (caseStudyModal && caseStudyModal.classList.contains("active")) {
+        const hashMatch = window.location.hash.match(/^#case-study\/(.+)$/);
+        if (hashMatch && hashMatch[1]) {
+          const project = projectsData.find(p => p.slug === hashMatch[1]);
+          if (project && caseStudyContainer) {
+            caseStudyContainer.innerHTML = buildCaseStudyHTML(project);
+            // Re-attach lightbox listeners inside modal
+            caseStudyContainer.querySelectorAll(".gallery-item").forEach(item => {
+              item.addEventListener("click", () => {
+                openLightbox(item.getAttribute("data-src"), item.getAttribute("data-title"));
+              });
+            });
+          }
+        }
+      }
+    });
   }
 
   // Filter projects by active category and featured status
@@ -41,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return filtered;
   }
 
-  // Render Project Cards or Dedicated DevOps View
   // Render Project Cards or Dedicated DevOps View with smooth transitions
   function renderProjects(animate = false) {
     if (!projectsGrid) return;
@@ -63,10 +86,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const filtered = getFilteredProjects();
         if (filtered.length === 0) {
+          const noProjectsText = window.i18n ? window.i18n.t("portfolio.noProjects") : "Tidak ada projek ditemukan untuk kategori ini.";
           projectsGrid.innerHTML = `
             <div class="col-span-full py-16 text-center text-gray-500 dark:text-gray-400">
               <i class="ri-folder-open-line text-4xl mb-3 block opacity-50"></i>
-              <p class="text-lg">Tidak ada projek ditemukan untuk kategori ini.</p>
+              <p class="text-lg">${noProjectsText}</p>
             </div>
           `;
         } else {
@@ -81,12 +105,15 @@ document.addEventListener("DOMContentLoaded", function () {
             ? projectsData.length 
             : projectsData.filter(p => p.category === currentCategory).length;
           
+          const viewAllLabel = window.i18n ? window.i18n.t("portfolio.viewAll") : "Lihat Semua Projek";
+          const showLessLabel = window.i18n ? window.i18n.t("portfolio.showLess") : "Tampilkan Diringkas";
+
           if (totalInCategory > 6 && showOnlyFeatured) {
             viewAllBtn.style.display = "inline-flex";
-            viewAllBtn.innerHTML = `Lihat Semua Projek (${totalInCategory}) <i class="ri-arrow-right-line ml-2"></i>`;
+            viewAllBtn.innerHTML = `${viewAllLabel} (${totalInCategory}) <i class="ri-arrow-right-line ml-2"></i>`;
           } else if (!showOnlyFeatured) {
             viewAllBtn.style.display = "inline-flex";
-            viewAllBtn.innerHTML = `Tampilkan Diringkas <i class="ri-arrow-up-s-line ml-2"></i>`;
+            viewAllBtn.innerHTML = `${showLessLabel} <i class="ri-arrow-up-s-line ml-2"></i>`;
           } else {
             viewAllBtn.style.display = "none";
           }
@@ -123,20 +150,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Create Modern Case-Study Card HTML (Linear / Vercel Aesthetic)
   function createProjectCardHTML(project, idx = 0) {
-    const statusColor = project.status === "Production" 
+    const loc = window.i18n ? window.i18n.getLocalizedProject(project) : project;
+    const isEn = window.i18n && window.i18n.getLanguage() === "en";
+
+    const statusLabel = loc.status === "Production" 
+      ? (isEn ? "Production" : "Produksi")
+      : loc.status === "Completed"
+      ? (isEn ? "Completed" : "Selesai")
+      : loc.status;
+
+    const statusColor = loc.status === "Production" 
       ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
-      : project.status === "Completed"
+      : loc.status === "Completed"
       ? "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20"
       : "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20";
 
-    const techBadgesHTML = project.techStack.slice(0, 5).map(tech => `
+    const techBadgesHTML = loc.techStack.slice(0, 5).map(tech => `
       <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-gray-700 dark:text-gray-300 text-xs font-mono px-2.5 py-1 rounded-md flex items-center gap-1.5">
         <i class="${tech.icon} ${tech.color}"></i> ${tech.name}
       </span>
     `).join("");
 
-    const extraTechCount = project.techStack.length > 5 ? project.techStack.length - 5 : 0;
+    const extraTechCount = loc.techStack.length > 5 ? loc.techStack.length - 5 : 0;
     const staggerDelay = (idx % 3) * 100;
+
+    const timelineText = isEn ? loc.timeline.replace("Sekarang", "Present") : loc.timeline;
+    const readCaseStudyText = window.i18n ? window.i18n.t("portfolio.readCaseStudy") : "Baca Case Study";
 
     return `
       <div class="project-card group bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between interactive-element" data-aos="fade-up" data-aos-delay="${staggerDelay}">
@@ -144,19 +183,19 @@ document.addEventListener("DOMContentLoaded", function () {
         <!-- Thumbnail & Badges -->
         <div>
           <div class="h-52 overflow-hidden relative bg-gray-900/5 dark:bg-black/30 border-b border-gray-100 dark:border-white/5">
-            <img src="${project.thumbnailUrl}" alt="${project.title}" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out" />
+            <img src="${loc.thumbnailUrl}" alt="${loc.title}" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out" />
             
             <!-- Category Badge -->
             <div class="absolute top-4 left-4 z-10">
               <span class="bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md border border-gray-200/80 dark:border-white/10 text-primary dark:text-secondary text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm">
-                ${project.categoryLabel}
+                ${loc.categoryLabel}
               </span>
             </div>
 
             <!-- Status Badge -->
             <div class="absolute top-4 right-4 z-10">
               <span class="backdrop-blur-md border text-xs font-medium px-2.5 py-1 rounded-md shadow-sm ${statusColor}">
-                • ${project.status}
+                • ${statusLabel}
               </span>
             </div>
           </div>
@@ -165,17 +204,17 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="p-6">
             <!-- Role -->
             <div class="flex items-center gap-2 mb-2 text-xs font-mono text-secondary tracking-wide uppercase font-semibold">
-              <i class="ri-user-settings-line"></i> ${project.role}
+              <i class="ri-user-settings-line"></i> ${loc.role}
             </div>
 
             <!-- Title -->
             <h3 class="text-xl font-bold text-primary dark:text-white group-hover:text-secondary transition-colors line-clamp-1 mb-2">
-              ${project.title}
+              ${loc.title}
             </h3>
 
             <!-- Short Description -->
             <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-2 mb-6">
-              ${project.shortDescription || (project.overview ? project.overview.what : '')}
+              ${loc.shortDescription || (loc.overview ? loc.overview.what : '')}
             </p>
 
             <!-- Tech Stack Badges -->
@@ -189,10 +228,10 @@ document.addEventListener("DOMContentLoaded", function () {
         <!-- Footer / Action Button -->
         <div class="px-6 pb-6 pt-2 border-t border-gray-100 dark:border-white/5 flex items-center justify-between mt-auto">
           <span class="text-xs font-mono text-gray-400 dark:text-gray-500 flex items-center gap-1">
-            <i class="ri-calendar-line"></i> ${project.timeline}
+            <i class="ri-calendar-line"></i> ${timelineText}
           </span>
-          <button class="view-case-study-btn bg-primary/5 hover:bg-primary text-primary hover:text-white dark:bg-secondary/10 dark:hover:bg-secondary dark:text-secondary dark:hover:text-primary text-xs font-semibold px-4 py-2.5 rounded-xl transition-all duration-300 flex items-center gap-2 interactive-element" data-slug="${project.slug}">
-            Baca Case Study <i class="ri-arrow-right-up-line text-sm"></i>
+          <button class="view-case-study-btn bg-primary/5 hover:bg-primary text-primary hover:text-white dark:bg-secondary/10 dark:hover:bg-secondary dark:text-secondary dark:hover:text-primary text-xs font-semibold px-4 py-2.5 rounded-xl transition-all duration-300 flex items-center gap-2 interactive-element" data-slug="${loc.slug}">
+            ${readCaseStudyText} <i class="ri-arrow-right-up-line text-sm"></i>
           </button>
         </div>
 
@@ -202,26 +241,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Dedicated DevOps Portfolio View (9 Sections)
   function buildDevOpsViewHTML() {
+    const isEn = window.i18n && window.i18n.getLanguage() === "en";
+
     const managedApps = [
-      { name: "SweetEscape", category: "Aplikasi Mobile & Web", tech: "Node.js, Docker, Nginx", logo: "asset/logo/sweet-escape-logo.svg" },
-      { name: "Kosmik", category: "Platform Enterprise", tech: "Docker, Nginx, SSL", logo: "asset/logo/logo-kosmik.png" },
-      { name: "DOMS", category: "Platform Operasional", tech: "Linux, Nginx, PostgreSQL", logo: "asset/logo/logo-doms.svg" },
-      { name: "Elkopra", category: "PWA Koperasi", tech: "Laravel, Docker, PWA", logo: "asset/logo/logo-elkopra.svg", slug: "elkopra-financial-system" },
-      { name: "Kopkar Anggota", category: "Koperasi Mobile", tech: "Flutter, IoT Vending API", logo: "asset/logo/logo-kopkar.png", slug: "kopkar-toyota" },
-      { name: "ERP Kopkar Toyota", category: "Sistem ERP Koperasi", tech: "Frappe, ERPNext, Docker", logo: "asset/logo/logo-kopkar.png", slug: "erp-kopkar-toyota" },
-      { name: "ERP Itekraf", category: "Sistem ERP Enterprise", tech: "Frappe, Python, MariaDB", logo: "", slug: "erp-itekraf" },
-      { name: "NAIQ User", category: "Aplikasi Mobile", tech: "Flutter, Firebase, REST API", logo: "asset/logo/naiq-logo.png", slug: "naiq-shuttle-app" },
-      { name: "NAIQ Driver", category: "Tracking Pengemudi", tech: "React Native, Google Maps", logo: "asset/logo/logo-naiq-driver.png" },
-      { name: "Walagiri", category: "Sistem Pertanian", tech: "Vue.js, Docker, Nginx", logo: "asset/logo/logo-wallagri.png" },
-      { name: "Dapen", category: "Sistem Dana Pensiun", tech: "Laravel, MySQL, Docker", logo: "asset/logo/logo-dapen.svg" },
-      { name: "E-Pass", category: "Akses Kontrol", tech: "Node.js, Redis, Nginx", logo: "asset/logo/logo-epass.svg" },
-      { name: "LSP", category: "Portal Sertifikasi", tech: "PHP, MariaDB, Linux", logo: "asset/logo/Logo-lsp.png" },
-      { name: "Komuditi", category: "Sistem Komoditas", tech: "Node.js, Docker Swarm", logo: "asset/logo/logo-komuditi.png" },
-      { name: "Dialogue", category: "Aplikasi Web", tech: "React, Express, PostgreSQL", logo: "asset/logo/logo-dialogue.jpeg" },
-      { name: "RPSM", category: "Sistem Manajemen", tech: "Laravel, MariaDB, Docker", logo: "" },
-      { name: "Flexa", category: "Aplikasi SaaS", tech: "Node.js, Redis, Docker Swarm", logo: "" },
-      { name: "Presensy", category: "Sistem Presensi", tech: "Laravel, MySQL, Certbot", logo: "" },
-      { name: "Spendora", category: "Aplikasi Keuangan", tech: "Flutter, REST API", logo: "asset/logo/logo-ios.png", slug: "spendora-finance-app" }
+      { name: "SweetEscape", category: isEn ? "Mobile & Web App" : "Aplikasi Mobile & Web", tech: "Node.js, Docker, Nginx", logo: "asset/logo/sweet-escape-logo.svg" },
+      { name: "Kosmik", category: isEn ? "Enterprise Platform" : "Platform Enterprise", tech: "Docker, Nginx, SSL", logo: "asset/logo/logo-kosmik.png" },
+      { name: "DOMS", category: isEn ? "Operational Platform" : "Platform Operasional", tech: "Linux, Nginx, PostgreSQL", logo: "asset/logo/logo-doms.svg" },
+      { name: "Elkopra", category: isEn ? "Cooperative PWA" : "PWA Koperasi", tech: "Laravel, Docker, PWA", logo: "asset/logo/logo-elkopra.svg", slug: "elkopra-financial-system" },
+      { name: "Kopkar Anggota", category: isEn ? "Cooperative Mobile" : "Koperasi Mobile", tech: "Flutter, IoT Vending API", logo: "asset/logo/logo-kopkar.png", slug: "kopkar-toyota" },
+      { name: "ERP Kopkar Toyota", category: isEn ? "Cooperative ERP System" : "Sistem ERP Koperasi", tech: "Frappe, ERPNext, Docker", logo: "asset/logo/logo-kopkar.png", slug: "erp-kopkar-toyota" },
+      { name: "ERP Itekraf", category: isEn ? "Enterprise ERP System" : "Sistem ERP Enterprise", tech: "Frappe, Python, MariaDB", logo: "", slug: "erp-itekraf" },
+      { name: "NAIQ User", category: isEn ? "Mobile App" : "Aplikasi Mobile", tech: "Flutter, Firebase, REST API", logo: "asset/logo/naiq-logo.png", slug: "naiq-shuttle-app" },
+      { name: "NAIQ Driver", category: isEn ? "Driver Tracking" : "Tracking Pengemudi", tech: "React Native, Google Maps", logo: "asset/logo/logo-naiq-driver.png" },
+      { name: "Walagiri", category: isEn ? "Agriculture System" : "Sistem Pertanian", tech: "Vue.js, Docker, Nginx", logo: "asset/logo/logo-wallagri.png" },
+      { name: "Dapen", category: isEn ? "Pension Fund System" : "Sistem Dana Pensiun", tech: "Laravel, MySQL, Docker", logo: "asset/logo/logo-dapen.svg" },
+      { name: "E-Pass", category: isEn ? "Access Control" : "Akses Kontrol", tech: "Node.js, Redis, Nginx", logo: "asset/logo/logo-epass.svg" },
+      { name: "LSP", category: isEn ? "Certification Portal" : "Portal Sertifikasi", tech: "PHP, MariaDB, Linux", logo: "asset/logo/Logo-lsp.png" },
+      { name: "Komuditi", category: isEn ? "Commodity System" : "Sistem Komoditas", tech: "Node.js, Docker Swarm", logo: "asset/logo/logo-komuditi.png" },
+      { name: "Dialogue", category: isEn ? "Web App" : "Aplikasi Web", tech: "React, Express, PostgreSQL", logo: "asset/logo/logo-dialogue.jpeg" },
+      { name: "RPSM", category: isEn ? "Management System" : "Sistem Manajemen", tech: "Laravel, MariaDB, Docker", logo: "" },
+      { name: "Flexa", category: isEn ? "SaaS App" : "Aplikasi SaaS", tech: "Node.js, Redis, Docker Swarm", logo: "" },
+      { name: "Presensy", category: isEn ? "Attendance System" : "Sistem Presensi", tech: "Laravel, MySQL, Certbot", logo: "" },
+      { name: "Spendora", category: isEn ? "Finance App" : "Aplikasi Keuangan", tech: "Flutter, REST API", logo: "asset/logo/logo-ios.png", slug: "spendora-finance-app" }
     ];
 
     const logoGridHTML = managedApps.map((app, idx) => `
@@ -238,7 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="absolute bottom-full mb-2 hidden group-hover:block z-20 w-44 bg-gray-900 text-white text-[11px] p-2.5 rounded-xl shadow-xl border border-white/10 pointer-events-none text-center">
           <div class="font-bold text-secondary">${app.name}</div>
           <div class="text-gray-300 text-[10px] mt-0.5">${app.category}</div>
-          ${app.slug ? `<div class="text-emerald-400 text-[9px] mt-1.5 flex items-center justify-center gap-1 font-mono"><i class="ri-eye-line"></i> Lihat Case Study</div>` : ''}
+          ${app.slug ? `<div class="text-emerald-400 text-[9px] mt-1.5 flex items-center justify-center gap-1 font-mono"><i class="ri-eye-line"></i> ${isEn ? "View Case Study" : "Lihat Case Study"}</div>` : ''}
         </div>
       </div>
     `).join("");
@@ -251,13 +292,15 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="max-w-3xl relative z-10 space-y-6">
             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-xs font-mono font-semibold">
               <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
-              Teknik DevOps &amp; Infrastruktur
+              ${isEn ? "DevSecOps & Infrastructure Engineering" : "Teknik DevSecOps & Infrastruktur"}
             </div>
             <h1 class="text-3xl md:text-5xl font-bold text-primary dark:text-white tracking-tight">
-              DevOps Portofolio
+              ${isEn ? "DevSecOps Portfolio" : "DevSecOps Portofolio"}
             </h1>
             <p class="text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-              Membangun infrastruktur yang andal, mengotomatisasi deployment, meningkatkan kualitas perangkat lunak, serta mengelola sistem produksi secara berkelanjutan.
+              ${isEn
+                ? "Building reliable and secure infrastructure, integrating security pipelines (SonarQube SAST & OWASP ZAP DAST), automating deployments, and maintaining sustainable production systems."
+                : "Membangun infrastruktur yang andal dan aman, mengintegrasikan security pipeline (SAST SonarQube & DAST OWASP ZAP), mengotomatisasi deployment, serta mengelola sistem produksi secara berkelanjutan."}
             </p>
           </div>
 
@@ -265,19 +308,19 @@ document.addEventListener("DOMContentLoaded", function () {
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-8 border-t border-gray-200/60 dark:border-white/10">
             <div class="bg-white/60 dark:bg-black/30 border border-gray-200/60 dark:border-white/10 p-4 rounded-2xl text-center hover:border-secondary/40 transition-colors" data-aos="fade-up" data-aos-delay="50">
               <div class="text-2xl md:text-3xl font-bold text-primary dark:text-secondary font-mono">12+</div>
-              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">Aplikasi Produksi</div>
+              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">${isEn ? "Production Apps" : "Aplikasi Produksi"}</div>
             </div>
             <div class="bg-white/60 dark:bg-black/30 border border-gray-200/60 dark:border-white/10 p-4 rounded-2xl text-center hover:border-secondary/40 transition-colors" data-aos="fade-up" data-aos-delay="100">
               <div class="text-2xl md:text-3xl font-bold text-primary dark:text-secondary font-mono">50+</div>
-              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">Deployment Sistem</div>
+              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">${isEn ? "System Deployments" : "Deployment Sistem"}</div>
             </div>
             <div class="bg-white/60 dark:bg-black/30 border border-gray-200/60 dark:border-white/10 p-4 rounded-2xl text-center hover:border-secondary/40 transition-colors" data-aos="fade-up" data-aos-delay="150">
               <div class="text-2xl md:text-3xl font-bold text-primary dark:text-secondary font-mono">99%</div>
-              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">Ketersediaan Layanan</div>
+              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">${isEn ? "Service Availability" : "Ketersediaan Layanan"}</div>
             </div>
             <div class="bg-white/60 dark:bg-black/30 border border-gray-200/60 dark:border-white/10 p-4 rounded-2xl text-center hover:border-secondary/40 transition-colors" data-aos="fade-up" data-aos-delay="200">
-              <div class="text-2xl md:text-3xl font-bold text-emerald-500 dark:text-emerald-400 font-mono">CI/CD</div>
-              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">Terotomatisasi</div>
+              <div class="text-2xl md:text-3xl font-bold text-emerald-500 dark:text-emerald-400 font-mono">SAST &amp; DAST</div>
+              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">DevSecOps Gates</div>
             </div>
           </div>
         </div>
@@ -286,26 +329,26 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="space-y-6" data-aos="fade-up">
           <div class="flex items-center justify-between">
             <h3 class="text-xs font-mono font-bold uppercase tracking-widest text-secondary flex items-center gap-2">
-              <i class="ri-star-line"></i> Case Study Unggulan
+              <i class="ri-star-line"></i> ${isEn ? "Featured Case Study" : "Case Study Unggulan"}
             </h3>
-            <span class="text-xs text-gray-400 font-mono">Sorotan Utama Infrastruktur</span>
+            <span class="text-xs text-gray-400 font-mono">${isEn ? "Key Infrastructure Highlight" : "Sorotan Utama Infrastruktur"}</span>
           </div>
 
           <div class="bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-3xl overflow-hidden shadow-lg p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div class="lg:col-span-5 relative h-64 lg:h-full rounded-2xl overflow-hidden border border-gray-200/80 dark:border-white/10 bg-gray-900/40 min-h-[220px]">
               <img src="asset/7.png" alt="Server Monitoring Platform" class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700" />
               <div class="absolute top-3 left-3 bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md text-secondary text-xs font-semibold px-3 py-1 rounded-lg border border-white/10">
-                Sorotan Utama
+                ${isEn ? "Key Highlight" : "Sorotan Utama"}
               </div>
             </div>
 
             <div class="lg:col-span-7 space-y-4">
               <div class="flex flex-wrap items-center gap-3">
                 <span class="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Status Produksi
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ${isEn ? "Production Status" : "Status Produksi"}
                 </span>
                 <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">
-                  Peran: Fullstack &amp; DevOps
+                  ${isEn ? "Role: Fullstack & DevSecOps" : "Peran: Fullstack & DevSecOps"}
                 </span>
               </div>
 
@@ -314,7 +357,9 @@ document.addEventListener("DOMContentLoaded", function () {
               </h2>
 
               <p class="text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed">
-                Platform web pemantauan server &amp; website multi-node realtime terintegrasi dengan alert Telegram, WhatsApp, &amp; AI Assistant. Mencegah terjadinya downtime tanpa terdeteksi dengan memberikan notifikasi seketika (&lt;5 detik).
+                ${isEn
+                  ? "Realtime multi-node server & website monitoring platform integrated with Telegram, WhatsApp, & AI Assistant alerts. Prevents undetected downtime by delivering immediate notifications (<5 seconds)."
+                  : "Platform web pemantauan server & website multi-node realtime terintegrasi dengan alert Telegram, WhatsApp, & AI Assistant. Mencegah terjadinya downtime tanpa terdeteksi dengan memberikan notifikasi seketika (<5 detik)."}
               </p>
 
               <!-- Tech Stack Badges -->
@@ -329,7 +374,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
               <div class="pt-4 border-t border-gray-200/60 dark:border-white/10">
                 <button class="view-case-study-btn bg-primary text-white dark:bg-secondary dark:text-primary font-semibold text-xs px-6 py-3 rounded-xl hover:shadow-lg transition-all flex items-center gap-2 interactive-element" data-slug="website-monitoring-platform">
-                  Baca Case Study Selengkapnya <i class="ri-arrow-right-line"></i>
+                  ${isEn ? "Read Full Case Study" : "Baca Case Study Selengkapnya"} <i class="ri-arrow-right-line"></i>
                 </button>
               </div>
             </div>
@@ -340,9 +385,9 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="space-y-6" data-aos="fade-up">
           <div class="flex items-center justify-between">
             <h3 class="text-xl md:text-2xl font-bold text-primary dark:text-white">
-              Studi Kasus Proyek Infrastruktur
+              ${isEn ? "DevSecOps & Infrastructure Case Studies" : "Studi Kasus DevSecOps & Infrastruktur"}
             </h3>
-            <span class="text-xs text-gray-400 font-mono">Arsitektur &amp; Deployment Enterprise</span>
+            <span class="text-xs text-gray-400 font-mono">${isEn ? "Enterprise Architecture & Deployments" : "Arsitektur & Deployment Enterprise"}</span>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -351,17 +396,19 @@ document.addEventListener("DOMContentLoaded", function () {
               <div class="space-y-3">
                 <div class="flex items-center justify-between">
                   <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">
-                    Sistem ERP Koperasi
+                    ${isEn ? "Cooperative ERP System" : "Sistem ERP Koperasi"}
                   </span>
                   <span class="text-xs font-mono text-emerald-500 font-semibold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Produksi
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ${isEn ? "Production" : "Produksi"}
                   </span>
                 </div>
                 <h4 class="text-xl font-bold text-primary dark:text-white group-hover:text-secondary transition-colors">
                   ERP Kopkar Toyota Infrastructure &amp; Deployment
                 </h4>
                 <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                  Infrastruktur ERPNext &amp; Frappe terpusat untuk Koperasi Karyawan Toyota, mencakup otomatisasi deployment Docker, reverse proxy Nginx, dan backup otomatis harian.
+                  ${isEn
+                    ? "Centralized ERPNext & Frappe infrastructure for Toyota Employee Cooperative, featuring Docker automated deployment, Nginx reverse proxy, and automated daily backups."
+                    : "Infrastruktur ERPNext & Frappe terpusat untuk Koperasi Karyawan Toyota, mencakup otomatisasi deployment Docker, reverse proxy Nginx, dan backup otomatis harian."}
                 </p>
                 <div class="flex flex-wrap gap-1.5 pt-1">
                   <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Frappe / ERPNext</span>
@@ -372,7 +419,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
               <div class="pt-4 mt-4 border-t border-gray-200/60 dark:border-white/10">
                 <button class="view-case-study-btn bg-primary text-white dark:bg-secondary dark:text-primary font-semibold text-xs px-5 py-2.5 rounded-xl hover:shadow-md transition-all flex items-center gap-2 interactive-element" data-slug="erp-kopkar-toyota">
-                  Baca Case Study <i class="ri-arrow-right-line"></i>
+                  ${isEn ? "Read Case Study" : "Baca Case Study"} <i class="ri-arrow-right-line"></i>
                 </button>
               </div>
             </div>
@@ -382,17 +429,19 @@ document.addEventListener("DOMContentLoaded", function () {
               <div class="space-y-3">
                 <div class="flex items-center justify-between">
                   <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">
-                    Sistem ERP Enterprise
+                    ${isEn ? "Enterprise ERP System" : "Sistem ERP Enterprise"}
                   </span>
                   <span class="text-xs font-mono text-emerald-500 font-semibold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Produksi
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ${isEn ? "Production" : "Produksi"}
                   </span>
                 </div>
                 <h4 class="text-xl font-bold text-primary dark:text-white group-hover:text-secondary transition-colors">
                   ERP Itekraf Enterprise Infrastructure
                 </h4>
                 <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                  Infrastruktur ERP Enterprise Itekraf dengan kontainerisasi Frappe / ERPNext, manajemen SSL otomatis, dan pengerasan keamanan server VPS.
+                  ${isEn
+                    ? "Enterprise ERP infrastructure for Itekraf with Frappe / ERPNext containerization, automated SSL management, and hardened VPS server security."
+                    : "Infrastruktur ERP Enterprise Itekraf dengan kontainerisasi Frappe / ERPNext, manajemen SSL otomatis, dan pengerasan keamanan server VPS."}
                 </p>
                 <div class="flex flex-wrap gap-1.5 pt-1">
                   <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Frappe / ERPNext</span>
@@ -403,7 +452,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
               <div class="pt-4 mt-4 border-t border-gray-200/60 dark:border-white/10">
                 <button class="view-case-study-btn bg-primary text-white dark:bg-secondary dark:text-primary font-semibold text-xs px-5 py-2.5 rounded-xl hover:shadow-md transition-all flex items-center gap-2 interactive-element" data-slug="erp-itekraf">
-                  Baca Case Study <i class="ri-arrow-right-line"></i>
+                  ${isEn ? "Read Case Study" : "Baca Case Study"} <i class="ri-arrow-right-line"></i>
                 </button>
               </div>
             </div>
@@ -413,17 +462,19 @@ document.addEventListener("DOMContentLoaded", function () {
               <div class="space-y-3">
                 <div class="flex items-center justify-between">
                   <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">
-                    Otomatisasi CI/CD
+                    ${isEn ? "CI/CD Automation" : "Otomatisasi CI/CD"}
                   </span>
                   <span class="text-xs font-mono text-emerald-500 font-semibold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Produksi
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ${isEn ? "Production" : "Produksi"}
                   </span>
                 </div>
                 <h4 class="text-xl font-bold text-primary dark:text-white group-hover:text-secondary transition-colors">
                   CI/CD Automation &amp; Docker Swarm Cluster
                 </h4>
                 <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                  Alur kerja CI/CD otomatis menggunakan GitHub Actions &amp; Docker Registry untuk deployment kluster Docker Swarm tanpa downtime.
+                  ${isEn
+                    ? "Automated CI/CD workflow leveraging GitHub Actions & Docker Registry for zero-downtime deployments across a Docker Swarm cluster."
+                    : "Alur kerja CI/CD otomatis menggunakan GitHub Actions & Docker Registry untuk deployment kluster Docker Swarm tanpa downtime."}
                 </p>
                 <div class="flex flex-wrap gap-1.5 pt-1">
                   <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">GitHub Actions</span>
@@ -433,37 +484,41 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
               <div class="pt-4 mt-4 border-t border-gray-200/60 dark:border-white/10">
                 <button class="view-case-study-btn bg-primary text-white dark:bg-secondary dark:text-primary font-semibold text-xs px-5 py-2.5 rounded-xl hover:shadow-md transition-all flex items-center gap-2 interactive-element" data-slug="cicd-swarm-infrastructure">
-                  Baca Case Study <i class="ri-arrow-right-line"></i>
+                  ${isEn ? "Read Case Study" : "Baca Case Study"} <i class="ri-arrow-right-line"></i>
                 </button>
               </div>
             </div>
 
-            <!-- SonarQube Quality Gate -->
+            <!-- SonarQube & OWASP ZAP Quality Gate -->
             <div class="bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl p-6 flex flex-col justify-between hover:border-secondary/40 transition-all shadow-md group" data-aos="fade-up" data-aos-delay="100">
               <div class="space-y-3">
                 <div class="flex items-center justify-between">
                   <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary text-xs font-mono px-3 py-1 rounded-full">
-                    Kualitas Kode &amp; SAST
+                    DevSecOps: SAST &amp; DAST
                   </span>
                   <span class="text-xs font-mono text-emerald-500 font-semibold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Produksi
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ${isEn ? "Production" : "Produksi"}
                   </span>
                 </div>
                 <h4 class="text-xl font-bold text-primary dark:text-white group-hover:text-secondary transition-colors">
-                  SonarQube Code Quality &amp; SAST Pipeline
+                  SonarQube &amp; OWASP ZAP DevSecOps Pipeline
                 </h4>
                 <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                  Sistem pengujian kualitas kode &amp; keamanan SAST otomatis yang terintegrasi di dalam GitHub Actions CI/CD.
+                  ${isEn
+                    ? "Automated static application security testing (SAST SonarQube) & dynamic application security scanning (DAST OWASP ZAP) pipeline in CI/CD."
+                    : "Pipeline otomatis pengujian keamanan kode statis (SAST SonarQube) & pemindaian kerentanan web dinamis (DAST OWASP ZAP) pada CI/CD."}
                 </p>
                 <div class="flex flex-wrap gap-1.5 pt-1">
                   <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">SonarQube</span>
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">OWASP ZAP</span>
+                  <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">SAST/DAST</span>
                   <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Docker</span>
                   <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-[11px] font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">GitHub Actions</span>
                 </div>
               </div>
               <div class="pt-4 mt-4 border-t border-gray-200/60 dark:border-white/10">
                 <button class="view-case-study-btn bg-primary text-white dark:bg-secondary dark:text-primary font-semibold text-xs px-5 py-2.5 rounded-xl hover:shadow-md transition-all flex items-center gap-2 interactive-element" data-slug="sonarqube-code-quality-gate">
-                  Baca Case Study <i class="ri-arrow-right-line"></i>
+                  ${isEn ? "Read Case Study" : "Baca Case Study"} <i class="ri-arrow-right-line"></i>
                 </button>
               </div>
             </div>
@@ -474,10 +529,12 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="space-y-6" data-aos="fade-up">
           <div>
             <h3 class="text-xl md:text-2xl font-bold text-primary dark:text-white">
-              Aplikasi Produksi yang Dikelola
+              ${isEn ? "Managed Production Applications" : "Aplikasi Produksi yang Dikelola"}
             </h3>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              Lingkungan produksi aktif dan microservices di bawah pemeliharaan berkelanjutan.
+              ${isEn
+                ? "Active production environments and microservices under continuous maintenance."
+                : "Lingkungan produksi aktif dan microservices di bawah pemeliharaan berkelanjutan."}
             </p>
           </div>
 
@@ -488,16 +545,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
           <!-- Responsibilities Footer Bar -->
           <div class="bg-white/60 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 p-5 rounded-2xl flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs font-mono text-gray-600 dark:text-gray-300 text-center">
-            <span class="font-bold text-primary dark:text-secondary uppercase">Bertanggung jawab atas:</span>
-            <span>Deployment</span> <span class="text-gray-400">•</span>
-            <span>CI/CD Pipeline</span> <span class="text-gray-400">•</span>
-            <span>Infrastruktur</span> <span class="text-gray-400">•</span>
-            <span>Pemantauan</span> <span class="text-gray-400">•</span>
-            <span>Sertifikat SSL</span> <span class="text-gray-400">•</span>
-            <span>Reverse Proxy</span> <span class="text-gray-400">•</span>
-            <span>Kontainer Docker</span> <span class="text-gray-400">•</span>
-            <span>Dukungan Produksi</span> <span class="text-gray-400">•</span>
-            <span>Pemeliharaan Server</span>
+            <span class="font-bold text-primary dark:text-secondary uppercase">${isEn ? "Responsible for:" : "Bertanggung jawab atas:"}</span>
+            <span>DevSecOps Pipeline</span> <span class="text-gray-400">•</span>
+            <span>Security Scan (SAST/DAST)</span> <span class="text-gray-400">•</span>
+            <span>OWASP ZAP Auditing</span> <span class="text-gray-400">•</span>
+            <span>${isEn ? "Automated Deployment" : "Deployment Otomatis"}</span> <span class="text-gray-400">•</span>
+            <span>${isEn ? "Swarm Infrastructure" : "Infrastruktur Swarm"}</span> <span class="text-gray-400">•</span>
+            <span>${isEn ? "Multi-node Monitoring" : "Pemantauan Multi-node"}</span> <span class="text-gray-400">•</span>
+            <span>${isEn ? "SSL/TLS Certificates" : "Sertifikat SSL/TLS"}</span> <span class="text-gray-400">•</span>
+            <span>Reverse Proxy Gateway</span> <span class="text-gray-400">•</span>
+            <span>${isEn ? "Docker Containers" : "Kontainer Docker"}</span> <span class="text-gray-400">•</span>
+            <span>${isEn ? "Server Maintenance" : "Pemeliharaan Server"}</span>
           </div>
         </div>
 
@@ -505,10 +563,12 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="space-y-6" data-aos="fade-up">
           <div>
             <h3 class="text-xl md:text-2xl font-bold text-primary dark:text-white">
-              Keahlian &amp; Kapabilitas Infrastruktur
+              ${isEn ? "Infrastructure Expertise & Capabilities" : "Keahlian & Kapabilitas Infrastruktur"}
             </h3>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              Kapabilitas teknis utama dalam kontainerisasi, otomatisasi, keamanan, dan observabilitas sistem.
+              ${isEn
+                ? "Core technical capabilities in containerization, automation, security, and system observability."
+                : "Kapabilitas teknis utama dalam kontainerisasi, otomatisasi, keamanan, dan observabilitas sistem."}
             </p>
           </div>
 
@@ -519,7 +579,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center text-xl">
                   <i class="ri-box-3-line"></i>
                 </div>
-                <h4 class="font-bold text-primary dark:text-white text-base">Kontainerisasi Sistem</h4>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "System Containerization" : "Kontainerisasi Sistem"}</h4>
               </div>
               <div class="flex flex-wrap gap-1.5">
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Docker</span>
@@ -527,7 +587,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Docker Swarm</span>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                Mengemas lingkungan aplikasi ke dalam kontainer ringan terisolasi dan mengorientasikan kluster Docker Swarm untuk pembaruan tanpa downtime (zero-downtime rolling updates).
+                ${isEn
+                  ? "Packaging application environments into isolated lightweight containers and configuring Docker Swarm clusters for zero-downtime rolling updates."
+                  : "Mengemas lingkungan aplikasi ke dalam kontainer ringan terisolasi dan mengorientasikan kluster Docker Swarm untuk pembaruan tanpa downtime (zero-downtime rolling updates)."}
               </p>
             </div>
 
@@ -537,15 +599,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl">
                   <i class="ri-git-merge-line"></i>
                 </div>
-                <h4 class="font-bold text-primary dark:text-white text-base">Otomatisasi CI/CD</h4>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "CI/CD Automation" : "Otomatisasi CI/CD"}</h4>
               </div>
               <div class="flex flex-wrap gap-1.5">
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">GitHub Actions</span>
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Docker Hub</span>
-                <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Otomatisasi Release</span>
+                <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">${isEn ? "Release Automation" : "Otomatisasi Release"}</span>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                Membangun alur pengujian otomatis, pembuatan image kontainer multi-arsitektur, publikasi ke Docker registry, dan pemicu otomatis deployment ke server VPS.
+                ${isEn
+                  ? "Building automated testing workflows, multi-arch container image builds, publishing to Docker registries, and automated deployment triggers to VPS servers."
+                  : "Membangun alur pengujian otomatis, pembuatan image kontainer multi-arsitektur, publikasi ke Docker registry, dan pemicu otomatis deployment ke server VPS."}
               </p>
             </div>
 
@@ -555,7 +619,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-xl">
                   <i class="ri-global-line"></i>
                 </div>
-                <h4 class="font-bold text-primary dark:text-white text-base">Reverse Proxy &amp; Jaringan</h4>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "Reverse Proxy & Networking" : "Reverse Proxy & Jaringan"}</h4>
               </div>
               <div class="flex flex-wrap gap-1.5">
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Nginx</span>
@@ -564,25 +628,31 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Cloudflare</span>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                Pengaturan routing gateway terpusat, mitigasi DDoS via Cloudflare WAF, penguatan keamanan header HTTP, dan pembaruan otomatis SSL/TLS Let's Encrypt.
+                ${isEn
+                  ? "Centralized gateway routing setup, DDoS mitigation via Cloudflare WAF, HTTP security headers hardening, and automated Let's Encrypt SSL/TLS renewals."
+                  : "Pengaturan routing gateway terpusat, mitigasi DDoS via Cloudflare WAF, penguatan keamanan header HTTP, dan pembaruan otomatis SSL/TLS Let's Encrypt."}
               </p>
             </div>
 
-            <!-- 4. Code Quality -->
+            <!-- 4. DevSecOps & Security Testing -->
             <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 space-y-4 hover:border-secondary/40 transition-colors">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl">
-                  <i class="ri-search-eye-line"></i>
+                  <i class="ri-shield-check-line"></i>
                 </div>
-                <h4 class="font-bold text-primary dark:text-white text-base">Kualitas Kode &amp; SAST</h4>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "DevSecOps Security (SAST & DAST)" : "Keamanan DevSecOps (SAST & DAST)"}</h4>
               </div>
               <div class="flex flex-wrap gap-1.5">
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">SonarQube</span>
-                <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Quality Gates</span>
+                <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">OWASP ZAP</span>
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">SAST</span>
+                <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">DAST</span>
+                <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Quality Gates</span>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                Pengujian keamanan aplikasi statis, pemindaian kerentanan kode, deteksi bug/code smell, dan penegakan Quality Gate otomatis pada setiap Pull Request.
+                ${isEn
+                  ? "Static application security testing (SAST) with SonarQube and dynamic security scanning (DAST) using OWASP ZAP to detect OWASP Top 10 vulnerabilities prior to production release."
+                  : "Pengujian keamanan kode statis (SAST) dengan SonarQube dan pemindaian keamanan dinamis (DAST) menggunakan OWASP ZAP untuk mendeteksi kerentanan web OWASP Top 10 sebelum rilis produksi."}
               </p>
             </div>
 
@@ -592,7 +662,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl">
                   <i class="ri-notification-3-line"></i>
                 </div>
-                <h4 class="font-bold text-primary dark:text-white text-base">Pemantauan &amp; Observabilitas</h4>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "Monitoring & Observability" : "Pemantauan & Observabilitas"}</h4>
               </div>
               <div class="flex flex-wrap gap-1.5">
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Website Monitoring</span>
@@ -601,7 +671,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">n8n</span>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                Pemantauan kesehatan server multi-node realtime dengan notifikasi instan yang dikirim melalui Telegram, WhatsApp, dan alur kerja otomatis n8n.
+                ${isEn
+                  ? "Realtime multi-node server health monitoring with instant notifications dispatched via Telegram, WhatsApp, and n8n automated workflows."
+                  : "Pemantauan kesehatan server multi-node realtime dengan notifikasi instan yang dikirim melalui Telegram, WhatsApp, dan alur kerja otomatis n8n."}
               </p>
             </div>
 
@@ -611,7 +683,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="w-10 h-10 rounded-xl bg-slate-500/10 text-slate-400 flex items-center justify-center text-xl">
                   <i class="ri-terminal-box-line"></i>
                 </div>
-                <h4 class="font-bold text-primary dark:text-white text-base">Sistem Operasi &amp; Server VPS</h4>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "Operating Systems & VPS Servers" : "Sistem Operasi & Server VPS"}</h4>
               </div>
               <div class="flex flex-wrap gap-1.5">
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Ubuntu</span>
@@ -620,7 +692,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Vultr</span>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-                Administrasi server Linux Ubuntu, penguatan keamanan akses SSH, konfigurasi firewall, optimalisasi memori/swap, dan pembuatan pencadangan otomatis.
+                ${isEn
+                  ? "Linux Ubuntu server administration, SSH access hardening, firewall configuration, memory/swap optimization, and automated backup scheduling."
+                  : "Administrasi server Linux Ubuntu, penguatan keamanan akses SSH, konfigurasi firewall, optimalisasi memori/swap, dan pembuatan pencadangan otomatis."}
               </p>
             </div>
           </div>
@@ -630,10 +704,12 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="space-y-6" data-aos="fade-up">
           <div>
             <h3 class="text-xl md:text-2xl font-bold text-primary dark:text-white">
-              Pencapaian Infrastruktur &amp; DevOps
+              ${isEn ? "Infrastructure & DevSecOps Achievements" : "Pencapaian Infrastruktur & DevSecOps"}
             </h3>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              Hasil utama operasional teknis dan dampak rekayasa infrastruktur.
+              ${isEn
+                ? "Key operational results, security automation milestones, and infrastructure engineering impact."
+                : "Hasil utama operasional teknis, otomatisasi keamanan, dan dampak rekayasa infrastruktur."}
             </p>
           </div>
 
@@ -643,9 +719,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 <i class="ri-apps-2-line"></i>
               </div>
               <div>
-                <h4 class="font-bold text-primary dark:text-white text-base">Aplikasi Produksi Dikelola</h4>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "Managed Production Apps" : "Aplikasi Produksi Dikelola"}</h4>
                 <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
-                  12+ aplikasi dan microservices produksi aktif dipelihara dengan tingkat ketersediaan 99.9%.
+                  ${isEn
+                    ? "12+ active production apps and microservices maintained with 99.9% availability."
+                    : "12+ aplikasi dan microservices produksi aktif dipelihara dengan tingkat ketersediaan 99.9%."}
                 </p>
               </div>
             </div>
@@ -655,9 +733,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 <i class="ri-rocket-line"></i>
               </div>
               <div>
-                <h4 class="font-bold text-primary dark:text-white text-base">Deployment Produksi</h4>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "Production Deployments" : "Deployment Produksi"}</h4>
                 <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
-                  50+ rilis otomatis dijalankan dengan pembaruan tanpa downtime (zero-downtime rolling updates).
+                  ${isEn
+                    ? "50+ automated releases executed with zero-downtime rolling updates."
+                    : "50+ rilis otomatis dijalankan dengan pembaruan tanpa downtime (zero-downtime rolling updates)."}
                 </p>
               </div>
             </div>
@@ -667,21 +747,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 <i class="ri-pulse-line"></i>
               </div>
               <div>
-                <h4 class="font-bold text-primary dark:text-white text-base">Platform Monitoring Mandiri</h4>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "Self-Hosted Monitoring Platform" : "Platform Monitoring Mandiri"}</h4>
                 <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
-                  Merancang dan mendeploy platform pemantauan multi-node realtime dengan sistem alert Telegram &amp; WhatsApp.
+                  ${isEn
+                    ? "Engineered and deployed a realtime multi-node monitoring platform with Telegram & WhatsApp alert systems."
+                    : "Merancang dan mendeploy platform pemantauan multi-node realtime dengan sistem alert Telegram & WhatsApp."}
                 </p>
               </div>
             </div>
 
             <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 flex items-start gap-4">
               <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-2xl flex-shrink-0">
-                <i class="ri-git-branch-line"></i>
+                <i class="ri-shield-keyhole-line"></i>
               </div>
               <div>
-                <h4 class="font-bold text-primary dark:text-white text-base">Implementasi Pipeline CI/CD</h4>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "DevSecOps & CI/CD Pipeline" : "Pipeline DevSecOps & CI/CD"}</h4>
                 <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
-                  Memangkas waktu rilis manual dari 2 jam menjadi kurang dari 3 menit per deployment.
+                  ${isEn
+                    ? "SonarQube & OWASP ZAP automated security scanning reduced vulnerabilities and slashed release cycle from 2 hours to <3 minutes."
+                    : "Otomatisasi pengujian keamanan SonarQube & OWASP ZAP memangkas celah kerentanan serta memotong waktu rilis dari 2 jam menjadi <3 menit."}
                 </p>
               </div>
             </div>
@@ -691,9 +775,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 <i class="ri-cpu-line"></i>
               </div>
               <div>
-                <h4 class="font-bold text-primary dark:text-white text-base">Otomatisasi Infrastruktur</h4>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "Infrastructure Automation" : "Otomatisasi Infrastruktur"}</h4>
                 <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
-                  Mengemas seluruh layanan ke dalam kluster Docker Swarm dengan mekanisme pemulihan otomatis.
+                  ${isEn
+                    ? "Packaged all services into a self-healing Docker Swarm cluster."
+                    : "Mengemas seluruh layanan ke dalam kluster Docker Swarm dengan mekanisme pemulihan otomatis."}
                 </p>
               </div>
             </div>
@@ -703,9 +789,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 <i class="ri-key-2-line"></i>
               </div>
               <div>
-                <h4 class="font-bold text-primary dark:text-white text-base">Otomatisasi Sertifikat SSL</h4>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "SSL Certificate Automation" : "Otomatisasi Sertifikat SSL"}</h4>
                 <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
-                  Mengotomatiskan 100% perpanjangan sertifikat TLS/SSL menggunakan tugas berkala Certbot &amp; Cloudflare DNS challenge.
+                  ${isEn
+                    ? "Automated 100% of TLS/SSL renewals via Certbot scheduled tasks & Cloudflare DNS challenges."
+                    : "Mengotomatiskan 100% perpanjangan sertifikat TLS/SSL menggunakan tugas berkala Certbot & Cloudflare DNS challenge."}
                 </p>
               </div>
             </div>
@@ -861,16 +949,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Build Comprehensive Case Study HTML Page
   function buildCaseStudyHTML(project) {
+    const isEn = window.i18n && window.i18n.getLanguage() === "en";
+    const loc = window.i18n ? window.i18n.getLocalizedProject(project) : project;
+
     // 1. Hero Tech Badges
-    const techBadges = project.techStack.map(t => `
+    const techBadges = (loc.techStack || project.techStack || []).map(t => `
       <span class="bg-white dark:bg-white/10 border border-gray-200/80 dark:border-white/10 text-gray-800 dark:text-gray-200 text-xs font-mono px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-sm">
         <i class="${t.icon} ${t.color}"></i> ${t.name}
       </span>
     `).join("");
 
     // 2. Architecture Nodes HTML
-    const architectureHTML = project.architecture.map((node, index) => {
-      const isLast = index === project.architecture.length - 1;
+    const archList = loc.architecture || project.architecture || [];
+    const architectureHTML = archList.map((node, index) => {
+      const isLast = index === archList.length - 1;
       return `
         <div class="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto relative group">
           <!-- Step Node Block -->
@@ -879,7 +971,7 @@ document.addEventListener("DOMContentLoaded", function () {
               <i class="${node.icon}"></i>
             </div>
             <div class="min-w-0 flex-1">
-              <div class="text-[10px] font-mono uppercase tracking-wider text-secondary font-bold">Step ${node.step}</div>
+              <div class="text-[10px] font-mono uppercase tracking-wider text-secondary font-bold">${isEn ? "Step" : "Langkah"} ${node.step}</div>
               <div class="text-sm font-bold text-primary dark:text-white truncate">${node.title}</div>
               <div class="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">${node.desc}</div>
             </div>
@@ -896,7 +988,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }).join("");
 
     // 3. Responsibilities Checklist
-    const responsibilitiesHTML = project.responsibilities.map(item => `
+    const respList = loc.responsibilities || project.responsibilities || [];
+    const responsibilitiesHTML = respList.map(item => `
       <li class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300">
         <i class="ri-checkbox-circle-fill text-secondary text-base mt-0.5 flex-shrink-0"></i>
         <span>${item}</span>
@@ -904,7 +997,8 @@ document.addEventListener("DOMContentLoaded", function () {
     `).join("");
 
     // 4. Results Highlights
-    const resultsHTML = project.results.map(item => `
+    const resultsList = loc.results || project.results || [];
+    const resultsHTML = resultsList.map(item => `
       <div class="bg-white dark:bg-dark-surface border border-gray-200/80 dark:border-white/10 p-4 rounded-xl flex items-center gap-3 shadow-sm">
         <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-lg flex-shrink-0">
           <i class="ri-trophy-line"></i>
@@ -914,7 +1008,8 @@ document.addEventListener("DOMContentLoaded", function () {
     `).join("");
 
     // 5. Gallery Lightbox Grid
-    const galleryHTML = project.gallery ? project.gallery.map(item => `
+    const galleryList = loc.gallery || project.gallery || [];
+    const galleryHTML = galleryList.length > 0 ? galleryList.map(item => `
       <div class="gallery-item group relative h-48 rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 cursor-pointer interactive-element" data-src="${item.image}" data-title="${item.title}">
         <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4 flex flex-col justify-end">
@@ -930,12 +1025,12 @@ document.addEventListener("DOMContentLoaded", function () {
         <div class="sticky top-0 z-50 bg-white/95 dark:bg-dark-bg/95 backdrop-blur-md border-b border-gray-200/80 dark:border-white/10 px-4 md:px-8 py-3.5 mb-8 shadow-sm">
           <div class="max-w-5xl mx-auto flex items-center justify-between">
             <div class="flex items-center gap-3 overflow-hidden">
-              <span class="px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 font-bold uppercase text-[11px] text-secondary tracking-wider font-mono flex-shrink-0">${project.categoryLabel}</span>
+              <span class="px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 font-bold uppercase text-[11px] text-secondary tracking-wider font-mono flex-shrink-0">${loc.categoryLabel}</span>
               <span class="text-gray-300 dark:text-gray-700 hidden sm:inline">|</span>
-              <span class="text-xs font-semibold text-gray-600 dark:text-gray-300 truncate hidden sm:inline">${project.title}</span>
+              <span class="text-xs font-semibold text-gray-600 dark:text-gray-300 truncate hidden sm:inline">${loc.title}</span>
             </div>
             <button class="close-modal-btn group bg-gray-100 hover:bg-gray-200 dark:bg-white/10 dark:hover:bg-white/20 text-gray-700 dark:text-white px-4 py-2 rounded-full transition-all flex items-center gap-2 text-xs font-medium interactive-element">
-              <span>Tutup</span>
+              <span>${isEn ? "Close" : "Tutup"}</span>
               <i class="ri-close-line text-lg group-hover:rotate-90 transition-transform duration-300"></i>
             </button>
           </div>
@@ -948,22 +1043,22 @@ document.addEventListener("DOMContentLoaded", function () {
           <section class="space-y-6">
             <div class="flex flex-wrap items-center gap-3 text-xs font-mono">
               <span class="bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary font-semibold px-3 py-1 rounded-lg border border-primary/10 dark:border-secondary/20">
-                Role: ${project.role}
+                ${isEn ? "Role" : "Peran"}: ${loc.role}
               </span>
               <span class="bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 px-3 py-1 rounded-lg border border-gray-200 dark:border-white/10">
-                Timeline: ${project.timeline}
+                ${isEn ? "Timeline" : "Waktu"}: ${loc.timeline}
               </span>
               <span class="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold px-3 py-1 rounded-lg border border-emerald-500/20 flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Status: ${project.status}
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Status: ${loc.status}
               </span>
             </div>
 
             <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-primary dark:text-white tracking-tight leading-tight">
-              ${project.title}
+              ${loc.title}
             </h1>
 
             <p class="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-3xl leading-relaxed">
-              ${project.shortDescription || (project.overview ? project.overview.what : '')}
+              ${loc.shortDescription || (loc.overview ? loc.overview.what : '')}
             </p>
 
             <!-- Action Buttons & Tech Stack -->
@@ -973,13 +1068,13 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
               
               <div class="flex items-center gap-3 flex-shrink-0">
-                ${project.githubUrl ? `
-                  <a href="${project.githubUrl}" target="_blank" class="bg-gray-900 hover:bg-black text-white dark:bg-white/10 dark:hover:bg-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 interactive-element">
-                    <i class="ri-github-fill text-base"></i> Repository GitHub
+                ${loc.githubUrl ? `
+                  <a href="${loc.githubUrl}" target="_blank" class="bg-gray-900 hover:bg-black text-white dark:bg-white/10 dark:hover:bg-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 interactive-element">
+                    <i class="ri-github-fill text-base"></i> ${isEn ? "GitHub Repository" : "Repository GitHub"}
                   </a>
                 ` : ''}
-                ${project.demoUrl ? `
-                  <a href="${project.demoUrl}" target="_blank" class="bg-secondary text-primary font-semibold text-xs px-4 py-2.5 rounded-xl hover:shadow-lg transition-all flex items-center gap-2 interactive-element">
+                ${loc.demoUrl ? `
+                  <a href="${loc.demoUrl}" target="_blank" class="bg-secondary text-primary font-semibold text-xs px-4 py-2.5 rounded-xl hover:shadow-lg transition-all flex items-center gap-2 interactive-element">
                     <i class="ri-external-link-line text-base"></i> Live Demo
                   </a>
                 ` : ''}
@@ -989,30 +1084,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
           <!-- HERO THUMBNAIL PREVIEW -->
           <div class="rounded-2xl overflow-hidden border border-gray-200/80 dark:border-white/10 shadow-xl bg-gray-900/40 max-h-[500px]">
-            <img src="${project.thumbnailUrl}" alt="${project.title}" class="w-full h-full object-cover object-top" />
+            <img src="${loc.thumbnailUrl}" alt="${loc.title}" class="w-full h-full object-cover object-top" />
           </div>
 
           <!-- 2. OVERVIEW -->
           <section class="space-y-6">
             <h2 class="text-xl sm:text-2xl font-bold text-primary dark:text-white flex items-center gap-3">
               <span class="w-8 h-8 rounded-lg bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary flex items-center justify-center text-base"><i class="ri-compass-3-line"></i></span>
-              Executive Summary
+              ${isEn ? "Executive Summary" : "Ringkasan Eksekutif"}
             </h2>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 space-y-2 shadow-sm">
-                <h3 class="text-xs font-mono font-bold uppercase text-secondary">What Was Built</h3>
-                <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${project.overview ? project.overview.what : ''}</p>
+                <h3 class="text-xs font-mono font-bold uppercase text-secondary">${isEn ? "What Was Built" : "Apa yang Dibangun"}</h3>
+                <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${loc.overview ? loc.overview.what : ''}</p>
               </div>
               
               <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 space-y-2 shadow-sm">
-                <h3 class="text-xs font-mono font-bold uppercase text-secondary">Target Audience</h3>
-                <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${project.overview ? project.overview.who : ''}</p>
+                <h3 class="text-xs font-mono font-bold uppercase text-secondary">${isEn ? "Target Audience" : "Target Pengguna"}</h3>
+                <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${loc.overview ? loc.overview.who : ''}</p>
               </div>
 
               <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 space-y-2 shadow-sm">
-                <h3 class="text-xs font-mono font-bold uppercase text-secondary">Core Value Created</h3>
-                <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${project.overview ? project.overview.problemSolved : ''}</p>
+                <h3 class="text-xs font-mono font-bold uppercase text-secondary">${isEn ? "Core Value Created" : "Nilai Utama yang Dihasilkan"}</h3>
+                <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${loc.overview ? loc.overview.problemSolved : ''}</p>
               </div>
             </div>
           </section>
@@ -1020,10 +1115,10 @@ document.addEventListener("DOMContentLoaded", function () {
           <!-- 3. THE PROBLEM -->
           <section class="bg-red-500/5 dark:bg-red-500/10 border border-red-500/20 p-6 md:p-8 rounded-2xl space-y-3">
             <h2 class="text-base sm:text-lg font-bold text-red-600 dark:text-red-400 flex items-center gap-2">
-              <i class="ri-error-warning-line"></i> The Problem & Operational Bottlenecks
+              <i class="ri-error-warning-line"></i> ${isEn ? "The Problem & Operational Bottlenecks" : "Tantangan & Kendala Operasional"}
             </h2>
             <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-              ${project.problem}
+              ${loc.problem}
             </p>
           </section>
 
@@ -1032,9 +1127,9 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="flex items-center justify-between">
               <h2 class="text-xl sm:text-2xl font-bold text-primary dark:text-white flex items-center gap-3">
                 <span class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-500 flex items-center justify-center text-base"><i class="ri-mind-map"></i></span>
-                Architecture Topology & Flow
+                ${isEn ? "Architecture Topology & Flow" : "Topologi Arsitektur & Alur Kerja"}
               </h2>
-              <span class="text-xs font-mono text-gray-400 hidden sm:inline">Interactive Pipeline</span>
+              <span class="text-xs font-mono text-gray-400 hidden sm:inline">${isEn ? "Interactive Pipeline" : "Pipeline Interaktif"}</span>
             </div>
 
             <div class="bg-white dark:bg-dark-surface border border-gray-200/80 dark:border-white/10 p-6 md:p-8 rounded-2xl shadow-sm overflow-x-auto">
@@ -1048,7 +1143,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <section class="space-y-6">
             <h2 class="text-xl sm:text-2xl font-bold text-primary dark:text-white flex items-center gap-3">
               <span class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-base"><i class="ri-task-line"></i></span>
-              Key Responsibilities & Deliverables
+              ${isEn ? "Key Responsibilities & Deliverables" : "Tanggung Jawab & Kontribusi Kunci"}
             </h2>
 
             <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 shadow-sm">
@@ -1060,7 +1155,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <section class="space-y-6">
             <h2 class="text-xl sm:text-2xl font-bold text-primary dark:text-white flex items-center gap-3">
               <span class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center text-base"><i class="ri-medal-line"></i></span>
-              Measurable Outcomes & Results
+              ${isEn ? "Measurable Outcomes & Results" : "Hasil Terukur & Pencapaian"}
             </h2>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1069,11 +1164,11 @@ document.addEventListener("DOMContentLoaded", function () {
           </section>
 
           <!-- 7. GALLERY & SCREENSHOTS -->
-          ${project.gallery && project.gallery.length > 0 ? `
+          ${galleryList.length > 0 ? `
             <section class="space-y-6">
               <h2 class="text-xl sm:text-2xl font-bold text-primary dark:text-white flex items-center gap-3">
                 <span class="w-8 h-8 rounded-lg bg-pink-500/10 text-pink-500 flex items-center justify-center text-base"><i class="ri-image-line"></i></span>
-                Architecture Gallery & Visual Artifacts
+                ${isEn ? "Architecture Gallery & Visual Artifacts" : "Galeri Arsitektur & Tangkapan Layar"}
               </h2>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -1083,39 +1178,39 @@ document.addEventListener("DOMContentLoaded", function () {
           ` : ''}
 
           <!-- 8. LESSONS LEARNED -->
-          ${project.learnings ? `
+          ${loc.learnings ? `
             <section class="space-y-6">
               <h2 class="text-xl sm:text-2xl font-bold text-primary dark:text-white flex items-center gap-3">
                 <span class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center text-base"><i class="ri-lightbulb-line"></i></span>
-                What I Learned
+                ${isEn ? "What I Learned" : "Pembelajaran & Evaluasi"}
               </h2>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 space-y-2 shadow-sm">
                   <h3 class="text-xs font-mono font-bold uppercase text-amber-500 flex items-center gap-2">
-                    <i class="ri-flag-line"></i> Technical Challenges
+                    <i class="ri-flag-line"></i> ${isEn ? "Technical Challenges" : "Tantangan Teknis"}
                   </h3>
-                  <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${project.learnings.challenges}</p>
+                  <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${loc.learnings.challenges}</p>
                 </div>
 
                 <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 space-y-2 shadow-sm">
                   <h3 class="text-xs font-mono font-bold uppercase text-red-400 flex items-center gap-2">
-                    <i class="ri-bug-line"></i> Mistakes & Pitfalls
+                    <i class="ri-bug-line"></i> ${isEn ? "Mistakes & Pitfalls" : "Kendala & Catatan Evaluasi"}
                   </h3>
-                  <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${project.learnings.mistakes}</p>
+                  <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${loc.learnings.mistakes}</p>
                 </div>
 
                 <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 space-y-2 shadow-sm">
                   <h3 class="text-xs font-mono font-bold uppercase text-emerald-500 flex items-center gap-2">
-                    <i class="ri-key-line"></i> Solutions Applied
+                    <i class="ri-key-line"></i> ${isEn ? "Solutions Applied" : "Solusi yang Diterapkan"}
                   </h3>
-                  <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${project.learnings.solutions}</p>
+                  <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${loc.learnings.solutions}</p>
                 </div>
 
                 <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 space-y-2 shadow-sm">
                   <h3 class="text-xs font-mono font-bold uppercase text-blue-400 flex items-center gap-2">
-                    <i class="ri-rocket-line"></i> Future Improvements
+                    <i class="ri-rocket-line"></i> ${isEn ? "Future Improvements" : "Rencana Peningkatan"}
                   </h3>
-                  <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${project.learnings.improvements}</p>
+                  <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">${loc.learnings.improvements}</p>
                 </div>
               </div>
             </section>
@@ -1124,7 +1219,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <!-- FOOTER CLOSE BUTTON -->
           <div class="pt-8 border-t border-gray-200 dark:border-gray-800 text-center">
             <button class="close-modal-btn bg-primary hover:bg-black dark:bg-secondary dark:hover:bg-amber-400 text-white dark:text-primary font-semibold px-8 py-3.5 rounded-xl hover:shadow-lg transition-all interactive-element">
-              Tutup Case Study
+              ${isEn ? "Close Case Study" : "Tutup Case Study"}
             </button>
           </div>
 
