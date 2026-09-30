@@ -11,8 +11,8 @@
   const I18N_DICTIONARY = {
     id: {
       meta: {
-        title: "Rifki Rizkia - Software Engineer & DevSecOps Portofolio",
-        description: "Portofolio Rifki Rizkia - Software Engineer, Mobile Developer, dan DevSecOps Engineer. Spesialisasi dalam pengembangan Flutter, React Native, Docker Swarm, CI/CD, OWASP ZAP, SonarQube, dan infrastruktur cloud."
+        title: "Rifki Rizkia - Software Engineer, AI & DevSecOps Cloud Specialist",
+        description: "Portofolio Rifki Rizkia - Software Engineer, Cloud & DevSecOps Practitioner, dan AI-Assisted Product Builder. Berpengalaman dalam Google Cloud (GCP), AWS, Docker Swarm, CI/CD, OWASP ZAP, SonarQube, Google Gemini, ChatGPT, serta visualisasi 3D taktis militer."
       },
       nav: {
         brand: "Portofolio",
@@ -26,21 +26,22 @@
       },
       hero: {
         greeting: "Halo, saya",
-        bio: "Berpengalaman dalam pengembangan aplikasi, website, serta infrastruktur server untuk menghadirkan solusi digital yang cepat, aman, dan mudah dikembangkan sesuai kebutuhan bisnis.",
+        bio: "Software Engineer & DevSecOps yang berorientasi pada pemecahan masalah (problem solving) end-to-end. Mengombinasikan arsitektur cloud tangguh (Google Cloud & AWS), automasi DevSecOps, serta tren model AI mutakhir (Gemini & ChatGPT) dan teknik prompting untuk mengakselerasi transformasi ide menjadi produk digital siap pakai berskala produksi.",
         ctaPortfolio: "Lihat Portofolio",
         ctaContact: "Hubungi Saya"
       },
       about: {
         title: "Tentang Saya",
-        p1: "Saya adalah Software Engineer dengan pengalaman lebih dari 5 tahun dalam membangun aplikasi mobile, website, dan sistem backend yang siap digunakan di lingkungan produksi.",
-        p2: "Saya membantu bisnis mengubah ide menjadi produk digital melalui proses end-to-end, mulai dari analisis kebutuhan, desain UI/UX, pengembangan aplikasi, hingga deployment ke server agar sistem dapat berjalan dengan stabil dan aman.",
-        p3: "Selain pengembangan aplikasi menggunakan Flutter, React Native, dan teknologi web modern, saya juga berpengalaman dalam pengelolaan server, cloud, dan CI/CD untuk memastikan aplikasi siap digunakan dan mudah dikembangkan ke depannya.",
-        p4: "Saya fokus membangun solusi yang cepat, aman, dan mudah digunakan untuk mendukung pertumbuhan bisnis klien.",
+        p1: "Saya adalah Software Engineer & DevSecOps Practitioner dengan fondasi problem solving yang kuat dan dedikasi tinggi dalam mentransformasikan ide kompleks menjadi produk digital siap pakai berkinerja tinggi.",
+        p2: "Saya terbiasa memecahkan tantangan teknis kompleks melalui pendekatan end-to-end: merumuskan arsitektur sistem, memanfaatkan ekosistem AI terkini (seperti Google Gemini dan OpenAI ChatGPT) melalui teknik prompt engineering untuk mempercepat siklus riset dan delivery, hingga membangun aplikasi web dan mobile yang responsif.",
+        p3: "Di sisi infrastruktur, saya menguasai orkestrasi deployment modern di Google Cloud Platform (GCP) dan Amazon Web Services (AWS) dengan praktik DevSecOps ketat (SAST/DAST, Docker Swarm, CI/CD, security hardening), memastikan sistem berjalan dengan ketersediaan tinggi, aman, dan siap tempur di lingkungan produksi.",
+        p4: "Mulai dari platform pemantauan server multi-node, aplikasi mobile operasional armada, hingga website visualisasi scan 3D berskala militer untuk simulasi latihan TNI, saya selalu berfokus menghadirkan solusi nyata yang presisi, tangguh, dan bernilai strategis bagi pengguna.",
         skillsTitle: "Keahlian & Teknologi",
-        skillsSubtitle: "Berikut adalah ekosistem teknologi yang biasa saya gunakan untuk membangun solusi siap produksi.",
+        skillsSubtitle: "Berikut adalah ekosistem teknologi, cloud, dan AI modern yang saya gunakan untuk membangun solusi siap produksi.",
         catMobile: "Mobile & Frontend",
         catBackend: "Backend & Automation",
-        catDevops: "DevSecOps & Infrastructure",
+        catAI: "AI Engineering & Modern Tools",
+        catDevops: "DevSecOps & Cloud Infrastructure",
         sslSetup: "Setup SSL"
       },
       experience: {
@@ -181,8 +182,8 @@
     },
     en: {
       meta: {
-        title: "Rifki Rizkia - Software Engineer & DevSecOps Portfolio",
-        description: "Portfolio of Rifki Rizkia - Software Engineer, Mobile Developer, and DevSecOps Engineer. Specializing in Flutter, React Native, Docker Swarm, CI/CD, OWASP ZAP, SonarQube, and cloud infrastructure."
+        title: "Rifki Rizkia - Software Engineer, AI & DevSecOps Cloud Specialist",
+        description: "Portfolio of Rifki Rizkia - Software Engineer, Cloud & DevSecOps Practitioner, and AI-Assisted Product Builder. Experienced in Google Cloud (GCP), AWS, Docker Swarm, CI/CD, OWASP ZAP, SonarQube, Google Gemini, ChatGPT, and tactical 3D military scan visualization."
       },
       nav: {
         brand: "Portfolio",
@@ -196,21 +197,22 @@
       },
       hero: {
         greeting: "Hello, I am",
-        bio: "Experienced in mobile application, website, and server infrastructure development to deliver fast, secure, and scalable digital solutions tailored to business needs.",
+        bio: "Results-driven Software & DevSecOps Engineer with strong end-to-end problem-solving capabilities. Combining resilient cloud architectures (Google Cloud & AWS), DevSecOps pipelines, and cutting-edge AI models (Gemini & ChatGPT) with advanced prompting to rapidly turn complex ideas into production-ready digital products.",
         ctaPortfolio: "View Portfolio",
         ctaContact: "Contact Me"
       },
       about: {
         title: "About Me",
-        p1: "I am a Software Engineer with over 5 years of experience in building mobile applications, websites, and backend systems ready for production environments.",
-        p2: "I help businesses transform ideas into digital products through an end-to-end process—from requirements analysis, UI/UX design, application development, to server deployment ensuring high stability and security.",
-        p3: "Beyond mobile development with Flutter, React Native, and modern web tech, I specialize in server management, cloud infrastructure, and CI/CD pipelines to ensure applications are production-ready and easily scalable.",
-        p4: "I focus on engineering fast, secure, and user-friendly solutions that accelerate business growth.",
+        p1: "I am a Software Engineer & DevSecOps Practitioner with strong problem-solving capabilities and a passion for turning complex concepts into high-performance, production-ready digital products.",
+        p2: "I specialize in solving complex engineering challenges through a modern hybrid approach: architecting resilient systems, harnessing cutting-edge AI models (Google Gemini and OpenAI ChatGPT) via structured prompt engineering to drastically accelerate delivery, and building intuitive web and mobile solutions.",
+        p3: "On the infrastructure side, I master modern cloud deployments across Google Cloud Platform (GCP) and Amazon Web Services (AWS), enforcing rigorous DevSecOps practices (SAST/DAST security gates, Docker containerization, CI/CD pipelines), ensuring every platform is secure, resilient, and enterprise-grade.",
+        p4: "From enterprise multi-node monitoring and mission-critical fleet mobile apps to high-precision 3D scan visualization platforms for TNI military tactical simulation, I focus on delivering impactful, secure, and user-centric solutions.",
         skillsTitle: "Skills & Technologies",
-        skillsSubtitle: "The technology ecosystem I actively leverage to build production-grade solutions.",
+        skillsSubtitle: "The modern technology, cloud, and AI ecosystem I actively leverage to engineer production-grade solutions.",
         catMobile: "Mobile & Frontend",
         catBackend: "Backend & Automation",
-        catDevops: "DevSecOps & Infrastructure",
+        catAI: "AI Engineering & Modern Tools",
+        catDevops: "DevSecOps & Cloud Infrastructure",
         sslSetup: "SSL Setup"
       },
       experience: {
@@ -353,6 +355,44 @@
 
   // Projects English Translations Mapping
   const PROJECTS_EN_TRANSLATIONS = {
+    "tni-3d-tactical-scan-viewer": {
+      shortDescription: "Interactive web platform visualizing 3D photogrammetry & LiDAR tactical terrain scans for TNI (Indonesian Armed Forces) simulation exercises, architected from idea to production via modern AI prompting (Gemini & ChatGPT).",
+      overview: {
+        what: "High-performance interactive 3D GIS & Tactical Terrain Web Viewer visualizing 3D photogrammetry scans, LiDAR point clouds, and topographic terrain meshes in real time directly inside standard web browsers, engineered to empower TNI tactical training simulations.",
+        who: "Indonesian Armed Forces (TNI) personnel, combat tactics instructors, and joint exercise mission planners.",
+        problemSolved: "Turned complex military simulation requirements from raw ideas into a battle-ready digital product rapidly via advanced AI prompting, overcoming massive 3D dataset bottlenecks (hundreds of MBs) to achieve smooth 60 FPS rendering in standard web browsers without proprietary desktop software or heavy GPU workstations."
+      },
+      problem: "Previously, high-density 3D terrain scans (containing millions of polygons and gigabytes of point cloud data) could only be rendered on expensive GPU workstations running heavy licensed desktop CAD/GIS software. This prevented field units and command centers from conducting rapid, collaborative tactical briefings. A lightweight, ultra-fast web-based viewer with tactical simulation tools (elevation slicing, waypoint navigation, line-of-sight) was critically needed within an aggressive delivery timeline.",
+      architecture: [
+        { step: 1, title: "Operational Requirement & Ideation", desc: "Analyzed TNI tactical simulation needs & 3D scan data schemas (LiDAR / Mesh)" },
+        { step: 2, title: "AI Prompting & Algorithm Solving", desc: "Structured prompting with Gemini & ChatGPT to solve WebGL shaders, LOD, & compression math" },
+        { step: 3, title: "Rapid Three.js Prototyping", desc: "Engineered interactive 3D viewer with tactical controls, waypoints, & elevation slicing" },
+        { step: 4, title: "Draco Mesh & Web Streaming", desc: "Optimized 3D asset streaming pipeline achieving up to 80% bandwidth reduction" },
+        { step: 5, title: "Cloud Deployment (GCP & AWS)", desc: "Isolated Docker container deployment with Nginx reverse proxy, TLS, & military security" },
+        { step: 6, title: "DevSecOps & Security Hardening", desc: "Rigorous SAST/DAST vulnerability scans and hardened authentication protocols" }
+      ],
+      responsibilities: [
+        "Architected and executed the end-to-end vision from raw concept to production-ready 3D web platform",
+        "Applied advanced prompt engineering with Gemini and ChatGPT to solve complex 3D math, custom WebGL fragment shaders, and performance bottlenecks",
+        "Implemented tactical camera controls (orbit view, path walkthrough, waypoint telemetry, and contour elevation analysis)",
+        "Designed high-efficiency 3D asset compression pipelines (Draco/Meshopt) allowing gigabyte-scale scans to stream seamlessly over web connections",
+        "Configured robust cloud deployments across Google Cloud (GCP) and AWS utilizing Docker containers and Nginx reverse proxies",
+        "Enforced DevSecOps standards, TLS 1.3 encryption, and SAST/DAST testing to safeguard sensitive military simulation data"
+      ],
+      results: [
+        "70% accelerated development lifecycle (Idea-to-Product) through modern AI-assisted workflows",
+        "Consistent 60 FPS performance in standard browsers without desktop installation or dedicated GPU hardware",
+        "80% reduction in 3D scan file sizes with sub-3-second initial load times",
+        "Successfully adopted and tested by TNI units for tactical mission rehearsals and terrain briefings",
+        "Demonstrated standout problem-solving agility by unifying AI trends, 3D graphics, and cloud DevSecOps"
+      ],
+      learnings: {
+        challenges: "Streaming and rendering ultra-dense 3D scans with photogrammetric textures on constrained network connections without memory exhaustion.",
+        mistakes: "Initially attempted to load full-resolution meshes directly into client GPU memory, leading to frame drops and memory spikes.",
+        solutions: "Leveraged advanced AI prompting to engineer dynamic Level of Detail (LOD), frustum culling, and camera-distance-based texture chunking.",
+        improvements: "Integrating dynamic weather simulation (fog, rain) and live drone GPS telemetry tracking directly into the 3D viewport."
+      }
+    },
     "website-monitoring-platform": {
       shortDescription: "Realtime multi-node server & website monitoring platform integrated with Telegram, WhatsApp alerts, & AI Assistant.",
       overview: {

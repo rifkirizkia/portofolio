@@ -262,7 +262,8 @@ document.addEventListener("DOMContentLoaded", function () {
       { name: "RPSM", category: isEn ? "Management System" : "Sistem Manajemen", tech: "Laravel, MariaDB, Docker", logo: "" },
       { name: "Flexa", category: isEn ? "SaaS App" : "Aplikasi SaaS", tech: "Node.js, Redis, Docker Swarm", logo: "" },
       { name: "Presensy", category: isEn ? "Attendance System" : "Sistem Presensi", tech: "Laravel, MySQL, Certbot", logo: "" },
-      { name: "Spendora", category: isEn ? "Finance App" : "Aplikasi Keuangan", tech: "Flutter, REST API", logo: "asset/logo/logo-ios.png", slug: "spendora-finance-app" }
+      { name: "Spendora", category: isEn ? "Finance App" : "Aplikasi Keuangan", tech: "Flutter, REST API", logo: "asset/logo/logo-ios.png", slug: "spendora-finance-app" },
+      { name: "TNI 3D Terrain", category: isEn ? "Tactical 3D Simulation" : "Simulasi 3D Taktis", tech: "Three.js, WebGL, AI, GCP/AWS", logo: "", slug: "tni-3d-tactical-scan-viewer" }
     ];
 
     const logoGridHTML = managedApps.map((app, idx) => `
@@ -572,7 +573,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </p>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- 1. Containerization -->
             <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 space-y-4 hover:border-secondary/40 transition-colors">
               <div class="flex items-center gap-3">
@@ -613,7 +614,47 @@ document.addEventListener("DOMContentLoaded", function () {
               </p>
             </div>
 
-            <!-- 3. Reverse Proxy -->
+            <!-- 3. Cloud Infrastructure (GCP & AWS) -->
+            <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 space-y-4 hover:border-secondary/40 transition-colors">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-500 flex items-center justify-center text-xl">
+                  <i class="ri-cloud-line"></i>
+                </div>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "Cloud Architecture (GCP & AWS)" : "Arsitektur Cloud (GCP & AWS)"}</h4>
+              </div>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Google Cloud (GCP)</span>
+                <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">AWS Cloud</span>
+                <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">IAM &amp; Security</span>
+              </div>
+              <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                ${isEn
+                  ? "Deploying scalable enterprise services on Google Cloud Platform and Amazon Web Services, configuring containerized runtimes, VPC isolation, and hardened IAM access."
+                  : "Mendeploy layanan enterprise di Google Cloud Platform dan Amazon Web Services, mengonfigurasi runtime kontainer, isolasi jaringan VPC, dan kebijakan keamanan akses IAM ketat."}
+              </p>
+            </div>
+
+            <!-- 4. AI-Powered Engineering & Prompting -->
+            <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 space-y-4 hover:border-secondary/40 transition-colors">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-secondary flex items-center justify-center text-xl">
+                  <i class="ri-sparkling-2-line"></i>
+                </div>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "AI-Powered Ops & Prompting" : "DevOps Berbasis AI & Prompting"}</h4>
+              </div>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Gemini AI</span>
+                <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">ChatGPT-4o</span>
+                <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Prompt Engineering</span>
+              </div>
+              <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                ${isEn
+                  ? "Leveraging state-of-the-art AI models (Gemini & ChatGPT) with advanced prompt engineering for rapid prototyping, security triage, and automated infrastructure script synthesis."
+                  : "Memanfaatkan model AI mutakhir (Gemini & ChatGPT) dengan prompt engineering canggih untuk akselerasi prototyping, triage audit keamanan, dan sintesis skrip otomasi infrastruktur."}
+              </p>
+            </div>
+
+            <!-- 5. Reverse Proxy -->
             <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 space-y-4 hover:border-secondary/40 transition-colors">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center text-xl">
@@ -634,7 +675,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </p>
             </div>
 
-            <!-- 4. DevSecOps & Security Testing -->
+            <!-- 6. DevSecOps & Security Testing -->
             <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 space-y-4 hover:border-secondary/40 transition-colors">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-xl">
@@ -647,7 +688,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">OWASP ZAP</span>
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">SAST</span>
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">DAST</span>
-                <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Quality Gates</span>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                 ${isEn
@@ -656,7 +696,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </p>
             </div>
 
-            <!-- 5. Monitoring -->
+            <!-- 7. Monitoring -->
             <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 space-y-4 hover:border-secondary/40 transition-colors">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl">
@@ -666,7 +706,6 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
               <div class="flex flex-wrap gap-1.5">
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Website Monitoring</span>
-                <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">API &amp; SSL</span>
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Telegram</span>
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">n8n</span>
               </div>
@@ -677,7 +716,7 @@ document.addEventListener("DOMContentLoaded", function () {
               </p>
             </div>
 
-            <!-- 6. Operating System -->
+            <!-- 8. Operating System -->
             <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 space-y-4 hover:border-secondary/40 transition-colors">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-slate-500/10 text-slate-400 flex items-center justify-center text-xl">
@@ -689,7 +728,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Ubuntu</span>
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Linux</span>
                 <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">VPS</span>
-                <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-xs font-mono px-2 py-0.5 rounded text-gray-700 dark:text-gray-300">Vultr</span>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
                 ${isEn
@@ -729,6 +767,34 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
 
             <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 flex items-start gap-4">
+              <div class="w-12 h-12 rounded-xl bg-sky-500/10 text-sky-500 flex items-center justify-center text-2xl flex-shrink-0">
+                <i class="ri-cloud-line"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "Cloud Architecture (GCP & AWS)" : "Arsitektur Cloud (GCP & AWS)"}</h4>
+                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
+                  ${isEn
+                    ? "Multi-cloud workload deployment on Google Cloud & AWS with zero-trust networking."
+                    : "Deployment beban kerja multi-cloud di Google Cloud & AWS dengan isolasi keamanan zero-trust."}
+                </p>
+              </div>
+            </div>
+
+            <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 flex items-start gap-4">
+              <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-secondary flex items-center justify-center text-2xl flex-shrink-0">
+                <i class="ri-sparkling-2-line"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "AI-Powered Delivery" : "Akselerasi Produk via AI"}</h4>
+                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
+                  ${isEn
+                    ? "Accelerated idea-to-product cycles by 70% using latest Gemini & ChatGPT models with structured prompting."
+                    : "Mengakselerasi siklus dari ide ke produk siap pakai hingga 70% dengan model Gemini & ChatGPT mutakhir."}
+                </p>
+              </div>
+            </div>
+
+            <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 flex items-start gap-4">
               <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center text-2xl flex-shrink-0">
                 <i class="ri-rocket-line"></i>
               </div>
@@ -743,43 +809,15 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
 
             <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 flex items-start gap-4">
-              <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-2xl flex-shrink-0">
-                <i class="ri-pulse-line"></i>
-              </div>
-              <div>
-                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "Self-Hosted Monitoring Platform" : "Platform Monitoring Mandiri"}</h4>
-                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
-                  ${isEn
-                    ? "Engineered and deployed a realtime multi-node monitoring platform with Telegram & WhatsApp alert systems."
-                    : "Merancang dan mendeploy platform pemantauan multi-node realtime dengan sistem alert Telegram & WhatsApp."}
-                </p>
-              </div>
-            </div>
-
-            <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 flex items-start gap-4">
-              <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-2xl flex-shrink-0">
+              <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-2xl flex-shrink-0">
                 <i class="ri-shield-keyhole-line"></i>
               </div>
               <div>
                 <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "DevSecOps & CI/CD Pipeline" : "Pipeline DevSecOps & CI/CD"}</h4>
                 <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
                   ${isEn
-                    ? "SonarQube & OWASP ZAP automated security scanning reduced vulnerabilities and slashed release cycle from 2 hours to <3 minutes."
-                    : "Otomatisasi pengujian keamanan SonarQube & OWASP ZAP memangkas celah kerentanan serta memotong waktu rilis dari 2 jam menjadi <3 menit."}
-                </p>
-              </div>
-            </div>
-
-            <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl border border-gray-200/80 dark:border-white/10 flex items-start gap-4">
-              <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-2xl flex-shrink-0">
-                <i class="ri-cpu-line"></i>
-              </div>
-              <div>
-                <h4 class="font-bold text-primary dark:text-white text-base">${isEn ? "Infrastructure Automation" : "Otomatisasi Infrastruktur"}</h4>
-                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">
-                  ${isEn
-                    ? "Packaged all services into a self-healing Docker Swarm cluster."
-                    : "Mengemas seluruh layanan ke dalam kluster Docker Swarm dengan mekanisme pemulihan otomatis."}
+                    ? "SonarQube & OWASP ZAP automated security scanning reduced vulnerabilities and slashed release cycle to <3 minutes."
+                    : "Otomatisasi pengujian keamanan SonarQube & OWASP ZAP memangkas celah kerentanan serta memotong waktu rilis ke <3 menit."}
                 </p>
               </div>
             </div>

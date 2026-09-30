@@ -5,7 +5,74 @@
  */
 
 const PROJECTS_DATA = [
-  // 1. WEB DEVELOPMENT (Server & Website Monitoring Platform)
+  // 1. TNI TACTICAL 3D SCAN VIEWER & SIMULATION PLATFORM (WEB & AI ENGINEERING)
+  {
+    id: "tni-3d-tactical-scan-viewer",
+    slug: "tni-3d-tactical-scan-viewer",
+    title: "TNI Tactical 3D Scan & Simulation Viewer",
+    category: "web",
+    categoryLabel: "Web & 3D Simulation",
+    role: "Lead Fullstack & AI-Assisted Architect",
+    status: "Production",
+    timeline: "2024 - 2025",
+    isFeatured: true,
+    thumbnailUrl: "asset/tni_3d_scan_viewer.png",
+    shortDescription: "Platform web interaktif visualisasi hasil scan 3D fotogrametri & LiDAR medan taktis untuk TNI dalam simulasi latihan, diarsiteki dari ide hingga produk siap pakai via prompt engineering model AI mutakhir (Gemini & ChatGPT).",
+    githubUrl: "https://github.com/rifkirizkia",
+    demoUrl: "",
+    techStack: [
+      { name: "Three.js / WebGL", icon: "ri-box-3-line", color: "text-emerald-400" },
+      { name: "Google Gemini AI", icon: "ri-sparkling-2-line", color: "text-blue-400" },
+      { name: "ChatGPT / OpenAI", icon: "ri-openai-fill", color: "text-green-400" },
+      { name: "Prompt Engineering", icon: "ri-terminal-box-line", color: "text-purple-400" },
+      { name: "Google Cloud (GCP)", icon: "ri-google-line", color: "text-sky-400" },
+      { name: "AWS Cloud", icon: "ri-amazon-line", color: "text-amber-500" },
+      { name: "Docker", icon: "ri-box-3-line", color: "text-blue-500" },
+      { name: "Nginx", icon: "ri-global-line", color: "text-emerald-500" }
+    ],
+    overview: {
+      what: "Platform web 3D GIS & Tactical Terrain Viewer berkinerja tinggi untuk memvisualisasikan hasil scan 3D (fotogrametri resolusi tinggi, LiDAR point cloud, dan mesh topografi) secara real-time di web browser, dirancang khusus untuk mendukung simulasi latihan tempur dan analisis taktis TNI.",
+      who: "Personel TNI, instruktur taktik tempur, dan perwira perencana latihan gabungan / simulasi manuver lapangan.",
+      problemSolved: "Mengubah ide dan spesifikasi simulasi militer yang kompleks menjadi platform web siap pakai secara cepat melalui prompting AI canggih, mengatasi kendala file 3D raksasa (ratusan megabyte) agar dapat dirender 60 FPS di browser standar tanpa memerlukan software desktop berbayar ataupun workstation GPU khusus."
+    },
+    problem: "Sebelumnya, hasil scan 3D medan latihan (berisi jutaan titik koordinat dan poligon berukuran gigabyte) hanya bisa dibuka melalui workstation berspesifikasi khusus dengan software CAD/GIS desktop yang berat dan lisensi mahal. Hal ini membuat personel di lapangan dan ruang komando kesulitan melakukan briefing taktis yang kolaboratif. Dibutuhkan solusi web-based yang instan, aman, memiliki navigasi simulasi medan (analisis elevasi, waypoint navigasi, line-of-sight), serta harus siap pakai dalam siklus waktu yang sangat singkat.",
+    architecture: [
+      { step: 1, title: "Operational Requirement & Ideation", icon: "ri-lightbulb-line", desc: "Menganalisis kebutuhan simulasi taktis TNI & struktur data scan 3D (LiDAR / Mesh)" },
+      { step: 2, title: "AI Prompting & Algorithm Solving", icon: "ri-sparkling-2-line", desc: "Prompting terstruktur ke Gemini & ChatGPT untuk kalkulasi WebGL shader, LOD, & kompresi" },
+      { step: 3, title: "Rapid Three.js Prototyping", icon: "ri-code-s-slash-line", desc: "Membangun web viewer 3D interaktif dengan kontrol taktis, waypoints, & elevation slice" },
+      { step: 4, title: "Draco Mesh & Web Streaming", icon: "ri-cpu-line", desc: "Optimasi streaming aset 3D terkompresi hingga 80% lebih hemat bandwidth" },
+      { step: 5, title: "Cloud Deployment (GCP & AWS)", icon: "ri-cloud-line", desc: "Infrastruktur kontainer Docker dengan isolasi jaringan, Nginx reverse proxy, & SSL" },
+      { step: 6, title: "DevSecOps & Security Hardening", icon: "ri-shield-keyhole-line", desc: "Pemeriksaan keamanan kode SAST/DAST & autentikasi tersandi standar militer" }
+    ],
+    responsibilities: [
+      "Menerjemahkan ide dan tantangan visualisasi medan TNI menjadi solusi produk web 3D yang fungsional dan siap pakai.",
+      "Menggunakan teknik prompt engineering pada Gemini dan ChatGPT untuk memecahkan komputasi matematis 3D, custom fragment shader, dan optimasi performa WebGL.",
+      "Mengimplementasikan kontrol navigasi kamera taktis (orbit view, path walkthrough, waypoint telemetry, dan analisis kontur elevasi).",
+      "Merancang pipeline kompresi data scan 3D (Draco/Meshopt) sehingga model berukuran gigabyte dapat di-streaming mulus via web.",
+      "Mengatur orkestrasi deployment di cloud Google Cloud (GCP) dan AWS menggunakan kontainer Docker serta konfigurasi reverse proxy Nginx.",
+      "Menerapkan standarisasi keamanan DevSecOps, enkripsi TLS 1.3, dan pengujian kerentanan SAST/DAST untuk melindungi kerahasiaan data simulasi."
+    ],
+    results: [
+      "Akselerasi siklus pengembangan hingga 70% (dari ide mentah hingga produk web siap pakai) melalui integrasi prompting AI modern.",
+      "Stabil di 60 FPS pada browser standar tanpa memerlukan instalasi aplikasi desktop atau hardware GPU workstation mahal.",
+      "Kompresi data 3D hingga 80% lebih kecil dengan latensi muat di bawah 3 detik.",
+      "Berhasil diujicobakan dan dimanfaatkan oleh unit TNI untuk simulasi skenario latihan taktis dan briefing medan tempur.",
+      "Membuktikan kemampuan problem solving yang tangguh dalam mengintegrasikan AI, grafika komputer 3D, dan cloud DevSecOps ke dalam produk nyata."
+    ],
+    gallery: [
+      { title: "TNI Tactical 3D Simulation Viewer Dashboard", image: "asset/tni_3d_scan_viewer.png", category: "Dashboard" },
+      { title: "Topographic Elevation & Waypoint Route Simulation", image: "asset/tni_3d_scan_viewer.png", category: "3D Simulation" },
+      { title: "Draco Compression & 3D Streaming Pipeline", image: "asset/tni_3d_scan_viewer.png", category: "Architecture" }
+    ],
+    learnings: {
+      challenges: "Menampilkan model 3D scan berdensitas jutaan poligon secara real-time di browser web tanpa crash memori pada perangkat klien dengan spesifikasi standar.",
+      mistakes: "Awalnya mencoba memuat seluruh detail mesh resolusi tertinggi secara bersamaan, yang menimbulkan lonjakan konsumsi VRAM dan stuttering.",
+      solutions: "Memanfaatkan bantuan prompting model AI terkini untuk merancang algoritma dynamic Level of Detail (LOD), frustum culling, dan texture chunking berbasis jarak kamera.",
+      improvements: "Mengembangkan modul simulasi balistik taktis dan integrasi telemetry live drone GPS langsung ke dalam viewport 3D."
+    }
+  },
+
+  // 2. WEB DEVELOPMENT (Server & Website Monitoring Platform)
   {
     id: "website-monitoring-platform",
     slug: "website-monitoring-platform",
