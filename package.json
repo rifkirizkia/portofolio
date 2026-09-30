@@ -1,0 +1,16 @@
+{
+  "name": "rifki-rizkia-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.mjs && tailwindcss -i styles/tailwind.css -o dist/styles/site.css --minify",
+    "start": "node scripts/serve.mjs",
+    "test": "node scripts/verify.mjs"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.16"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

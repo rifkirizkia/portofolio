@@ -11,8 +11,8 @@
   const I18N_DICTIONARY = {
     id: {
       meta: {
-        title: "Rifki Rizkia - Software Engineer, AI & DevSecOps Cloud Specialist",
-        description: "Portofolio Rifki Rizkia - Software Engineer, Cloud & DevSecOps Practitioner, dan AI-Assisted Product Builder. Berpengalaman dalam Google Cloud (GCP), AWS, Docker Swarm, CI/CD, OWASP ZAP, SonarQube, Google Gemini, ChatGPT, serta visualisasi 3D taktis militer."
+        title: "Rifki Rizkia — DevOps Engineer & Software Developer",
+        description: "Portofolio resmi Rifki Rizkia, DevOps Engineer & Software Developer dengan pengalaman cloud AWS/GCP, Docker, CI/CD, serta pengembangan aplikasi web dan mobile."
       },
       nav: {
         brand: "Portofolio",
@@ -26,13 +26,13 @@
       },
       hero: {
         greeting: "Halo, saya",
-        bio: "Software Engineer & DevSecOps yang berorientasi pada pemecahan masalah (problem solving) end-to-end. Mengombinasikan arsitektur cloud tangguh (Google Cloud & AWS), automasi DevSecOps, serta tren model AI mutakhir (Gemini & ChatGPT) dan teknik prompting untuk mengakselerasi transformasi ide menjadi produk digital siap pakai berskala produksi.",
+        bio: "DevOps Engineer & Software Developer yang berorientasi pada pemecahan masalah (problem solving) end-to-end. Mengombinasikan arsitektur cloud tangguh (Google Cloud & AWS), automasi DevSecOps, serta tren model AI mutakhir (Gemini & ChatGPT) dan teknik prompting untuk mengakselerasi transformasi ide menjadi produk digital siap pakai berskala produksi.",
         ctaPortfolio: "Lihat Portofolio",
         ctaContact: "Hubungi Saya"
       },
       about: {
         title: "Tentang Saya",
-        p1: "Saya adalah Software Engineer & DevSecOps Practitioner dengan fondasi problem solving yang kuat dan dedikasi tinggi dalam mentransformasikan ide kompleks menjadi produk digital siap pakai berkinerja tinggi.",
+        p1: "Saya Rifki Rizkia, DevOps Engineer & Software Developer dengan fondasi problem solving yang kuat dan dedikasi tinggi dalam mentransformasikan ide kompleks menjadi produk digital siap pakai berkinerja tinggi.",
         p2: "Saya terbiasa memecahkan tantangan teknis kompleks melalui pendekatan end-to-end: merumuskan arsitektur sistem, memanfaatkan ekosistem AI terkini (seperti Google Gemini dan OpenAI ChatGPT) melalui teknik prompt engineering untuk mempercepat siklus riset dan delivery, hingga membangun aplikasi web dan mobile yang responsif.",
         p3: "Di sisi infrastruktur, saya menguasai orkestrasi deployment modern di Google Cloud Platform (GCP) dan Amazon Web Services (AWS) dengan praktik DevSecOps ketat (SAST/DAST, Docker Swarm, CI/CD, security hardening), memastikan sistem berjalan dengan ketersediaan tinggi, aman, dan siap tempur di lingkungan produksi.",
         p4: "Mulai dari platform pemantauan server multi-node, aplikasi mobile operasional armada, hingga website visualisasi scan 3D berskala militer untuk simulasi latihan TNI, saya selalu berfokus menghadirkan solusi nyata yang presisi, tangguh, dan bernilai strategis bagi pengguna.",
@@ -182,8 +182,8 @@
     },
     en: {
       meta: {
-        title: "Rifki Rizkia - Software Engineer, AI & DevSecOps Cloud Specialist",
-        description: "Portfolio of Rifki Rizkia - Software Engineer, Cloud & DevSecOps Practitioner, and AI-Assisted Product Builder. Experienced in Google Cloud (GCP), AWS, Docker Swarm, CI/CD, OWASP ZAP, SonarQube, Google Gemini, ChatGPT, and tactical 3D military scan visualization."
+        title: "Rifki Rizkia — DevOps Engineer & Software Developer",
+        description: "Official portfolio of Rifki Rizkia, a DevOps Engineer & Software Developer experienced in AWS/GCP, Docker, CI/CD, and web and mobile development."
       },
       nav: {
         brand: "Portfolio",
@@ -197,13 +197,13 @@
       },
       hero: {
         greeting: "Hello, I am",
-        bio: "Results-driven Software & DevSecOps Engineer with strong end-to-end problem-solving capabilities. Combining resilient cloud architectures (Google Cloud & AWS), DevSecOps pipelines, and cutting-edge AI models (Gemini & ChatGPT) with advanced prompting to rapidly turn complex ideas into production-ready digital products.",
+        bio: "Results-driven DevOps Engineer & Software Developer with strong end-to-end problem-solving capabilities. Combining resilient cloud architectures (Google Cloud & AWS), DevSecOps pipelines, and cutting-edge AI models (Gemini & ChatGPT) with advanced prompting to rapidly turn complex ideas into production-ready digital products.",
         ctaPortfolio: "View Portfolio",
         ctaContact: "Contact Me"
       },
       about: {
         title: "About Me",
-        p1: "I am a Software Engineer & DevSecOps Practitioner with strong problem-solving capabilities and a passion for turning complex concepts into high-performance, production-ready digital products.",
+        p1: "I am Rifki Rizkia, a DevOps Engineer & Software Developer with strong problem-solving capabilities and a passion for turning complex concepts into high-performance, production-ready digital products.",
         p2: "I specialize in solving complex engineering challenges through a modern hybrid approach: architecting resilient systems, harnessing cutting-edge AI models (Google Gemini and OpenAI ChatGPT) via structured prompt engineering to drastically accelerate delivery, and building intuitive web and mobile solutions.",
         p3: "On the infrastructure side, I master modern cloud deployments across Google Cloud Platform (GCP) and Amazon Web Services (AWS), enforcing rigorous DevSecOps practices (SAST/DAST security gates, Docker containerization, CI/CD pipelines), ensuring every platform is secure, resilient, and enterprise-grade.",
         p4: "From enterprise multi-node monitoring and mission-critical fleet mobile apps to high-precision 3D scan visualization platforms for TNI military tactical simulation, I focus on delivering impactful, secure, and user-centric solutions.",
@@ -869,6 +869,17 @@
     document.title = t("meta.title");
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.setAttribute("content", t("meta.description"));
+
+    for (const selector of ['meta[property="og:title"]', 'meta[name="twitter:title"]']) {
+      document.querySelector(selector)?.setAttribute("content", t("meta.title"));
+    }
+    for (const selector of ['meta[property="og:description"]', 'meta[name="twitter:description"]']) {
+      document.querySelector(selector)?.setAttribute("content", t("meta.description"));
+    }
+    document.querySelector('meta[property="og:locale"]')?.setAttribute("content", currentLanguage === "en" ? "en_US" : "id_ID");
+    for (const selector of ['meta[property="og:image:alt"]', 'meta[name="twitter:image:alt"]']) {
+      document.querySelector(selector)?.setAttribute("content", currentLanguage === "en" ? "Profile photo of Rifki Rizkia" : "Foto profil Rifki Rizkia");
+    }
 
     // Update HTML lang attribute
     document.documentElement.setAttribute("lang", currentLanguage);

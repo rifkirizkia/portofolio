@@ -3,49 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Portofolio Rifki Rizkia - Software Engineer, Mobile Developer, dan DevSecOps Engineer. Spesialisasi dalam pengembangan Flutter, React Native, Docker Swarm, CI/CD, OWASP ZAP, SonarQube, dan infrastruktur cloud." />
-    <meta name="keywords" content="Rifki Rizkia, Portfolio, Software Engineer, Mobile Developer, DevSecOps Engineer, DevOps, OWASP ZAP, SonarQube, Flutter, React Native, Docker, CI/CD, Nginx" />
-    <meta property="og:title" content="Rifki Rizkia - Software Engineer & DevSecOps Portofolio" />
-    <meta property="og:description" content="Modern, case-study based portfolio showcasing Mobile Development, Web Development, and DevSecOps Infrastructure projects." />
+    <title>Rifki Rizkia — DevOps Engineer &amp; Software Developer</title>
+    <meta name="description" content="Portofolio resmi Rifki Rizkia, DevOps Engineer &amp; Software Developer dengan pengalaman cloud AWS/GCP, Docker, CI/CD, serta pengembangan aplikasi web dan mobile." />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://portofolio.rifkirizkia.site/" />
+    <link rel="icon" type="image/png" sizes="1000x1000" href="/asset/foto.png" />
+    <meta property="og:site_name" content="Rifki Rizkia" />
+    <meta property="og:title" content="Rifki Rizkia — DevOps Engineer &amp; Software Developer" />
+    <meta property="og:description" content="Portofolio resmi Rifki Rizkia, DevOps Engineer &amp; Software Developer dengan pengalaman cloud AWS/GCP, Docker, CI/CD, serta pengembangan aplikasi web dan mobile." />
+    <meta property="og:url" content="https://portofolio.rifkirizkia.site/" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="asset/foto.png" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Rifki Rizkia - Software Engineer & DevSecOps Portofolio" />
-    <meta name="twitter:description" content="Modern, case-study based portfolio showcasing Mobile Development, Web Development, and DevSecOps Infrastructure projects." />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-    <title>Rifki Rizkia - Software Engineer & DevSecOps Portofolio</title>
-    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            colors: { 
-                primary: "#0A192F", 
-                secondary: "var(--color-secondary)",
-                "dark-bg": "#0B192C",
-                "dark-surface": "#112240",
-            },
-            borderRadius: {
-              none: "0px",
-              sm: "4px",
-              DEFAULT: "8px",
-              md: "12px",
-              lg: "16px",
-              xl: "20px",
-              "2xl": "24px",
-              "3xl": "32px",
-              full: "9999px",
-              button: "8px",
-            },
-            boxShadow: {
-              'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.1)',
-              'glass-dark': '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
-            }
-          },
-        },
-      };
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:image" content="https://portofolio.rifkirizkia.site/asset/foto.png" />
+    <meta property="og:image:width" content="1000" />
+    <meta property="og:image:height" content="1000" />
+    <meta property="og:image:alt" content="Foto profil Rifki Rizkia" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Rifki Rizkia — DevOps Engineer &amp; Software Developer" />
+    <meta name="twitter:description" content="Portofolio resmi Rifki Rizkia, DevOps Engineer &amp; Software Developer dengan pengalaman cloud AWS/GCP, Docker, CI/CD, serta pengembangan aplikasi web dan mobile." />
+    <meta name="twitter:image" content="https://portofolio.rifkirizkia.site/asset/foto.png" />
+    <meta name="twitter:image:alt" content="Foto profil Rifki Rizkia" />
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "@id": "https://portofolio.rifkirizkia.site/#profile",
+  "url": "https://portofolio.rifkirizkia.site/",
+  "name": "Rifki Rizkia — DevOps Engineer & Software Developer",
+  "inLanguage": "id",
+  "mainEntity": {
+    "@type": "Person",
+    "@id": "https://portofolio.rifkirizkia.site/#person",
+    "name": "Rifki Rizkia",
+    "url": "https://portofolio.rifkirizkia.site/",
+    "jobTitle": "DevOps Engineer & Software Developer",
+    "image": "https://portofolio.rifkirizkia.site/asset/foto.png",
+    "sameAs": [
+      "https://www.linkedin.com/in/rifki-rizkia/",
+      "https://github.com/rifkirizkia",
+      "https://www.instagram.com/rifkirizkia.dart/"
+    ]
+  }
+}
     </script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link href="/styles/site.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -69,7 +71,7 @@
         scroll-behavior: smooth;
         cursor: none; /* Hide default cursor for custom cursor */
       }
-      h1, h2, h3, h4, h5, h6 {
+      h1, h2, h3, h4, h5, h6, [data-i18n="hero.greeting"] {
         font-family: "Poppins", sans-serif;
       }
       
@@ -202,13 +204,13 @@
       }
 
       /* Scroll Reveal Section Transitions (In & Out) */
-      .scroll-reveal {
+      .reveal-ready .scroll-reveal {
         opacity: 0;
         transform: translateY(28px);
         transition: opacity 0.85s cubic-bezier(0.25, 1, 0.5, 1), transform 0.85s cubic-bezier(0.25, 1, 0.5, 1);
         will-change: transform, opacity;
       }
-      .scroll-reveal.active {
+      .reveal-ready .scroll-reveal.active {
         opacity: 1;
         transform: translateY(0);
       }
@@ -279,7 +281,23 @@
       .dark .parallax-orb {
         opacity: 0.18;
       }
+      /* Content remains visible if the optional animation library fails. */
+      html:not(.aos-ready) [data-aos] {
+        opacity: 1 !important;
+        transform: none !important;
+        visibility: visible !important;
+      }
     </style>
+    <noscript>
+      <style>
+        body { cursor: auto; }
+        .custom-cursor, .lang-switcher, #themeToggle, #mobileThemeToggle,
+        #mobileMenuButton, .portfolio-tab-btn, #view-all-projects-btn,
+        .view-case-study-btn { display: none !important; }
+        #mobileMenu { max-height: none; opacity: 1; transform: none; pointer-events: auto; }
+        #mobileMenu > div { flex-direction: row; flex-wrap: wrap; gap: 0.75rem; }
+      </style>
+    </noscript>
   </head>
 
   <body class="text-gray-800 dark:text-gray-300 relative overflow-x-hidden bg-gray-50 dark:bg-dark-bg">
@@ -395,6 +413,7 @@
       </div>
     </header>
 
+    <main>
     <!-- Hero Section -->
     <section id="hero" class="min-h-screen flex items-center pt-16 relative overflow-hidden" data-bg-dark="#0B192C" data-bg-light="#F9FAFB">
       <!-- Minimalist grid background with parallax scroll -->
@@ -408,15 +427,15 @@
         <div class="flex flex-col-reverse md:flex-row items-center justify-between gap-12">
           
           <div class="w-full md:w-1/2 text-center md:text-left">
-            <h2 class="text-secondary font-medium tracking-wider mb-2" data-aos="fade-down" data-i18n="hero.greeting">Halo, saya</h2>
+            <p class="text-secondary font-medium tracking-wider mb-2" data-aos="fade-down" data-i18n="hero.greeting">Halo, saya</p>
             <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-primary dark:text-white mb-4" data-aos="fade-right" data-aos-delay="100">
               Rifki Rizkia
             </h1>
             <p class="text-2xl md:text-3xl text-gray-600 dark:text-gray-400 font-medium mb-6" data-aos="fade-right" data-aos-delay="200">
-              <span id="typewriter-text"></span><span class="text-secondary dark:text-secondary animate-blink">|</span>
+              <span id="typewriter-text">DevOps Engineer &amp; Software Developer</span><span class="text-secondary dark:text-secondary animate-blink">|</span>
             </p>
             <p class="text-gray-600 dark:text-gray-400 mb-10 max-w-lg mx-auto md:mx-0 text-lg leading-relaxed" data-aos="fade-up" data-aos-delay="300" data-i18n="hero.bio">
-              Software Engineer & DevSecOps yang berorientasi pada pemecahan masalah (problem solving) end-to-end. Mengombinasikan arsitektur cloud tangguh (Google Cloud & AWS), automasi DevSecOps, serta tren model AI mutakhir (Gemini & ChatGPT) dan teknik prompting untuk mengakselerasi transformasi ide menjadi produk digital siap pakai berskala produksi.
+              DevOps Engineer &amp; Software Developer yang berorientasi pada pemecahan masalah (problem solving) end-to-end. Mengombinasikan arsitektur cloud tangguh (Google Cloud & AWS), automasi DevSecOps, serta tren model AI mutakhir (Gemini & ChatGPT) dan teknik prompting untuk mengakselerasi transformasi ide menjadi produk digital siap pakai berskala produksi.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start" data-aos="fade-up" data-aos-delay="400">
               <a href="#projek" data-i18n="hero.ctaPortfolio" class="bg-primary dark:bg-secondary text-white dark:text-primary font-semibold px-8 py-4 rounded-xl whitespace-nowrap hover:shadow-lg hover:-translate-y-1 transition-all interactive-element">
@@ -432,7 +451,7 @@
           <div class="w-full md:w-1/2 flex justify-center md:justify-end" data-aos="zoom-in">
             <div class="tilt-wrapper w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 interactive-element">
               <div class="tilt-element w-full h-full bg-white dark:bg-dark-surface p-2 rounded-3xl shadow-2xl relative overflow-visible">
-                <img src="asset/foto.png" alt="Rifki Rizkia" class="w-full h-full object-cover rounded-2xl object-top z-10 relative pointer-events-none" />
+                <img src="asset/foto.png" alt="Foto profil Rifki Rizkia" width="1000" height="1000" fetchpriority="high" class="w-full h-full object-cover rounded-2xl object-top z-10 relative pointer-events-none" />
                 <!-- Decorative element -->
                 <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-secondary rounded-full filter blur-3xl opacity-30 z-0"></div>
                 <div class="absolute -top-6 -left-6 w-32 h-32 bg-blue-500 rounded-full filter blur-3xl opacity-30 z-0"></div>
@@ -462,7 +481,7 @@
           <div class="w-full lg:w-1/2" data-aos="fade-right">
             <div class="prose dark:prose-invert max-w-none text-lg text-gray-700 dark:text-gray-300 leading-relaxed space-y-6">
               <p data-i18n="about.p1">
-                Saya adalah Software Engineer & DevSecOps Practitioner dengan fondasi problem solving yang kuat dan dedikasi tinggi dalam mentransformasikan ide kompleks menjadi produk digital siap pakai berkinerja tinggi.
+                Saya Rifki Rizkia, DevOps Engineer &amp; Software Developer dengan fondasi problem solving yang kuat dan dedikasi tinggi dalam mentransformasikan ide kompleks menjadi produk digital siap pakai berkinerja tinggi.
               </p>
               <p data-i18n="about.p2">
                 Saya terbiasa memecahkan tantangan teknis kompleks melalui pendekatan end-to-end: merumuskan arsitektur sistem, memanfaatkan ekosistem AI terkini (seperti Google Gemini dan OpenAI ChatGPT) melalui teknik prompt engineering untuk mempercepat siklus riset dan delivery, hingga membangun aplikasi web dan mobile yang responsif.
@@ -563,11 +582,11 @@
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300">DevSecOps</span>
                   </div>
                   <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-blue-500/50 dark:hover:border-blue-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
-                    <img src="asset/docker.png" alt="Docker" class="w-5 h-5 object-contain mr-2.5 group-hover:scale-110 transition-transform" />
+                    <img src="asset/docker.png" alt="Docker" loading="lazy" decoding="async" width="20" height="20" class="w-5 h-5 object-contain mr-2.5 group-hover:scale-110 transition-transform" />
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Docker</span>
                   </div>
                   <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-cyan-500/50 dark:hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
-                    <img src="asset/docker_swarm.png" alt="Docker Swarm" class="w-5 h-5 object-contain mr-2.5 group-hover:scale-110 transition-transform" />
+                    <img src="asset/docker_swarm.png" alt="Docker Swarm" loading="lazy" decoding="async" width="20" height="20" class="w-5 h-5 object-contain mr-2.5 group-hover:scale-110 transition-transform" />
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Docker Swarm</span>
                   </div>
                   <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-sky-500/50 dark:hover:border-sky-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
@@ -733,7 +752,7 @@
         
         <!-- Dynamic Projects Grid -->
         <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-300">
-          <!-- Rendered dynamically by js/portfolio.js -->
+          <!-- prerender:projects -->
         </div>
 
         <!-- View All Projects Footer Button -->
@@ -883,16 +902,16 @@
     
               <!-- Kanan: Media Sosial -->
               <div class="flex gap-6">
-                <a href="https://wa.link/v51flf" target="_blank" class="w-14 h-14 flex items-center justify-center bg-green-500/10 text-green-600 dark:text-green-400 rounded-2xl hover:bg-green-500 hover:text-white transition-all transform hover:-translate-y-2 interactive-element">
+                <a href="https://wa.link/v51flf" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="w-14 h-14 flex items-center justify-center bg-green-500/10 text-green-600 dark:text-green-400 rounded-2xl hover:bg-green-500 hover:text-white transition-all transform hover:-translate-y-2 interactive-element">
                   <i class="ri-whatsapp-line ri-2xl"></i>
                 </a>
-                <a href="https://www.linkedin.com/in/rifki-rizkia/" target="_blank" class="w-14 h-14 flex items-center justify-center bg-blue-600/10 text-blue-600 dark:text-blue-400 rounded-2xl hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-2 interactive-element">
+                <a href="https://www.linkedin.com/in/rifki-rizkia/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Rifki Rizkia" class="w-14 h-14 flex items-center justify-center bg-blue-600/10 text-blue-600 dark:text-blue-400 rounded-2xl hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-2 interactive-element">
                   <i class="ri-linkedin-fill ri-2xl"></i>
                 </a>
-                <a href="https://www.instagram.com/rifkirizkia.dart/" target="_blank" class="w-14 h-14 flex items-center justify-center bg-pink-500/10 text-pink-600 dark:text-pink-400 rounded-2xl hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-pink-500 hover:to-purple-600 hover:text-white transition-all transform hover:-translate-y-2 interactive-element">
+                <a href="https://www.instagram.com/rifkirizkia.dart/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Rifki Rizkia" class="w-14 h-14 flex items-center justify-center bg-pink-500/10 text-pink-600 dark:text-pink-400 rounded-2xl hover:bg-gradient-to-tr hover:from-yellow-400 hover:via-pink-500 hover:to-purple-600 hover:text-white transition-all transform hover:-translate-y-2 interactive-element">
                   <i class="ri-instagram-line ri-2xl"></i>
                 </a>
-                <a href="https://github.com/rifkirizkia" target="_blank" class="w-14 h-14 flex items-center justify-center bg-gray-800/10 text-gray-800 dark:text-white dark:bg-white/10 rounded-2xl hover:bg-gray-900 dark:hover:bg-white dark:hover:text-gray-900 hover:text-white transition-all transform hover:-translate-y-2 interactive-element">
+                <a href="https://github.com/rifkirizkia" target="_blank" rel="noopener noreferrer" aria-label="GitHub Rifki Rizkia" class="w-14 h-14 flex items-center justify-center bg-gray-800/10 text-gray-800 dark:text-white dark:bg-white/10 rounded-2xl hover:bg-gray-900 dark:hover:bg-white dark:hover:text-gray-900 hover:text-white transition-all transform hover:-translate-y-2 interactive-element">
                   <i class="ri-github-fill ri-2xl"></i>
                 </a>
               </div>
@@ -903,6 +922,8 @@
       </div>
     </section>
     
+    </main>
+
     <!-- Footer -->
     <footer class="bg-white dark:bg-[#060F1E] border-t border-gray-200 dark:border-gray-800 py-8 transition-colors duration-300">
       <div class="container mx-auto px-4 text-center">
@@ -1019,6 +1040,7 @@
         });
 
         // --- Scroll Reveal / Entrance & Exit Animation (Bidirectional) ---
+        document.documentElement.classList.add('reveal-ready');
         const revealSections = document.querySelectorAll('.scroll-reveal');
         
         const revealObserver = new IntersectionObserver((entries) => {
@@ -1187,19 +1209,23 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="js/i18n.js?v=2.4"></script>
+    <script src="js/i18n.js?v=3"></script>
     <script src="js/projects-data.js?v=2.4"></script>
-    <script src="js/portfolio.js?v=2.4"></script>
+    <script src="js/project-card.js?v=3"></script>
+    <script src="js/portfolio.js?v=3"></script>
     <script>
       // Initialize AOS with bidirectional smooth in-out transitions
-      AOS.init({
-        once: false,
-        mirror: true,
-        offset: 80,
-        duration: 750,
-        easing: 'ease-in-out-cubic',
-        anchorPlacement: 'top-bottom',
-      });
+      if (window.AOS) {
+        AOS.init({
+          once: false,
+          mirror: true,
+          offset: 80,
+          duration: 750,
+          easing: 'ease-in-out-cubic',
+          anchorPlacement: 'top-bottom',
+        });
+        document.documentElement.classList.add('aos-ready');
+      }
     </script>
   </body>
 </html>

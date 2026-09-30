@@ -148,95 +148,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Create Modern Case-Study Card HTML (Linear / Vercel Aesthetic)
   function createProjectCardHTML(project, idx = 0) {
-    const loc = window.i18n ? window.i18n.getLocalizedProject(project) : project;
-    const isEn = window.i18n && window.i18n.getLanguage() === "en";
-
-    const statusLabel = loc.status === "Production" 
-      ? (isEn ? "Production" : "Produksi")
-      : loc.status === "Completed"
-      ? (isEn ? "Completed" : "Selesai")
-      : loc.status;
-
-    const statusColor = loc.status === "Production" 
-      ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
-      : loc.status === "Completed"
-      ? "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20"
-      : "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20";
-
-    const techBadgesHTML = loc.techStack.slice(0, 5).map(tech => `
-      <span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-gray-700 dark:text-gray-300 text-xs font-mono px-2.5 py-1 rounded-md flex items-center gap-1.5">
-        <i class="${tech.icon} ${tech.color}"></i> ${tech.name}
-      </span>
-    `).join("");
-
-    const extraTechCount = loc.techStack.length > 5 ? loc.techStack.length - 5 : 0;
-    const staggerDelay = (idx % 3) * 100;
-
-    const timelineText = isEn ? loc.timeline.replace("Sekarang", "Present") : loc.timeline;
-    const readCaseStudyText = window.i18n ? window.i18n.t("portfolio.readCaseStudy") : "Baca Case Study";
-
-    return `
-      <div class="project-card group bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between interactive-element" data-aos="fade-up" data-aos-delay="${staggerDelay}">
-        
-        <!-- Thumbnail & Badges -->
-        <div>
-          <div class="h-52 overflow-hidden relative bg-gray-900/5 dark:bg-black/30 border-b border-gray-100 dark:border-white/5">
-            <img src="${loc.thumbnailUrl}" alt="${loc.title}" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out" />
-            
-            <!-- Category Badge -->
-            <div class="absolute top-4 left-4 z-10">
-              <span class="bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md border border-gray-200/80 dark:border-white/10 text-primary dark:text-secondary text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm">
-                ${loc.categoryLabel}
-              </span>
-            </div>
-
-            <!-- Status Badge -->
-            <div class="absolute top-4 right-4 z-10">
-              <span class="backdrop-blur-md border text-xs font-medium px-2.5 py-1 rounded-md shadow-sm ${statusColor}">
-                • ${statusLabel}
-              </span>
-            </div>
-          </div>
-
-          <!-- Content -->
-          <div class="p-6">
-            <!-- Role -->
-            <div class="flex items-center gap-2 mb-2 text-xs font-mono text-secondary tracking-wide uppercase font-semibold">
-              <i class="ri-user-settings-line"></i> ${loc.role}
-            </div>
-
-            <!-- Title -->
-            <h3 class="text-xl font-bold text-primary dark:text-white group-hover:text-secondary transition-colors line-clamp-1 mb-2">
-              ${loc.title}
-            </h3>
-
-            <!-- Short Description -->
-            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-2 mb-6">
-              ${loc.shortDescription || (loc.overview ? loc.overview.what : '')}
-            </p>
-
-            <!-- Tech Stack Badges -->
-            <div class="flex flex-wrap gap-1.5">
-              ${techBadgesHTML}
-              ${extraTechCount > 0 ? `<span class="bg-gray-100 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 text-gray-500 text-xs font-mono px-2 py-1 rounded-md">+${extraTechCount}</span>` : ''}
-            </div>
-          </div>
-        </div>
-
-        <!-- Footer / Action Button -->
-        <div class="px-6 pb-6 pt-2 border-t border-gray-100 dark:border-white/5 flex items-center justify-between mt-auto">
-          <span class="text-xs font-mono text-gray-400 dark:text-gray-500 flex items-center gap-1">
-            <i class="ri-calendar-line"></i> ${timelineText}
-          </span>
-          <button class="view-case-study-btn bg-primary/5 hover:bg-primary text-primary hover:text-white dark:bg-secondary/10 dark:hover:bg-secondary dark:text-secondary dark:hover:text-primary text-xs font-semibold px-4 py-2.5 rounded-xl transition-all duration-300 flex items-center gap-2 interactive-element" data-slug="${loc.slug}">
-            ${readCaseStudyText} <i class="ri-arrow-right-up-line text-sm"></i>
-          </button>
-        </div>
-
-      </div>
-    `;
+    return window.createProjectCardHTML(project, idx, window.i18n);
   }
 
   // Dedicated DevOps Portfolio View (9 Sections)
@@ -270,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="devops-app-badge group relative bg-white/70 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 p-4 rounded-2xl flex flex-col items-center justify-center text-center transition-all duration-300 hover:scale-105 hover:border-secondary/50 hover:shadow-lg hover:bg-white dark:hover:bg-dark-surface cursor-pointer" ${app.slug ? `data-slug="${app.slug}"` : ''} data-aos="zoom-in" data-aos-delay="${(idx % 4) * 60}">
         <div class="w-14 h-14 rounded-full bg-gray-100 dark:bg-white text-gray-900 flex items-center justify-center font-bold mb-2.5 group-hover:scale-110 transition-transform overflow-hidden p-2.5 shadow-sm border border-gray-200/60 dark:border-white">
           ${app.logo 
-            ? `<img src="${app.logo}" alt="${app.name}" class="w-full h-full object-contain" />`
+            ? `<img loading="lazy" decoding="async" src="${app.logo}" alt="${app.name}" class="w-full h-full object-contain" />`
             : `<span class="text-2xl font-bold font-mono text-gray-900">${app.name.charAt(0)}</span>`
           }
         </div>
@@ -295,9 +208,9 @@ document.addEventListener("DOMContentLoaded", function () {
               <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
               ${isEn ? "DevSecOps & Infrastructure Engineering" : "Teknik DevSecOps & Infrastruktur"}
             </div>
-            <h1 class="text-3xl md:text-5xl font-bold text-primary dark:text-white tracking-tight">
+            <h2 class="text-3xl md:text-5xl font-bold text-primary dark:text-white tracking-tight">
               ${isEn ? "DevSecOps Portfolio" : "DevSecOps Portofolio"}
-            </h1>
+            </h2>
             <p class="text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
               ${isEn
                 ? "Building reliable and secure infrastructure, integrating security pipelines (SonarQube SAST & OWASP ZAP DAST), automating deployments, and maintaining sustainable production systems."
@@ -337,7 +250,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           <div class="bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-3xl overflow-hidden shadow-lg p-6 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div class="lg:col-span-5 relative h-64 lg:h-full rounded-2xl overflow-hidden border border-gray-200/80 dark:border-white/10 bg-gray-900/40 min-h-[220px]">
-              <img src="asset/7.png" alt="Server Monitoring Platform" class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700" />
+              <img loading="lazy" decoding="async" src="asset/7.png" alt="Server Monitoring Platform" class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700" />
               <div class="absolute top-3 left-3 bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md text-secondary text-xs font-semibold px-3 py-1 rounded-lg border border-white/10">
                 ${isEn ? "Key Highlight" : "Sorotan Utama"}
               </div>
@@ -1049,7 +962,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const galleryList = loc.gallery || project.gallery || [];
     const galleryHTML = galleryList.length > 0 ? galleryList.map(item => `
       <div class="gallery-item group relative h-48 rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 cursor-pointer interactive-element" data-src="${item.image}" data-title="${item.title}">
-        <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+        <img loading="lazy" decoding="async" src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4 flex flex-col justify-end">
           <span class="text-[10px] font-mono text-secondary uppercase font-bold">${item.category}</span>
           <h4 class="text-xs font-bold text-white">${item.title}</h4>
@@ -1091,9 +1004,9 @@ document.addEventListener("DOMContentLoaded", function () {
               </span>
             </div>
 
-            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-primary dark:text-white tracking-tight leading-tight">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-primary dark:text-white tracking-tight leading-tight">
               ${loc.title}
-            </h1>
+            </h2>
 
             <p class="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-3xl leading-relaxed">
               ${loc.shortDescription || (loc.overview ? loc.overview.what : '')}
@@ -1122,7 +1035,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           <!-- HERO THUMBNAIL PREVIEW -->
           <div class="rounded-2xl overflow-hidden border border-gray-200/80 dark:border-white/10 shadow-xl bg-gray-900/40 max-h-[500px]">
-            <img src="${loc.thumbnailUrl}" alt="${loc.title}" class="w-full h-full object-cover object-top" />
+            <img loading="lazy" decoding="async" src="${loc.thumbnailUrl}" alt="${loc.title}" class="w-full h-full object-cover object-top" />
           </div>
 
           <!-- 2. OVERVIEW -->
