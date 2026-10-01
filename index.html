@@ -46,33 +46,55 @@
   }
 }
     </script>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link rel="preload" as="image" href="/asset/foto-hero.webp" type="image/webp" fetchpriority="high" />
     <link href="/styles/site.css" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
     />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+    <link
+      rel="preload"
+      as="style"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
     />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+      />
+    </noscript>
     <style>
       :where([class^="ri-"])::before {
         content: "\f3c2";
       }
       body {
-        font-family: "Inter", sans-serif;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         scroll-behavior: smooth;
         cursor: none; /* Hide default cursor for custom cursor */
       }
       h1, h2, h3, h4, h5, h6, [data-i18n="hero.greeting"] {
-        font-family: "Poppins", sans-serif;
+        font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       }
       
       :root {
@@ -355,7 +377,7 @@
           </div>
 
           <!-- Theme Toggle -->
-          <button id="themeToggle" class="p-2 rounded-full bg-gray-100 dark:bg-dark-surface text-gray-800 dark:text-yellow-400 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors interactive-element">
+          <button id="themeToggle" class="p-2 rounded-full bg-gray-100 dark:bg-dark-surface text-gray-800 dark:text-yellow-400 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors interactive-element" aria-label="Ganti mode tema" title="Ganti mode tema">
             <i class="ri-moon-line hidden dark:block"></i>
             <i class="ri-sun-line block dark:hidden"></i>
           </button>
@@ -390,11 +412,11 @@
             </button>
           </div>
 
-          <button id="mobileThemeToggle" class="p-2 rounded-full bg-gray-100 dark:bg-dark-surface text-gray-800 dark:text-yellow-400 interactive-element">
+          <button id="mobileThemeToggle" class="p-2 rounded-full bg-gray-100 dark:bg-dark-surface text-gray-800 dark:text-yellow-400 interactive-element" aria-label="Ganti mode tema" title="Ganti mode tema">
             <i class="ri-moon-line hidden dark:block"></i>
             <i class="ri-sun-line block dark:hidden"></i>
           </button>
-          <button id="mobileMenuButton" class="w-10 h-10 flex items-center justify-center text-primary dark:text-white interactive-element">
+          <button id="mobileMenuButton" class="w-10 h-10 flex items-center justify-center text-primary dark:text-white interactive-element" aria-label="Buka navigasi menu" title="Buka navigasi menu">
             <i class="ri-menu-line ri-lg"></i>
           </button>
         </div>
@@ -427,17 +449,17 @@
         <div class="flex flex-col-reverse md:flex-row items-center justify-between gap-12">
           
           <div class="w-full md:w-1/2 text-center md:text-left">
-            <p class="text-secondary font-medium tracking-wider mb-2" data-aos="fade-down" data-i18n="hero.greeting">Halo, saya</p>
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-primary dark:text-white mb-4" data-aos="fade-right" data-aos-delay="100">
+            <p class="text-secondary font-medium tracking-wider mb-2" data-i18n="hero.greeting">Halo, saya</p>
+            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-primary dark:text-white mb-4">
               Rifki Rizkia
             </h1>
-            <p class="text-2xl md:text-3xl text-gray-600 dark:text-gray-400 font-medium mb-6" data-aos="fade-right" data-aos-delay="200">
+            <p class="text-2xl md:text-3xl text-gray-600 dark:text-gray-400 font-medium mb-6">
               <span id="typewriter-text">DevOps Engineer &amp; Software Developer</span><span class="text-secondary dark:text-secondary animate-blink">|</span>
             </p>
-            <p class="text-gray-600 dark:text-gray-400 mb-10 max-w-lg mx-auto md:mx-0 text-lg leading-relaxed" data-aos="fade-up" data-aos-delay="300" data-i18n="hero.bio">
+            <p class="text-gray-600 dark:text-gray-400 mb-10 max-w-lg mx-auto md:mx-0 text-lg leading-relaxed" data-i18n="hero.bio">
               DevOps Engineer &amp; Software Developer yang berorientasi pada pemecahan masalah (problem solving) end-to-end. Mengombinasikan arsitektur cloud tangguh (Google Cloud & AWS), automasi DevSecOps, serta tren model AI mutakhir (Gemini & ChatGPT) dan teknik prompting untuk mengakselerasi transformasi ide menjadi produk digital siap pakai berskala produksi.
             </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start" data-aos="fade-up" data-aos-delay="400">
+            <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
               <a href="#projek" data-i18n="hero.ctaPortfolio" class="bg-primary dark:bg-secondary text-white dark:text-primary font-semibold px-8 py-4 rounded-xl whitespace-nowrap hover:shadow-lg hover:-translate-y-1 transition-all interactive-element">
                 Lihat Portofolio
               </a>
@@ -448,10 +470,13 @@
           </div>
           
           <!-- 3D Photo Frame -->
-          <div class="w-full md:w-1/2 flex justify-center md:justify-end" data-aos="zoom-in">
+          <div class="w-full md:w-1/2 flex justify-center md:justify-end">
             <div class="tilt-wrapper w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 interactive-element">
               <div class="tilt-element w-full h-full bg-white dark:bg-dark-surface p-2 rounded-3xl shadow-2xl relative overflow-visible">
-                <img src="asset/foto.png" alt="Foto profil Rifki Rizkia" width="1000" height="1000" fetchpriority="high" class="w-full h-full object-cover rounded-2xl object-top z-10 relative pointer-events-none" />
+                <picture>
+                  <source srcset="/asset/foto-hero.webp" type="image/webp" />
+                  <img src="/asset/foto.png" alt="Foto profil Rifki Rizkia" width="384" height="384" fetchpriority="high" decoding="sync" class="w-full h-full object-cover rounded-2xl object-top z-10 relative pointer-events-none" />
+                </picture>
                 <!-- Decorative element -->
                 <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-secondary rounded-full filter blur-3xl opacity-30 z-0"></div>
                 <div class="absolute -top-6 -left-6 w-32 h-32 bg-blue-500 rounded-full filter blur-3xl opacity-30 z-0"></div>
@@ -582,11 +607,11 @@
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300">DevSecOps</span>
                   </div>
                   <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-blue-500/50 dark:hover:border-blue-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
-                    <img src="asset/docker.png" alt="Docker" loading="lazy" decoding="async" width="20" height="20" class="w-5 h-5 object-contain mr-2.5 group-hover:scale-110 transition-transform" />
+                    <img src="asset/docker-icon.png" alt="Docker" loading="lazy" decoding="async" width="20" height="20" class="w-5 h-5 object-contain mr-2.5 group-hover:scale-110 transition-transform" />
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Docker</span>
                   </div>
                   <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-cyan-500/50 dark:hover:border-cyan-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
-                    <img src="asset/docker_swarm.png" alt="Docker Swarm" loading="lazy" decoding="async" width="20" height="20" class="w-5 h-5 object-contain mr-2.5 group-hover:scale-110 transition-transform" />
+                    <img src="asset/docker-swarm-icon.png" alt="Docker Swarm" loading="lazy" decoding="async" width="20" height="20" class="w-5 h-5 object-contain mr-2.5 group-hover:scale-110 transition-transform" />
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Docker Swarm</span>
                   </div>
                   <div class="flex items-center bg-white/40 dark:bg-white/5 border border-gray-200/50 dark:border-white/10 rounded-xl px-4 py-2.5 hover:border-sky-500/50 dark:hover:border-sky-400/50 transition-all duration-300 hover:-translate-y-0.5 group cursor-default">
@@ -885,7 +910,7 @@
                     <i class="ri-mail-line ri-xl text-primary dark:text-secondary"></i>
                   </div>
                   <div>
-                    <h4 class="font-medium text-gray-500 dark:text-gray-400 text-sm mb-1" data-i18n="contact.emailLabel">Email</h4>
+                    <h3 class="font-medium text-gray-500 dark:text-gray-400 text-sm mb-1" data-i18n="contact.emailLabel">Email</h3>
                     <a href="mailto:rifkirizkia91@gmail.com" class="text-lg font-bold text-primary dark:text-white hover:text-secondary dark:hover:text-secondary transition-colors">rifkirizkia91@gmail.com</a>
                   </div>
                 </div>
@@ -894,7 +919,7 @@
                     <i class="ri-map-pin-line ri-xl text-primary dark:text-secondary"></i>
                   </div>
                   <div>
-                    <h4 class="font-medium text-gray-500 dark:text-gray-400 text-sm mb-1" data-i18n="contact.locationLabel">Lokasi</h4>
+                    <h3 class="font-medium text-gray-500 dark:text-gray-400 text-sm mb-1" data-i18n="contact.locationLabel">Lokasi</h3>
                     <p class="text-lg font-bold text-primary dark:text-white" data-i18n="contact.locationValue">Bandung, Indonesia</p>
                   </div>
                 </div>
@@ -930,7 +955,7 @@
         <p class="text-gray-600 dark:text-gray-400 font-mono text-sm">
           <span data-i18n="footer.designedBy">Didesain & Dibangun oleh</span> <span class="text-primary dark:text-secondary font-bold">Rifki Rizkia</span>
         </p>
-        <p class="text-gray-400 dark:text-gray-600 text-xs mt-2" data-i18n="footer.rights">© 2025 All rights reserved.</p>
+        <p class="text-gray-500 dark:text-gray-400 text-xs mt-2" data-i18n="footer.rights">© 2025 All rights reserved.</p>
       </div>
     </footer>
 
@@ -1099,10 +1124,10 @@
         });
 
         // --- Typewriter Effect ---
-        const words = ["Software Engineer", "DevSecOps & Cloud Specialist", "AI-Driven Product Builder", "Fullstack & Mobile Developer"];
+        const words = ["DevOps Engineer & Software Developer", "Software Engineer", "DevSecOps & Cloud Specialist", "AI-Driven Product Builder", "Fullstack & Mobile Developer"];
         let wordIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
+        let charIndex = words[0].length;
+        let isDeleting = true;
         const typewriterEl = document.getElementById("typewriter-text");
 
         function type() {
@@ -1135,10 +1160,9 @@
           setTimeout(type, typeSpeed);
         }
 
-        // Start typewriter
+        // Start typewriter after user has read the initial title
         if (typewriterEl) {
-          typewriterEl.textContent = "";
-          type();
+          setTimeout(type, 3000);
         }
 
         // --- Floating WhatsApp Action Button Visibility ---
@@ -1208,24 +1232,23 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="js/i18n.js?v=3"></script>
-    <script src="js/projects-data.js?v=2.4"></script>
-    <script src="js/project-card.js?v=3"></script>
-    <script src="js/portfolio.js?v=3"></script>
+    <script src="js/aos.js" defer></script>
+    <script src="js/i18n.js?v=3" defer></script>
+    <script src="js/projects-data.js?v=2.4" defer></script>
+    <script src="js/project-card.js?v=3" defer></script>
+    <script src="js/portfolio.js?v=3" defer></script>
     <script>
-      // Initialize AOS with bidirectional smooth in-out transitions
-      if (window.AOS) {
-        AOS.init({
-          once: false,
-          mirror: true,
-          offset: 80,
-          duration: 750,
-          easing: 'ease-in-out-cubic',
-          anchorPlacement: 'top-bottom',
-        });
-        document.documentElement.classList.add('aos-ready');
-      }
+      window.addEventListener('DOMContentLoaded', function () {
+        if (window.AOS) {
+          AOS.init({
+            once: true,
+            offset: 60,
+            duration: 650,
+            easing: 'ease-out-cubic',
+          });
+          document.documentElement.classList.add('aos-ready');
+        }
+      });
     </script>
   </body>
 </html>
