@@ -59,6 +59,10 @@ jobs:
             set -e
             cd /home/ubuntu/apps/portofolio
 
+            aws ecr get-login-password --region us-east-1 | \
+            docker login --username AWS --password-stdin \
+            ${{ secrets.ECR_REGISTRY }}
+
             echo "Pulling latest Docker image..."
             docker compose pull
 
