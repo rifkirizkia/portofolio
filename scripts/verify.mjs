@@ -63,6 +63,9 @@ for (const project of context.window.PROJECTS_DATA) {
     if (img && !img.startsWith('http')) await access(resolve('dist', img));
   }
 }
+const llms = await readFile('dist/llms.txt', 'utf8');
+assert.match(llms, /^#\s+.+/m, 'llms.txt missing H1 title');
+assert.match(llms, /\[.+\]\(https?:\/\/.+\)/, 'llms.txt missing links');
 const robots = await readFile('dist/robots.txt', 'utf8');
 assert.match(robots, /User-agent: \*\s+Allow: \//);
 assert(!/^Disallow:\s*\/\s*$/m.test(robots));
@@ -71,10 +74,10 @@ const sitemap = await readFile('dist/sitemap.xml', 'utf8');
 assert.deepEqual([...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => m[1]), [canonical]);
 for (const [, script] of html.matchAll(/<script>(.*?)<\/script>/gs)) new vm.Script(script);
 for (const file of ['i18n', 'portfolio', 'projects-data', 'project-card']) new vm.Script(await readFile(`dist/js/${file}.js`, 'utf8'));
-console.log(`PASS: metadata, one H1, JSON-LD, social identity, ${links} local links/assets, ${defaultProjects.length} static projects, robots, sitemap and JavaScript syntax.`);
+console.log(`PASS: metadata, one H1, JSON-LD, social identity, ${links} local links/assets, ${defaultProjects.length} static projects, llms.txt, robots, sitemap and JavaScript syntax.`);
 
 if (process.env.BASE_URL) {
-  for (const [path, status] of [['/', 200], ['/robots.txt', 200], ['/sitemap.xml', 200], ['/styles/site.css', 200], ['/missing-page', 404], ['/about', 404], ['/projects', 404], ['/index.html', 200]]) {
+  for (const [path, status] of [['/', 200], ['/robots.txt', 200], ['/sitemap.xml', 200], ['/llms.txt', 200], ['/styles/site.css', 200], ['/missing-page', 404], ['/about', 404], ['/projects', 404], ['/index.html', 200]]) {
     const response = await fetch(new URL(path, process.env.BASE_URL), { redirect: 'manual' });
     assert.equal(response.status, status, path);
     assert(!/noindex/i.test(response.headers.get('x-robots-tag') || ''));
