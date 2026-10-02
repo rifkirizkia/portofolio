@@ -70,18 +70,25 @@
     <link
       rel="preload"
       as="style"
-      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+      href="/styles/remixicon/remixicon.min.css"
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/styles/remixicon/remixicon.woff2"
+      crossorigin
     />
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+      href="/styles/remixicon/remixicon.min.css"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+        href="/styles/remixicon/remixicon.min.css"
       />
     </noscript>
     <style>
@@ -289,15 +296,29 @@
         transition: background-color 1.2s cubic-bezier(0.25, 1, 0.5, 1), color 0.5s ease;
       }
 
+      @keyframes ambientFloat {
+        0%, 100% {
+          transform: translate3d(0, 0, 0);
+        }
+        50% {
+          transform: translate3d(0, -16px, 0);
+        }
+      }
+
       .parallax-orb {
         position: absolute;
         pointer-events: none;
         z-index: 0;
-        filter: blur(90px);
+        filter: blur(80px);
         opacity: 0.35;
         border-radius: 50%;
-        will-change: transform;
-        transition: transform 0.1s ease-out;
+        contain: strict;
+        animation: ambientFloat 8s ease-in-out infinite;
+      }
+
+      .parallax-orb:nth-of-type(even) {
+        animation-duration: 11s;
+        animation-delay: -3s;
       }
       
       .dark .parallax-orb {
@@ -1111,17 +1132,6 @@
           updateActiveSectionBackground();
         }
 
-        // --- Parallax Scroll Effect ---
-        window.addEventListener('scroll', () => {
-          const scrolled = window.pageYOffset;
-          const parallaxElements = document.querySelectorAll('[data-parallax-speed]');
-          
-          parallaxElements.forEach(el => {
-            const speed = parseFloat(el.dataset.parallaxSpeed);
-            const offset = scrolled * speed;
-            el.style.transform = `translateY(${offset}px)`;
-          });
-        });
 
         // --- Typewriter Effect ---
         const words = ["DevOps Engineer & Software Developer", "Software Engineer", "DevSecOps & Cloud Specialist", "AI-Driven Product Builder", "Fullstack & Mobile Developer"];

@@ -11,12 +11,13 @@ if (!projects?.length) throw new Error('Project data is missing');
 const source = await readFile('index.html', 'utf8');
 const marker = '<!-- prerender:projects -->';
 if (!source.includes(marker)) throw new Error('Project prerender marker is missing');
-// All projects are available without JavaScript. The existing UI enhances this
-// into the same six-card view with category filters and case-study modals.
-const html = source.replace(marker, projects.map((project, i) => renderCard(project, i)).join(''));
+// Prerender default view projects (Mobile and Web) for initial static HTML.
+const defaultProjects = projects.filter(p => p.category === 'mobile' || p.category === 'web');
+const html = source.replace(marker, defaultProjects.map((project, i) => renderCard(project, i)).join(''));
 await mkdir('dist/styles', { recursive: true });
 await writeFile('dist/index.html', html);
-for (const path of ['js', 'asset', 'robots.txt', 'sitemap.xml']) {
+await cp('styles/remixicon', 'dist/styles/remixicon', { recursive: true });
+for (const path of ['js', 'asset', 'robots.txt', 'sitemap.xml', 'llms.txt']) {
   await cp(path, `dist/${path}`, { recursive: true });
 }
-console.log(`Static HTML built with ${projects.length} project cards.`);
+console.log(`Static HTML built with ${defaultProjects.length} project cards.`);

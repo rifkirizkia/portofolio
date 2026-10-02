@@ -54,8 +54,11 @@ for (const img of tags.filter(t => t.tag === 'img' && t.src)) assert(img.alt && 
 for (const id of ['tentang', 'pengalaman', 'projek', 'kontak']) assert(ids.has(id));
 const context = vm.createContext({ window: {} });
 vm.runInContext(await readFile('js/projects-data.js', 'utf8'), context);
-for (const project of context.window.PROJECTS_DATA) {
+const defaultProjects = context.window.PROJECTS_DATA.filter(p => p.category === 'mobile' || p.category === 'web');
+for (const project of defaultProjects) {
   assert(html.includes(project.title), `Project missing from static HTML: ${project.title}`);
+}
+for (const project of context.window.PROJECTS_DATA) {
   for (const img of [project.thumbnailUrl, ...(project.gallery || []).map(i => i.image)]) {
     if (img && !img.startsWith('http')) await access(resolve('dist', img));
   }
@@ -68,7 +71,7 @@ const sitemap = await readFile('dist/sitemap.xml', 'utf8');
 assert.deepEqual([...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => m[1]), [canonical]);
 for (const [, script] of html.matchAll(/<script>(.*?)<\/script>/gs)) new vm.Script(script);
 for (const file of ['i18n', 'portfolio', 'projects-data', 'project-card']) new vm.Script(await readFile(`dist/js/${file}.js`, 'utf8'));
-console.log(`PASS: metadata, one H1, JSON-LD, social identity, ${links} local links/assets, ${context.window.PROJECTS_DATA.length} static projects, robots, sitemap and JavaScript syntax.`);
+console.log(`PASS: metadata, one H1, JSON-LD, social identity, ${links} local links/assets, ${defaultProjects.length} static projects, robots, sitemap and JavaScript syntax.`);
 
 if (process.env.BASE_URL) {
   for (const [path, status] of [['/', 200], ['/robots.txt', 200], ['/sitemap.xml', 200], ['/styles/site.css', 200], ['/missing-page', 404], ['/about', 404], ['/projects', 404], ['/index.html', 200]]) {

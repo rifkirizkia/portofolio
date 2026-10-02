@@ -16,7 +16,7 @@ const PROJECTS_DATA = [
     status: "Production",
     timeline: "2024 - 2025",
     isFeatured: true,
-    thumbnailUrl: "asset/tni_3d_scan_viewer.png",
+    thumbnailUrl: "asset/tni_3d_scan_viewer.webp",
     shortDescription: "Platform web interaktif visualisasi hasil scan 3D fotogrametri & LiDAR medan taktis untuk TNI dalam simulasi latihan, diarsiteki dari ide hingga produk siap pakai via prompt engineering model AI mutakhir (Gemini & ChatGPT).",
     githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
@@ -60,9 +60,9 @@ const PROJECTS_DATA = [
       "Membuktikan kemampuan problem solving yang tangguh dalam mengintegrasikan AI, grafika komputer 3D, dan cloud DevSecOps ke dalam produk nyata."
     ],
     gallery: [
-      { title: "TNI Tactical 3D Simulation Viewer Dashboard", image: "asset/tni_3d_scan_viewer.png", category: "Dashboard" },
-      { title: "Topographic Elevation & Waypoint Route Simulation", image: "asset/tni_3d_scan_viewer.png", category: "3D Simulation" },
-      { title: "Draco Compression & 3D Streaming Pipeline", image: "asset/tni_3d_scan_viewer.png", category: "Architecture" }
+      { title: "TNI Tactical 3D Simulation Viewer Dashboard", image: "asset/tni_3d_scan_viewer.webp", category: "Dashboard" },
+      { title: "Topographic Elevation & Waypoint Route Simulation", image: "asset/tni_3d_scan_viewer.webp", category: "3D Simulation" },
+      { title: "Draco Compression & 3D Streaming Pipeline", image: "asset/tni_3d_scan_viewer.webp", category: "Architecture" }
     ],
     learnings: {
       challenges: "Menampilkan model 3D scan berdensitas jutaan poligon secara real-time di browser web tanpa crash memori pada perangkat klien dengan spesifikasi standar.",
@@ -83,7 +83,7 @@ const PROJECTS_DATA = [
     status: "Production",
     timeline: "2026 - 2026",
     isFeatured: true,
-    thumbnailUrl: "asset/7.png",
+    thumbnailUrl: "asset/7.webp",
     shortDescription: "Platform web pemantauan server & website multi-node realtime terintegrasi dengan alert Telegram, WhatsApp, & AI Assistant.",
     githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
@@ -129,10 +129,10 @@ const PROJECTS_DATA = [
       "Reduced incident response time by 80%"
     ],
     gallery: [
-      { title: "Monitoring Dashboard", image: "asset/7.png", category: "Dashboard" },
-      { title: "Server Health Topology", image: "asset/7.png", category: "Architecture" },
-      { title: "n8n Automation Pipeline", image: "asset/7.png", category: "CI/CD Pipeline" },
-      { title: "Telegram & WhatsApp Alerts", image: "asset/7.png", category: "Notifications" }
+      { title: "Monitoring Dashboard", image: "asset/7.webp", category: "Dashboard" },
+      { title: "Server Health Topology", image: "asset/7.webp", category: "Architecture" },
+      { title: "n8n Automation Pipeline", image: "asset/7.webp", category: "CI/CD Pipeline" },
+      { title: "Telegram & WhatsApp Alerts", image: "asset/7.webp", category: "Notifications" }
     ],
     learnings: {
       challenges: "Mengelola koneksi realtime healthcheck untuk puluhan node server tanpa menimbulkan overhead beban memori pada engine monitoring.",
@@ -153,7 +153,7 @@ const PROJECTS_DATA = [
     status: "Production",
     timeline: "2023 - 2024",
     isFeatured: true,
-    thumbnailUrl: "asset/4.png",
+    thumbnailUrl: "asset/4.webp",
     shortDescription: "Aplikasi mobile antar-jemput karyawan armada bus Toyota dengan pemantauan live GPS tracking dan QR check-in.",
     githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
@@ -193,8 +193,8 @@ const PROJECTS_DATA = [
       "Reduced waiting time at pickup points by 15 mins"
     ],
     gallery: [
-      { title: "Naiq User Interface", image: "asset/4.png", category: "Dashboard" },
-      { title: "Naiq Driver Live Tracking", image: "asset/5.png", category: "Monitoring" }
+      { title: "Naiq User Interface", image: "asset/4.webp", category: "Dashboard" },
+      { title: "Naiq Driver Live Tracking", image: "asset/5.webp", category: "Monitoring" }
     ],
     learnings: {
       challenges: "Mengurangi konsumsi baterai berlebih pada HP Driver akibat tracking GPS latar belakang (background location) sepanjang perjalanan.",
@@ -215,7 +215,7 @@ const PROJECTS_DATA = [
     status: "Production",
     timeline: "2023 - 2024",
     isFeatured: true,
-    thumbnailUrl: "asset/3.png",
+    thumbnailUrl: "asset/3.webp",
     shortDescription: "Aplikasi mobile koperasi digital karyawan Toyota terintegrasi dengan Vending Machine IoT JumpStart & PIMA.",
     githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
@@ -253,7 +253,7 @@ const PROJECTS_DATA = [
       "Reduced queue time at cooperative store by 60%"
     ],
     gallery: [
-      { title: "Kopkar Mobile Member Dashboard", image: "asset/3.png", category: "Dashboard" }
+      { title: "Kopkar Mobile Member Dashboard", image: "asset/3.webp", category: "Dashboard" }
     ],
     learnings: {
       challenges: "Menangani batas waktu (timeout) koneksi Vending Machine IoT ketika dispensing barang terjadi ganguan sinyal.",
@@ -274,7 +274,7 @@ const PROJECTS_DATA = [
     status: "Production",
     timeline: "2023",
     isFeatured: true,
-    thumbnailUrl: "asset/1.png",
+    thumbnailUrl: "asset/1.webp",
     shortDescription: "Aplikasi mobile pelayanan administrasi kependudukan desa, pengajuan surat mandiri & pelaporan warga berbasis QR Code.",
     githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
@@ -311,7 +311,7 @@ const PROJECTS_DATA = [
       "Realtime community report notification system"
     ],
     gallery: [
-      { title: "Evillage Citizen Mobile App", image: "asset/1.png", category: "Dashboard" }
+      { title: "Evillage Citizen Mobile App", image: "asset/1.webp", category: "Dashboard" }
     ],
     learnings: {
       challenges: "Mendesain interface aplikasi mobile yang simpel agar ramah digunakan oleh warga senior/lansia.",
@@ -332,7 +332,7 @@ const PROJECTS_DATA = [
     status: "Production",
     timeline: "2023 - 2024",
     isFeatured: true,
-    thumbnailUrl: "asset/2.png",
+    thumbnailUrl: "asset/2.webp",
     shortDescription: "Aplikasi mobile manajemen keuangan dan ERP akuntansi koperasi terpadu dengan pencatatan jurnal otomatis dan neraca saldo.",
     githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
@@ -367,7 +367,7 @@ const PROJECTS_DATA = [
       "Automated financial health score indicator"
     ],
     gallery: [
-      { title: "Elkopra Mobile ERP Interface", image: "asset/2.png", category: "Dashboard" }
+      { title: "Elkopra Mobile ERP Interface", image: "asset/2.webp", category: "Dashboard" }
     ],
     learnings: {
       challenges: "Menjaga ketelitian kalkulasi nilai angka desimal mata uang pada volume ribuan transaksi bulanan.",
@@ -388,7 +388,7 @@ const PROJECTS_DATA = [
     status: "Production",
     timeline: "2023 - 2024",
     isFeatured: true,
-    thumbnailUrl: "asset/6.png",
+    thumbnailUrl: "asset/6.webp",
     shortDescription: "Aplikasi mobile manajemen keuangan pribadi, pelacak anggaran bulanan, target tabungan wishlist, dan analisis arus kas visual.",
     githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
@@ -422,7 +422,7 @@ const PROJECTS_DATA = [
       "Visual budget threshold alert system"
     ],
     gallery: [
-      { title: "Spendora Mobile Analytics", image: "asset/6.png", category: "Reports" }
+      { title: "Spendora Mobile Analytics", image: "asset/6.webp", category: "Reports" }
     ],
     learnings: {
       challenges: "Menjaga aplikasi tetap responsif saat membuka laporan histori transaksi tahunan yang berisi ribuan baris record.",
@@ -443,7 +443,7 @@ const PROJECTS_DATA = [
     status: "Production",
     timeline: "2024 - Present",
     isFeatured: true,
-    thumbnailUrl: "asset/docker_swarm.png",
+    thumbnailUrl: "asset/docker_swarm.webp",
     shortDescription: "Arsitektur CI/CD otomatis dengan Docker Swarm untuk deployment zero-downtime dan pemindaian keamanan SonarQube & OWASP ZAP. (Infrastructure Demo)",
     githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
@@ -490,8 +490,8 @@ const PROJECTS_DATA = [
       "100% code quality gate enforcement"
     ],
     gallery: [
-      { title: "Docker Swarm Cluster Node", image: "asset/docker_swarm.png", category: "Architecture" },
-      { title: "Docker Container Architecture", image: "asset/docker.png", category: "CI/CD Pipeline" }
+      { title: "Docker Swarm Cluster Node", image: "asset/docker_swarm.webp", category: "Architecture" },
+      { title: "Docker Container Architecture", image: "asset/docker.webp", category: "CI/CD Pipeline" }
     ],
     learnings: {
       challenges: "Mengelola persisten volume dan zero-downtime rolling updates tanpa mengganggu transaksi user yang sedang berjalan.",
@@ -512,7 +512,7 @@ const PROJECTS_DATA = [
     status: "Production",
     timeline: "2024",
     isFeatured: false,
-    thumbnailUrl: "asset/foto1.png",
+    thumbnailUrl: "asset/foto1.webp",
     shortDescription: "Infrastruktur Nginx Reverse Proxy terpusat dengan otomatisasi pembaruan sertifikat Let's Encrypt TLS/SSL. (Infrastructure Demo)",
     githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
@@ -549,7 +549,7 @@ const PROJECTS_DATA = [
       "Centralized SSL & domain management"
     ],
     gallery: [
-      { title: "Nginx Infrastructure Topology", image: "asset/foto1.png", category: "Architecture" }
+      { title: "Nginx Infrastructure Topology", image: "asset/foto1.webp", category: "Architecture" }
     ],
     learnings: {
       challenges: "Menangani Let's Encrypt HTTP-01 challenge saat domain berada di balik Cloudflare Flexible/Full proxy.",
@@ -570,7 +570,7 @@ const PROJECTS_DATA = [
     status: "Production",
     timeline: "2024",
     isFeatured: false,
-    thumbnailUrl: "asset/7.png",
+    thumbnailUrl: "asset/7.webp",
     shortDescription: "Sistem pengujian kualitas kode & keamanan SAST (SonarQube) serta DAST (OWASP ZAP) otomatis yang terintegrasi di dalam GitHub Actions CI/CD. (Infrastructure Demo)",
     githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
@@ -607,7 +607,7 @@ const PROJECTS_DATA = [
       "Reduced security review cycle from days to under 5 minutes"
     ],
     gallery: [
-      { title: "SonarQube & OWASP ZAP Security Report", image: "asset/7.png", category: "DevSecOps Pipeline" }
+      { title: "SonarQube & OWASP ZAP Security Report", image: "asset/7.webp", category: "DevSecOps Pipeline" }
     ],
     learnings: {
       challenges: "Mengoptimalkan durasi scan OWASP ZAP dan SonarScanner agar tidak memperlambat execution pipeline GitHub Actions dan meminimalkan false positive.",
@@ -628,7 +628,7 @@ const PROJECTS_DATA = [
     status: "Production",
     timeline: "2025 - 2026",
     isFeatured: true,
-    thumbnailUrl: "asset/docker_swarm.png",
+    thumbnailUrl: "asset/docker_swarm.webp",
     shortDescription: "Infrastruktur ERPNext & Frappe terpusat untuk Koperasi Karyawan Toyota, mencakup otomatisasi deployment Docker, reverse proxy Nginx, dan backup otomatis.",
     githubUrl: "",
     demoUrl: "",
@@ -667,7 +667,7 @@ const PROJECTS_DATA = [
       "Standardisasi lingkungan deployment berbasis kontainer Docker"
     ],
     gallery: [
-      { title: "Cetak Biru Infrastruktur ERP Kopkar Toyota", image: "asset/docker_swarm.png", category: "Architecture" }
+      { title: "Cetak Biru Infrastruktur ERP Kopkar Toyota", image: "asset/docker_swarm.webp", category: "Architecture" }
     ],
     learnings: {
       challenges: "Mengoptimalkan penggunaan RAM dan CPU MariaDB & Redis di server VPS agar Frappe workers dapat menangani beban puncak saat jam kerja.",
@@ -688,7 +688,7 @@ const PROJECTS_DATA = [
     status: "Production",
     timeline: "2025 - 2026",
     isFeatured: true,
-    thumbnailUrl: "asset/foto1.png",
+    thumbnailUrl: "asset/foto1.webp",
     shortDescription: "Infrastruktur ERP Enterprise Itekraf dengan kontainerisasi Frappe / ERPNext, manajemen SSL otomatis, dan pengerasan keamanan server VPS.",
     githubUrl: "",
     demoUrl: "",
@@ -727,7 +727,7 @@ const PROJECTS_DATA = [
       "Pengerasan keamanan server sesuai standar enterprise"
     ],
     gallery: [
-      { title: "Cetak Biru Infrastruktur ERP Itekraf", image: "asset/foto1.png", category: "Architecture" }
+      { title: "Cetak Biru Infrastruktur ERP Itekraf", image: "asset/foto1.webp", category: "Architecture" }
     ],
     learnings: {
       challenges: "Menjamin ketersediaan tinggi dan mengisolasi environment staging vs produksi pada server yang sama.",

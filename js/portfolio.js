@@ -55,9 +55,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Filter projects by active category and featured status
   function getFilteredProjects() {
-    let filtered = projectsData;
-    if (currentCategory !== "all") {
-      filtered = filtered.filter(p => p.category === currentCategory);
+    let filtered;
+    if (currentCategory === "all") {
+      filtered = projectsData.filter(p => p.category === "mobile" || p.category === "web");
+    } else {
+      filtered = projectsData.filter(p => p.category === currentCategory);
     }
     if (showOnlyFeatured && filtered.length > 6) {
       return filtered.slice(0, 6);
@@ -102,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Update "View All Projects" button visibility for standard grid
         if (viewAllBtn) {
           const totalInCategory = currentCategory === "all" 
-            ? projectsData.length 
+            ? projectsData.filter(p => p.category === "mobile" || p.category === "web").length 
             : projectsData.filter(p => p.category === currentCategory).length;
           
           const viewAllLabel = window.i18n ? window.i18n.t("portfolio.viewAll") : "Lihat Semua Projek";

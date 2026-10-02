@@ -30,7 +30,13 @@ http.createServer(async (req, res) => {
 
     const headers = {
       'Content-Type': contentType,
-      'Cache-Control': ext === '.html' ? 'no-cache' : 'public, max-age=31536000, immutable'
+      'Cache-Control': ext === '.html' ? 'no-cache' : 'public, max-age=31536000, immutable',
+      'X-Frame-Options': 'SAMEORIGIN',
+      'X-Content-Type-Options': 'nosniff',
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
+      'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+      'Content-Security-Policy': "frame-ancestors 'self';",
+      'Permissions-Policy': 'camera=(), microphone=(), geolocation=()'
     };
 
     if (/\.(html|txt|xml|css|js|svg)$/.test(ext) && acceptEncoding.includes('gzip')) {
