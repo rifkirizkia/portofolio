@@ -67,7 +67,7 @@ jobs:
             docker compose pull
 
             echo "Starting application..."
-            docker compose up -d
+            docker compose up -d --force-recreate
 
             echo "Cleaning unused Docker images..."
             docker image prune -f
