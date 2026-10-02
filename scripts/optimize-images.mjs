@@ -30,8 +30,8 @@ async function optimizeDir(dir) {
       // Generate WebP version
       const webpPath = fullPath.replace(/\.png$/, '.webp');
       let webpPipeline = sharp(originalBuf);
-      if (meta.width > 1920) {
-        webpPipeline = webpPipeline.resize({ width: 1920, withoutEnlargement: true });
+      if (meta.width > 720) {
+        webpPipeline = webpPipeline.resize({ width: 720, withoutEnlargement: true });
       }
       const webpBuf = await webpPipeline
         .webp({ quality: 80, effort: 6 })

@@ -1,6 +1,7 @@
-import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, writeFile, readdir } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import vm from 'node:vm';
+import { minify } from 'terser';
 
 const require = createRequire(import.meta.url);
 const renderCard = require('../js/project-card.js');
@@ -15,9 +16,25 @@ if (!source.includes(marker)) throw new Error('Project prerender marker is missi
 const defaultProjects = projects.filter(p => p.category === 'mobile' || p.category === 'web');
 const html = source.replace(marker, defaultProjects.map((project, i) => renderCard(project, i)).join(''));
 await mkdir('dist/styles', { recursive: true });
+await mkdir('dist/js', { recursive: true });
 await writeFile('dist/index.html', html);
 await cp('styles/remixicon', 'dist/styles/remixicon', { recursive: true });
-for (const path of ['js', 'asset', 'robots.txt', 'sitemap.xml', 'llms.txt']) {
+
+// Minify application JavaScript files
+const jsFiles = await readdir('js');
+for (const file of jsFiles) {
+  if (file.endsWith('.js')) {
+    const raw = await readFile(`js/${file}`, 'utf8');
+    if (file === 'aos.js') {
+      await writeFile(`dist/js/${file}`, raw);
+    } else {
+      const minResult = await minify(raw, { compress: true, mangle: true });
+      await writeFile(`dist/js/${file}`, minResult.code);
+    }
+  }
+}
+
+for (const path of ['asset', 'robots.txt', 'sitemap.xml', 'llms.txt']) {
   await cp(path, `dist/${path}`, { recursive: true });
 }
-console.log(`Static HTML built with ${defaultProjects.length} project cards.`);
+console.log(`Static HTML built with ${defaultProjects.length} project cards and minified JS.`);

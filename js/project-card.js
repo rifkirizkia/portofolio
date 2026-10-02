@@ -28,13 +28,18 @@
     const timelineText = isEn ? loc.timeline.replace("Sekarang", "Present") : loc.timeline;
     const readCaseStudyText = i18n ? i18n.t("portfolio.readCaseStudy") : "Baca Case Study";
 
+    const isFirstCard = idx === 0;
+    const imgAttrs = isFirstCard
+      ? 'loading="eager" fetchpriority="high" decoding="sync"'
+      : 'loading="lazy" decoding="async"';
+
     return `
       <div class="project-card group bg-white dark:bg-dark-surface/90 border border-gray-200/80 dark:border-white/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between interactive-element" data-aos="fade-up" data-aos-delay="${staggerDelay}">
         
         <!-- Thumbnail & Badges -->
         <div>
           <div class="h-52 overflow-hidden relative bg-gray-900/5 dark:bg-black/30 border-b border-gray-100 dark:border-white/5">
-            <img loading="lazy" decoding="async" src="${loc.thumbnailUrl}" alt="${loc.title}" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out" />
+            <img ${imgAttrs} src="${loc.thumbnailUrl}" alt="${loc.title}" width="720" height="405" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out" />
             
             <!-- Category Badge -->
             <div class="absolute top-4 left-4 z-10">

@@ -16,7 +16,7 @@ const PROJECTS_DATA = [
     status: "Production",
     timeline: "2024 - 2025",
     isFeatured: true,
-    thumbnailUrl: "asset/tni_3d_scan_viewer.webp",
+    thumbnailUrl: "asset/tni.webp",
     shortDescription: "Platform web interaktif visualisasi hasil scan 3D fotogrametri & LiDAR medan taktis untuk TNI dalam simulasi latihan, diarsiteki dari ide hingga produk siap pakai via prompt engineering model AI mutakhir (Gemini & ChatGPT).",
     githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
@@ -60,9 +60,9 @@ const PROJECTS_DATA = [
       "Membuktikan kemampuan problem solving yang tangguh dalam mengintegrasikan AI, grafika komputer 3D, dan cloud DevSecOps ke dalam produk nyata."
     ],
     gallery: [
-      { title: "TNI Tactical 3D Simulation Viewer Dashboard", image: "asset/tni_3d_scan_viewer.webp", category: "Dashboard" },
-      { title: "Topographic Elevation & Waypoint Route Simulation", image: "asset/tni_3d_scan_viewer.webp", category: "3D Simulation" },
-      { title: "Draco Compression & 3D Streaming Pipeline", image: "asset/tni_3d_scan_viewer.webp", category: "Architecture" }
+      { title: "TNI Tactical 3D Simulation Viewer Dashboard", image: "asset/tni.webp", category: "Dashboard" },
+      { title: "Topographic Elevation & Waypoint Route Simulation", image: "asset/tni.webp", category: "3D Simulation" },
+      { title: "Draco Compression & 3D Streaming Pipeline", image: "asset/tni.webp", category: "Architecture" }
     ],
     learnings: {
       challenges: "Menampilkan model 3D scan berdensitas jutaan poligon secara real-time di browser web tanpa crash memori pada perangkat klien dengan spesifikasi standar.",
