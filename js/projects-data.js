@@ -14,11 +14,10 @@ const PROJECTS_DATA = [
     categoryLabel: "Web & 3D Simulation",
     role: "Lead Fullstack & AI-Assisted Architect",
     status: "Production",
-    timeline: "2024 - 2025",
+    timeline: "2026",
     isFeatured: true,
     thumbnailUrl: "asset/tni.webp",
     shortDescription: "Platform web interaktif visualisasi hasil scan 3D fotogrametri & LiDAR medan taktis untuk TNI dalam simulasi latihan, diarsiteki dari ide hingga produk siap pakai via prompt engineering model AI mutakhir (Gemini & ChatGPT).",
-    githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
     techStack: [
       { name: "Three.js / WebGL", icon: "ri-box-3-line", color: "text-emerald-400" },
@@ -85,7 +84,6 @@ const PROJECTS_DATA = [
     isFeatured: true,
     thumbnailUrl: "asset/7.webp",
     shortDescription: "Platform web pemantauan server & website multi-node realtime terintegrasi dengan alert Telegram, WhatsApp, & AI Assistant.",
-    githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
     techStack: [
       { name: "Node.js", icon: "ri-nodejs-line", color: "text-green-500" },
@@ -155,7 +153,6 @@ const PROJECTS_DATA = [
     isFeatured: true,
     thumbnailUrl: "asset/4.webp",
     shortDescription: "Aplikasi mobile antar-jemput karyawan armada bus Toyota dengan pemantauan live GPS tracking dan QR check-in.",
-    githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
     techStack: [
       { name: "Flutter", icon: "ri-code-s-slash-line", color: "text-blue-400" },
@@ -217,7 +214,6 @@ const PROJECTS_DATA = [
     isFeatured: true,
     thumbnailUrl: "asset/3.webp",
     shortDescription: "Aplikasi mobile koperasi digital karyawan Toyota terintegrasi dengan Vending Machine IoT JumpStart & PIMA.",
-    githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
     techStack: [
       { name: "Flutter", icon: "ri-code-s-slash-line", color: "text-blue-400" },
@@ -276,7 +272,6 @@ const PROJECTS_DATA = [
     isFeatured: true,
     thumbnailUrl: "asset/1.webp",
     shortDescription: "Aplikasi mobile pelayanan administrasi kependudukan desa, pengajuan surat mandiri & pelaporan warga berbasis QR Code.",
-    githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
     techStack: [
       { name: "Flutter", icon: "ri-code-s-slash-line", color: "text-blue-400" },
@@ -334,7 +329,6 @@ const PROJECTS_DATA = [
     isFeatured: true,
     thumbnailUrl: "asset/2.webp",
     shortDescription: "Aplikasi mobile manajemen keuangan dan ERP akuntansi koperasi terpadu dengan pencatatan jurnal otomatis dan neraca saldo.",
-    githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
     techStack: [
       { name: "Flutter", icon: "ri-code-s-slash-line", color: "text-blue-400" },
@@ -390,7 +384,6 @@ const PROJECTS_DATA = [
     isFeatured: true,
     thumbnailUrl: "asset/6.webp",
     shortDescription: "Aplikasi mobile manajemen keuangan pribadi, pelacak anggaran bulanan, target tabungan wishlist, dan analisis arus kas visual.",
-    githubUrl: "https://github.com/rifkirizkia",
     demoUrl: "",
     techStack: [
       { name: "Flutter", icon: "ri-code-s-slash-line", color: "text-blue-400" },

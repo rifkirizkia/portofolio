@@ -1020,18 +1020,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 ${techBadges}
               </div>
               
-              <div class="flex items-center gap-3 flex-shrink-0">
-                ${loc.githubUrl ? `
-                  <a href="${loc.githubUrl}" target="_blank" class="bg-gray-900 hover:bg-black text-white dark:bg-white/10 dark:hover:bg-white/20 text-xs font-semibold px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 interactive-element">
-                    <i class="ri-github-fill text-base"></i> ${isEn ? "GitHub Repository" : "Repository GitHub"}
-                  </a>
-                ` : ''}
-                ${loc.demoUrl ? `
+              ${loc.demoUrl ? `
+                <div class="flex items-center gap-3 flex-shrink-0">
                   <a href="${loc.demoUrl}" target="_blank" class="bg-secondary text-primary font-semibold text-xs px-4 py-2.5 rounded-xl hover:shadow-lg transition-all flex items-center gap-2 interactive-element">
                     <i class="ri-external-link-line text-base"></i> Live Demo
                   </a>
-                ` : ''}
-              </div>
+                </div>
+              ` : ''}
             </div>
           </section>
 
