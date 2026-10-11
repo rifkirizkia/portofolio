@@ -12,7 +12,7 @@ const PROJECT_STOPS = [
   { id: '07', name: 'NAIQ DRIVER', slug: 'naiq-shuttle-app' },
 ];
 
-export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpenDevSecOps } = {}) {
+export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecOps } = {}) {
   const stage = root.querySelector('.portfolio-3d-stage');
   const canvasHost = root.querySelector('.portfolio-3d-canvas');
   const loaderEl = root.querySelector('[data-portfolio-loader]');
@@ -56,17 +56,7 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
   const NORMAL_SETTLE_DELAY = 280;
   const BOUNDARY_SETTLE_DELAY = 1200;
   const cameraGoal = { position: new THREE.Vector3(), lookAt: new THREE.Vector3(), quaternion: new THREE.Quaternion() };
-  const transition = {
-    active: false, startedAt: 0, duration: TRANSITION_DURATION,
-    fromPosition: new THREE.Vector3(), fromQuaternion: new THREE.Quaternion(),
-    path: null, finalLookAt: null, lookBackward: false, cameraDelay: 0,
-    doorFrom: 0, doorTo: 0, doorStart: 0, doorEnd: 1, onFinish: null,
-  };
-  const doorPivots = [];
-  let doorThreshold = null;
-  let exteriorCameraPosition = null;
-  let pendingEntryIndex = null;
-  let doorProgress = 0;
+  const transition = { active: false, startedAt: 0, duration: TRANSITION_DURATION, fromPosition: new THREE.Vector3(), fromQuaternion: new THREE.Quaternion() };
   let selectedIndex = 0;
   let lastWheelAt = 0;
   let yaw = 0;
@@ -77,7 +67,6 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
   let lastTime = performance.now();
   let isPageScrolling = false;
   let wasInViewport = false;
-  let museumExitActive = false;
   let arrivedAtTargetTime = 0;
 
   function resize() {
@@ -89,24 +78,19 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
     renderer.setSize(width, height, false);
   }
 
-  function getProjectCameraPose(index) {
+  function focusProject(index, animate = true) {
+    if (!targets[index]) return;
+    selectedIndex = index;
     const target = targets[index];
-    if (!target) return null;
     const cameraPosition = target.center.clone().addScaledVector(target.normal, 2.9);
     cameraPosition.y += 0.08;
+    cameraGoal.position.copy(cameraPosition);
+    cameraGoal.lookAt.copy(target.center);
+
     const lookCam = new THREE.PerspectiveCamera();
     lookCam.position.copy(cameraPosition);
     lookCam.lookAt(target.center);
-    return { position: cameraPosition, lookAt: target.center.clone(), quaternion: lookCam.quaternion.clone() };
-  }
-
-  function focusProject(index, animate = true) {
-    const pose = getProjectCameraPose(index);
-    if (!pose) return;
-    selectedIndex = index;
-    cameraGoal.position.copy(pose.position);
-    cameraGoal.lookAt.copy(pose.lookAt);
-    cameraGoal.quaternion.copy(pose.quaternion);
+    cameraGoal.quaternion.copy(lookCam.quaternion);
 
     if (!animate || !modelLoaded) {
       camera.position.copy(cameraGoal.position);
@@ -121,130 +105,15 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
 
     transition.fromPosition.copy(camera.position);
     transition.fromQuaternion.copy(camera.quaternion);
-    transition.path = null;
-    transition.onFinish = null;
     transition.startedAt = performance.now();
     transition.duration = TRANSITION_DURATION;
     transition.active = true;
     arrivedAtTargetTime = performance.now() + transition.duration;
   }
 
-  function setDoorProgress(progress) {
-    doorProgress = THREE.MathUtils.clamp(progress, 0, 1);
-    doorPivots.forEach(({ pivot, closedAngle }) => {
-      pivot.rotation.y = closedAngle * (1 - doorProgress);
-    });
-  }
-
-  function startCameraRoute({ points, finalLookAt, duration, doorFrom, doorTo, cameraDelay = 0, doorStart = 0, doorEnd = 1, lookBackward = false, onFinish }) {
-    if (transition.active || points.length < 2) return;
-    transition.path = new THREE.CatmullRomCurve3(points, false, 'centripetal');
-    transition.finalLookAt = finalLookAt.clone();
-    transition.lookBackward = lookBackward;
-    transition.cameraDelay = cameraDelay;
-    transition.doorFrom = doorFrom;
-    transition.doorTo = doorTo;
-    transition.doorStart = doorStart;
-    transition.doorEnd = doorEnd;
-    transition.onFinish = onFinish;
-    transition.startedAt = performance.now();
-    transition.duration = duration;
-    transition.active = true;
-    arrivedAtTargetTime = transition.startedAt + duration;
-    const routeStartedAt = transition.startedAt;
-    setTimeout(() => {
-      if (!transition.active || transition.startedAt !== routeStartedAt || !transition.path) return;
-      camera.position.copy(points[points.length - 1]);
-      camera.lookAt(finalLookAt);
-      setDoorProgress(doorTo);
-      transition.active = false;
-      transition.path = null;
-      const finish = transition.onFinish;
-      transition.onFinish = null;
-      arrivedAtTargetTime = performance.now();
-      isPageScrolling = false;
-      finish?.();
-    }, duration + 1200);
-  }
-
-  function startMuseumEntry(index) {
-    if (transition.active || museumExitActive) return;
-    if (!modelLoaded || !targets[index]) {
-      pendingEntryIndex = index;
-      if (modelLoaded) isPageScrolling = false;
-      return;
-    }
-    pendingEntryIndex = null;
-    selectedIndex = index;
-    wasInViewport = true;
-    if (!doorThreshold || !exteriorCameraPosition) {
-      setDoorProgress(1);
-      focusProject(index, false);
-      isPageScrolling = false;
-      return;
-    }
-    const pose = getProjectCameraPose(index);
-    const insideDoor = doorThreshold.clone().add(new THREE.Vector3(0, 1.62, -1.9));
-    const innerAisle = doorThreshold.clone().add(new THREE.Vector3(0, 1.62, -4.1));
-    setDoorProgress(0);
-    camera.position.copy(exteriorCameraPosition);
-    camera.lookAt(doorThreshold.clone().add(new THREE.Vector3(0, 1.62, -1.4)));
-    yaw = new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ').y;
-    pitch = new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ').x;
-    startCameraRoute({
-      points: [exteriorCameraPosition.clone(), doorThreshold.clone().add(new THREE.Vector3(0, 1.62, 0.8)), insideDoor, innerAisle, pose.position],
-      finalLookAt: pose.lookAt,
-      duration: 2700,
-      doorFrom: 0,
-      doorTo: 1,
-      cameraDelay: 0.08,
-      doorStart: 0,
-      doorEnd: 0.18,
-      onFinish: () => { isPageScrolling = false; },
-    });
-  }
-
-  function startMuseumExit(onFinish) {
-    if (transition.active) return;
-    museumExitActive = true;
-    if (!modelLoaded || !doorThreshold) {
-      onFinish?.();
-      return;
-    }
-    const insideAisle = doorThreshold.clone().add(new THREE.Vector3(0, 1.62, -4.1));
-    const insideDoor = doorThreshold.clone().add(new THREE.Vector3(0, 1.62, -1.4));
-    const outsideDoor = doorThreshold.clone().add(new THREE.Vector3(0, 1.62, 1.0));
-    const outside = exteriorCameraPosition || doorThreshold.clone().add(new THREE.Vector3(0, 1.62, 3.8));
-    startCameraRoute({
-      points: [camera.position.clone(), insideAisle, insideDoor, outsideDoor, outside],
-      finalLookAt: doorThreshold.clone().add(new THREE.Vector3(0, 1.62, -0.8)),
-      duration: 2900,
-      doorFrom: 1,
-      doorTo: 0,
-      doorStart: 0.76,
-      doorEnd: 1,
-      cameraDelay: 0,
-      lookBackward: true,
-      onFinish,
-    });
-  }
-
   function moveSelection(direction) {
     if (targets.length === 0 || isPageScrolling) return;
     const now = performance.now();
-
-    if (direction < 0 && selectedIndex === 0) {
-      if (transition.active || now < arrivedAtTargetTime + BOUNDARY_SETTLE_DELAY) return;
-      if (typeof onExit === 'function') {
-        isPageScrolling = true;
-        startMuseumExit(() => {
-          wasInViewport = false;
-          onExit();
-          setTimeout(() => { isPageScrolling = false; }, 1000);
-        });
-      }
-      return;
-    }
 
     // Bottom boundary at the last artwork:
     if (direction > 0 && selectedIndex === targets.length - 1) {
@@ -253,11 +122,8 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
       }
       if (typeof onComplete === 'function') {
         isPageScrolling = true;
-        startMuseumExit(() => {
-          wasInViewport = false;
-          onComplete();
-          setTimeout(() => { isPageScrolling = false; }, 1000);
-        });
+        onComplete();
+        setTimeout(() => { isPageScrolling = false; }, 1000);
       }
       return;
     }
@@ -276,7 +142,7 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
     if (!stage || disposed) return false;
     const rect = stage.getBoundingClientRect();
     const vh = window.innerHeight;
-    return rect.top < vh && rect.bottom > 0;
+    return rect.top < vh * 0.65 && rect.bottom > vh * 0.35;
   }
 
   function onWheel(event) {
@@ -296,10 +162,11 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
         event.preventDefault();
         isPageScrolling = true;
         stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        const index = targets.length > 0 ? targets.length - 1 : PROJECT_STOPS.length - 1;
-        pendingEntryIndex = index;
-        if (targets.length > 0) startMuseumEntry(index);
-        else setTimeout(() => { isPageScrolling = false; }, 850);
+        if (targets.length > 0) {
+          focusProject(targets.length - 1, false);
+          arrivedAtTargetTime = performance.now();
+        }
+        setTimeout(() => { isPageScrolling = false; }, 850);
         return;
       }
     }
@@ -317,10 +184,10 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
         event.preventDefault();
         isPageScrolling = true;
         stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        pendingEntryIndex = 0;
-        if (modelLoaded) startMuseumEntry(0);
+        focusProject(0, false);
+        arrivedAtTargetTime = now;
         lastWheelAt = now + 400;
-        if (!modelLoaded) setTimeout(() => { isPageScrolling = false; }, 700);
+        setTimeout(() => { isPageScrolling = false; }, 700);
         return;
       }
 
@@ -329,11 +196,10 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
         event.preventDefault();
         isPageScrolling = true;
         stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        const index = targets.length > 0 ? targets.length - 1 : PROJECT_STOPS.length - 1;
-        pendingEntryIndex = index;
-        if (modelLoaded) startMuseumEntry(index);
+        if (targets.length > 0) focusProject(targets.length - 1, false);
+        arrivedAtTargetTime = now;
         lastWheelAt = now + 400;
-        if (!modelLoaded) setTimeout(() => { isPageScrolling = false; }, 700);
+        setTimeout(() => { isPageScrolling = false; }, 700);
         return;
       }
     }
@@ -350,15 +216,6 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
       if (transition.active || now < arrivedAtTargetTime + NORMAL_SETTLE_DELAY) {
         event.preventDefault();
         return;
-      }
-      if (typeof onExit === 'function') {
-        event.preventDefault();
-        isPageScrolling = true;
-        startMuseumExit(() => {
-          wasInViewport = false;
-          onExit();
-          setTimeout(() => { isPageScrolling = false; }, 1000);
-        });
       }
       return;
     }
@@ -415,11 +272,7 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
   }
 
   function onTouchMove(e) {
-    if (!touchGesture.active || e.touches.length !== 1) return;
-    if (transition.active) {
-      e.preventDefault();
-      return;
-    }
+    if (!touchGesture.active || e.touches.length !== 1 || transition.active) return;
     const touch = e.touches[0];
     const dx = touch.clientX - touchGesture.startX;
     const dy = touch.clientY - touchGesture.startY;
@@ -435,8 +288,10 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
       camera.rotation.set(pitch, yaw, 0);
     } else if (touchGesture.axis === 'project') {
       const direction = dy < 0 ? 1 : -1;
-      // Page boundaries are handled by the animated museum exit route.
-      e.preventDefault();
+      const leavingAtFirst = selectedIndex === 0 && direction < 0;
+      const leavingAtLast = selectedIndex === targets.length - 1 && direction > 0;
+      // Keep native page scrolling available at both ends of the gallery.
+      if (!leavingAtFirst && !leavingAtLast) e.preventDefault();
     }
 
     touchGesture.lastX = touch.clientX;
@@ -590,34 +445,14 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
     if (transition.active) {
       const t = THREE.MathUtils.clamp((now - transition.startedAt) / transition.duration, 0, 1);
       const eased = t * t * (3 - 2 * t);
-      if (transition.path) {
-        const routeT = THREE.MathUtils.clamp((eased - transition.cameraDelay) / (1 - transition.cameraDelay), 0, 1);
-        camera.position.copy(transition.path.getPoint(routeT));
-        const tangent = transition.path.getTangent(routeT).normalize();
-        if (transition.lookBackward) tangent.negate();
-        const lookPoint = camera.position.clone().addScaledVector(tangent, 3.2);
-        const finalBlend = THREE.MathUtils.smoothstep(routeT, 0.7, 1);
-        lookPoint.lerp(transition.finalLookAt, finalBlend);
-        camera.lookAt(lookPoint);
-
-        const doorT = THREE.MathUtils.clamp((t - transition.doorStart) / Math.max(0.001, transition.doorEnd - transition.doorStart), 0, 1);
-        const doorEase = doorT * doorT * (3 - 2 * doorT);
-        setDoorProgress(THREE.MathUtils.lerp(transition.doorFrom, transition.doorTo, doorEase));
-      } else {
-        camera.position.lerpVectors(transition.fromPosition, cameraGoal.position, eased);
-        camera.quaternion.slerpQuaternions(transition.fromQuaternion, cameraGoal.quaternion, eased);
-      }
+      camera.position.lerpVectors(transition.fromPosition, cameraGoal.position, eased);
+      camera.quaternion.slerpQuaternions(transition.fromQuaternion, cameraGoal.quaternion, eased);
       if (t >= 1) {
         transition.active = false;
         const euler = new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ');
         yaw = euler.y;
         pitch = euler.x;
         arrivedAtTargetTime = now;
-        const onFinish = transition.onFinish;
-        transition.path = null;
-        transition.onFinish = null;
-        if (!onFinish) isPageScrolling = false;
-        onFinish?.();
       }
     } else if (keys.size > 0) {
       const direction = new THREE.Vector3();
@@ -642,62 +477,6 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
     renderer.render(scene, camera);
   }
 
-  function findGalleryObject(gallery, nameFragment) {
-    let match = null;
-    gallery.traverse((object) => {
-      if (!match && object.name.includes(nameFragment)) match = object;
-    });
-    return match;
-  }
-
-  function setupMuseumEntrance(gallery) {
-    const threshold = findGalleryObject(gallery, 'Stone door threshold');
-    if (threshold) {
-      threshold.updateWorldMatrix(true, false);
-      doorThreshold = threshold.getWorldPosition(new THREE.Vector3());
-      exteriorCameraPosition = doorThreshold.clone().add(new THREE.Vector3(0, 1.62, 3.8));
-    }
-
-    ['left', 'right'].forEach((side) => {
-      const door = findGalleryObject(gallery, `Open walnut door | ${side}`);
-      const hinge = findGalleryObject(gallery, `Door hinge | ${side} | 1.35`);
-      if (!door || !hinge) return;
-
-      door.updateWorldMatrix(true, false);
-      hinge.updateWorldMatrix(true, false);
-      const worldPosition = door.getWorldPosition(new THREE.Vector3());
-      const worldQuaternion = door.getWorldQuaternion(new THREE.Quaternion());
-      const worldScale = door.getWorldScale(new THREE.Vector3());
-      const hingePosition = hinge.getWorldPosition(new THREE.Vector3());
-      const hingeToDoor = worldPosition.clone().sub(hingePosition);
-      const currentAngle = Math.atan2(hingeToDoor.z, hingeToDoor.x);
-      const closedDirection = side === 'left' ? 0 : Math.PI;
-      let closedAngle = currentAngle - closedDirection;
-      while (closedAngle > Math.PI) closedAngle -= Math.PI * 2;
-      while (closedAngle < -Math.PI) closedAngle += Math.PI * 2;
-
-      door.parent?.remove(door);
-      const pivot = new THREE.Group();
-      pivot.name = `Museum door pivot | ${side}`;
-      pivot.position.copy(hingePosition);
-      scene.add(pivot);
-      pivot.add(door);
-      door.position.copy(worldPosition).sub(hingePosition);
-      door.quaternion.copy(worldQuaternion);
-      door.scale.copy(worldScale);
-      doorPivots.push({ pivot, closedAngle });
-    });
-
-    setDoorProgress(0);
-    if (exteriorCameraPosition && doorThreshold) {
-      camera.position.copy(exteriorCameraPosition);
-      camera.lookAt(doorThreshold.clone().add(new THREE.Vector3(0, 1.62, -1.4)));
-      const euler = new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ');
-      yaw = euler.y;
-      pitch = euler.x;
-    }
-  }
-
   function onModelLoaded(gltf) {
     if (disposed) return;
     const gallery = gltf.scene;
@@ -715,7 +494,6 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
     });
     scene.add(gallery);
     gallery.updateMatrixWorld(true);
-    setupMuseumEntrance(gallery);
 
     gallery.traverse((object) => {
       if (!object.isMesh || !object.name.includes('recessed graphite housing')) return;
@@ -790,14 +568,11 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
     }
 
     modelLoaded = true;
-    const shouldEnter = pendingEntryIndex !== null || isStageInViewport();
-    if (shouldEnter) startMuseumEntry(pendingEntryIndex ?? 0);
+    focusProject(0, false);
   }
 
   function onModelError(error) {
     console.error('Could not load the Blender portfolio gallery:', error);
-    isPageScrolling = false;
-    transition.active = false;
     if (loaderEl) loaderEl.hidden = true;
   }
 
@@ -818,34 +593,11 @@ export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpe
 
   const visibilityObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (!entry.isIntersecting) {
-        wasInViewport = false;
-        if (museumExitActive) museumExitActive = false;
-        return;
-      }
-
-      stage.focus({ preventScroll: true });
-      if (wasInViewport || museumExitActive || transition.active) return;
-
-      // Catch trackpad, touch, and programmatic page movement as well as wheel events.
-      // The side from which the section enters the viewport determines the first artwork.
-      const enteringFromAbove = entry.boundingClientRect.top >= 0;
-      const index = enteringFromAbove ? 0 : Math.max(0, targets.length - 1);
-      wasInViewport = true;
-      isPageScrolling = true;
-      pendingEntryIndex = index;
-      stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-      if (modelLoaded) {
-        startMuseumEntry(index);
-      } else {
-        // Model loading may take longer; onModelLoaded will start the pending route.
-        setTimeout(() => {
-          if (!modelLoaded && !transition.active) isPageScrolling = false;
-        }, 2500);
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
+        stage.focus({ preventScroll: true });
       }
     });
-  }, { threshold: [0, 0.4] });
+  }, { threshold: [0.4] });
   visibilityObserver.observe(stage);
 
   if (previous) previous.addEventListener('click', onPreviousClick);
