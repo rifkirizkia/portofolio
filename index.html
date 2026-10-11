@@ -272,6 +272,16 @@
         pointer-events: auto;
       }
       
+      /* Sembunyikan scrollbar browser namun tetap mempertahankan fungsi scroll */
+      html, body {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      html::-webkit-scrollbar,
+      body::-webkit-scrollbar {
+        display: none;
+      }
+
       body {
         transition: background-color 1.2s cubic-bezier(0.25, 1, 0.5, 1), color 0.5s ease;
       }
@@ -762,13 +772,7 @@
         <div class="flex items-center justify-center mb-12" data-aos="fade-up" data-aos-delay="100">
           <div class="inline-flex p-1.5 rounded-2xl bg-white/70 dark:bg-white/5 border border-gray-200/80 dark:border-white/10 backdrop-blur-md shadow-sm gap-1 sm:gap-2 max-w-full overflow-x-auto">
             <button class="portfolio-tab-btn active px-4 py-2 sm:px-6 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 bg-primary text-white dark:bg-secondary dark:text-primary shadow-md interactive-element" data-category="all">
-              <i class="ri-apps-line mr-1.5"></i> <span data-i18n="portfolio.tabAll">Semua Projek</span>
-            </button>
-            <button class="portfolio-tab-btn px-4 py-2 sm:px-6 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 bg-white/60 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-white border-transparent interactive-element" data-category="mobile">
-              <i class="ri-smartphone-line mr-1.5"></i> <span data-i18n="portfolio.tabMobile">Mobile</span>
-            </button>
-            <button class="portfolio-tab-btn px-4 py-2 sm:px-6 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 bg-white/60 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-white border-transparent interactive-element" data-category="web">
-              <i class="ri-global-line mr-1.5"></i> <span data-i18n="portfolio.tabWeb">Web</span>
+              <i class="ri-apps-line mr-1.5"></i> <span data-i18n="portfolio.tabAll">Web &amp; Mobile</span>
             </button>
             <button class="portfolio-tab-btn px-4 py-2 sm:px-6 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 bg-white/60 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-white border-transparent interactive-element" data-category="devops">
               <i class="ri-shield-keyhole-line mr-1.5"></i> <span data-i18n="portfolio.tabDevops">DevSecOps</span>

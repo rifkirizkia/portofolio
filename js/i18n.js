@@ -61,8 +61,8 @@
       },
       portfolio: {
         title: "Portofolio & Case Studies",
-        subtitle: "Eksplorasi proyek aplikasi mobile, sistem web enterprise, dan arsitektur infrastruktur DevSecOps yang telah saya selesaikan.",
-        tabAll: "Semua Projek",
+        subtitle: "Jelajahi karya Web & Mobile di museum 3D, atau buka studi kasus DevSecOps dalam tampilan tersendiri.",
+        tabAll: "Web & Mobile",
         tabMobile: "Mobile",
         tabWeb: "Web",
         tabDevops: "DevSecOps",
@@ -232,8 +232,8 @@
       },
       portfolio: {
         title: "Portfolio & Case Studies",
-        subtitle: "Explore mobile applications, enterprise web platforms, and DevSecOps infrastructure architectures I have engineered.",
-        tabAll: "All Projects",
+        subtitle: "Explore Web & Mobile projects in the 3D gallery, or open the dedicated DevSecOps case studies.",
+        tabAll: "Web & Mobile",
         tabMobile: "Mobile",
         tabWeb: "Web",
         tabDevops: "DevSecOps",
