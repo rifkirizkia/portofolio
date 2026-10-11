@@ -158,6 +158,34 @@
   outline-offset: 3px;
 }
 
+.portfolio-3d-devsecops-btn {
+  position: absolute;
+  top: 84px;
+  left: 224px;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid rgba(210, 225, 241, .22);
+  border-radius: 12px;
+  color: #e6edf6;
+  background: rgba(5, 13, 24, .68);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease, background .2s ease, transform .2s ease;
+}
+
+.portfolio-3d-devsecops-btn i { color: #5ff4d0; font-size: 16px; }
+.portfolio-3d-devsecops-btn:hover { color: #06121d; border-color: #5ff4d0; background: #5ff4d0; transform: translateY(-1px); }
+.portfolio-3d-devsecops-btn:hover i { color: currentColor; }
+.portfolio-3d-devsecops-btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
 /* Subtle, icon-only next/prev navigation buttons (no text) */
 .portfolio-3d-nav-btn {
   position: absolute;
@@ -211,6 +239,13 @@
     width: 38px;
     height: 38px;
     font-size: 16px;
+  }
+  .portfolio-3d-devsecops-btn {
+    top: 132px;
+    left: 12px;
+    min-height: 38px;
+    padding: 0 12px;
+    font-size: 11px;
   }
   .portfolio-3d-nav-btn {
     width: 40px;

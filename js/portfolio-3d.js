@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const PROJECT_STOPS = [
-  { id: '07', name: 'DEVOPS MONITORING', slug: 'website-monitoring-platform' },
+  { id: '07', name: 'TNI 3D TERRAIN', slug: 'tni-3d-tactical-scan-viewer' },
   { id: '06', name: 'SPENDORA', slug: 'spendora-finance-app' },
   { id: '05', name: 'NAIQ DRIVER', slug: 'naiq-shuttle-app' },
   { id: '01', name: 'EVILLAGE', slug: 'evillage-smart-village' },
@@ -11,7 +11,7 @@ const PROJECT_STOPS = [
   { id: '04', name: 'NAIQ USER', slug: 'naiq-shuttle-app' },
 ];
 
-export function createPortfolio3D(root, { onComplete, onStart, onCaseStudy } = {}) {
+export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecOps } = {}) {
   const stage = root.querySelector('.portfolio-3d-stage');
   const canvasHost = root.querySelector('.portfolio-3d-canvas');
   const loaderEl = root.querySelector('[data-portfolio-loader]');
@@ -19,6 +19,7 @@ export function createPortfolio3D(root, { onComplete, onStart, onCaseStudy } = {
   const next = root.querySelector('[data-portfolio-next]');
   const fullscreenBtn = root.querySelector('[data-portfolio-fullscreen]');
   const caseStudyBtn = root.querySelector('[data-portfolio-case-study]');
+  const devSecOpsBtn = root.querySelector('[data-portfolio-devsecops]');
 
   const loader = new GLTFLoader();
   const scene = new THREE.Scene();
@@ -125,19 +126,6 @@ export function createPortfolio3D(root, { onComplete, onStart, onCaseStudy } = {
       return;
     }
 
-    // Top boundary (Portfolio 1):
-    if (direction < 0 && selectedIndex === 0) {
-      if (transition.active || now < arrivedAtTargetTime + BOUNDARY_SETTLE_DELAY) {
-        return;
-      }
-      if (typeof onStart === 'function') {
-        isPageScrolling = true;
-        onStart();
-        setTimeout(() => { isPageScrolling = false; }, 1000);
-      }
-      return;
-    }
-
     // Never interrupt an active transition
     if (transition.active) return;
 
@@ -219,8 +207,19 @@ export function createPortfolio3D(root, { onComplete, onStart, onCaseStudy } = {
       return;
     }
 
-    // Inside the 3D gallery: ALWAYS prevent default browser page scrolling!
-    // This stops accidental jump/skip to #organisasi or other sections.
+    // At the first artwork, let upward wheel input return to the page so the
+    // portfolio tabs remain easy to reach. The DevSecOps shortcut is also in-view.
+    const direction = event.deltaY > 0 ? 1 : -1;
+    if (direction < 0 && selectedIndex === 0) {
+      if (transition.active || now < arrivedAtTargetTime + NORMAL_SETTLE_DELAY) {
+        event.preventDefault();
+        return;
+      }
+      wasInViewport = false;
+      return;
+    }
+
+    // Inside the gallery, wheel input focuses one artwork at a time.
     event.preventDefault();
 
     // Self-correct misalignment: if stage is overshot or displaced (e.g. rect.top > 25), snap to stage top:
@@ -232,19 +231,8 @@ export function createPortfolio3D(root, { onComplete, onStart, onCaseStudy } = {
       return;
     }
 
-    const direction = event.deltaY > 0 ? 1 : -1;
-
     // While camera is in flight, absorb all scroll input so intermediate projects are never skipped
     if (transition.active) {
-      return;
-    }
-
-    // Top boundary (Portfolio 1): must stay still ("diam dulu") before exiting up to #pengalaman
-    if (direction < 0 && selectedIndex === 0) {
-      if (now < arrivedAtTargetTime + BOUNDARY_SETTLE_DELAY) {
-        return;
-      }
-      moveSelection(-1);
       return;
     }
 
@@ -385,6 +373,12 @@ export function createPortfolio3D(root, { onComplete, onStart, onCaseStudy } = {
     onCaseStudy?.(project.slug);
   }
 
+  function onDevSecOpsClick(event) {
+    event.stopPropagation();
+    if (document.pointerLockElement === renderer.domElement) document.exitPointerLock();
+    onOpenDevSecOps?.();
+  }
+
   function toggleFullscreen(e) {
     if (e) e.stopPropagation();
     if (!document.fullscreenElement) {
@@ -462,6 +456,21 @@ export function createPortfolio3D(root, { onComplete, onStart, onCaseStudy } = {
     gallery.traverse((object) => {
       if (object.isLight) object.intensity = Math.min(object.intensity * 0.006, 120);
     });
+    // DevSecOps is shown in its dedicated 2D view. Reuse the seventh frame for
+    // the web-based TNI project so this gallery stays focused on Web & Mobile.
+    const oldDevOpsTitle = gallery.getObjectByName('DEVOPS MONITORING');
+    if (oldDevOpsTitle) oldDevOpsTitle.visible = false;
+    const tniPrint = gallery.getObjectByName('Portfolio print | 07');
+    if (tniPrint?.isMesh) {
+      const tniTexture = new THREE.TextureLoader().load('/asset/tni.webp');
+      tniTexture.colorSpace = THREE.SRGBColorSpace;
+      const materials = Array.isArray(tniPrint.material) ? tniPrint.material : [tniPrint.material];
+      materials.forEach((material) => {
+        material.map = tniTexture;
+        material.color?.set(0xffffff);
+        material.needsUpdate = true;
+      });
+    }
     scene.add(gallery);
     gallery.updateMatrixWorld(true);
 
@@ -544,6 +553,7 @@ export function createPortfolio3D(root, { onComplete, onStart, onCaseStudy } = {
   if (next) next.addEventListener('click', onNextClick);
   if (fullscreenBtn) fullscreenBtn.addEventListener('click', toggleFullscreen);
   if (caseStudyBtn) caseStudyBtn.addEventListener('click', onCaseStudyClick);
+  if (devSecOpsBtn) devSecOpsBtn.addEventListener('click', onDevSecOpsClick);
 
   window.addEventListener('keydown', onKeyDown);
   window.addEventListener('keyup', onKeyUp);
@@ -578,6 +588,7 @@ export function createPortfolio3D(root, { onComplete, onStart, onCaseStudy } = {
     if (next) next.removeEventListener('click', onNextClick);
     if (fullscreenBtn) fullscreenBtn.removeEventListener('click', toggleFullscreen);
     if (caseStudyBtn) caseStudyBtn.removeEventListener('click', onCaseStudyClick);
+    if (devSecOpsBtn) devSecOpsBtn.removeEventListener('click', onDevSecOpsClick);
     window.removeEventListener('keydown', onKeyDown);
     window.removeEventListener('keyup', onKeyUp);
     window.removeEventListener('blur', onWindowBlur);

@@ -118,6 +118,11 @@ function initPortfolioApp() {
                 <i class="ri-book-open-line" aria-hidden="true"></i>
                 <span>Baca Case Study</span>
               </button>
+              <button type="button" class="portfolio-3d-devsecops-btn" data-portfolio-devsecops>
+                <i class="ri-shield-keyhole-line" aria-hidden="true"></i>
+                <span>Lihat DevSecOps</span>
+                <i class="ri-arrow-up-right-line" aria-hidden="true"></i>
+              </button>
             </div>
           </section>
         `;
@@ -125,8 +130,12 @@ function initPortfolioApp() {
         if (viewAllBtn) viewAllBtn.style.display = "none";
         disposePortfolio3D = createPortfolio3D(projectsGrid, {
           onComplete: () => document.getElementById("organisasi")?.scrollIntoView({ behavior: "smooth", block: "start" }),
-          onStart: () => document.getElementById("pengalaman")?.scrollIntoView({ behavior: "smooth", block: "start" }),
-          onCaseStudy: (slug) => openCaseStudy(slug)
+          onCaseStudy: (slug) => openCaseStudy(slug),
+          onOpenDevSecOps: () => {
+            const devSecOpsTab = Array.from(tabButtons).find((button) => button.dataset.category === "devops");
+            devSecOpsTab?.click();
+            document.getElementById("projek")?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
         });
       } else if (currentCategory === "devops") {
         // Prepare container for full-width DevOps layout
