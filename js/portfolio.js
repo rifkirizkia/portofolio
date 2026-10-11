@@ -143,7 +143,6 @@ function initPortfolioApp() {
         if (viewAllBtn) viewAllBtn.style.display = "none";
         disposePortfolio3D = createPortfolio3D(projectsGrid, {
           onComplete: () => document.getElementById("organisasi")?.scrollIntoView({ behavior: "smooth", block: "start" }),
-          onExit: () => document.getElementById("pengalaman")?.scrollIntoView({ behavior: "smooth", block: "start" }),
           onCaseStudy: (slug) => openCaseStudy(slug),
           onOpenDevSecOps: () => {
             const devSecOpsTab = Array.from(tabButtons).find((button) => button.dataset.category === "devops");
