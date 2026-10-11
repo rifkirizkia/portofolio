@@ -15,7 +15,8 @@ const types = {
   '.jpeg': 'image/jpeg',
   '.svg': 'image/svg+xml',
   '.webp': 'image/webp',
-  '.woff2': 'font/woff2'
+  '.woff2': 'font/woff2',
+  '.glb': 'model/gltf-binary'
 };
 
 http.createServer(async (req, res) => {
@@ -36,7 +37,7 @@ http.createServer(async (req, res) => {
       'Referrer-Policy': 'strict-origin-when-cross-origin',
       'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
       'Cross-Origin-Resource-Policy': 'same-origin',
-      'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://portofolio.rifkirizkia.site; connect-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self';",
+      'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://portofolio.rifkirizkia.site; connect-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';",
       'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=()'
     };
 
