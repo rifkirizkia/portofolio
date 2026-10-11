@@ -1,3 +1,5 @@
+import { createPortfolio3D } from './portfolio-3d.js';
+
 /**
  * Portfolio Interactive Module
  * Manages category tab filtering, project card rendering,
@@ -20,6 +22,7 @@ function initPortfolioApp() {
 
   let currentCategory = "all";
   let showOnlyFeatured = true;
+  let disposePortfolio3D = null;
 
   // Initialize Portfolio UI
   function initPortfolio() {
@@ -28,6 +31,22 @@ function initPortfolioApp() {
     setupHashRouting();
     setupLightboxListeners();
     setupLanguageListener();
+    setupNavLinks();
+  }
+
+  function setupNavLinks() {
+    document.querySelectorAll('a[href="#projek"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        if (currentCategory === "all") {
+          const stage = document.querySelector('.portfolio-3d-stage');
+          if (stage) {
+            e.preventDefault();
+            history.pushState(null, '', '#projek');
+            stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      });
+    });
   }
 
   // Listen to language change to re-render UI dynamically
@@ -72,7 +91,44 @@ function initPortfolioApp() {
     if (!projectsGrid) return;
 
     const doRender = () => {
-      if (currentCategory === "devops") {
+      if (disposePortfolio3D) {
+        disposePortfolio3D();
+        disposePortfolio3D = null;
+      }
+
+      if (currentCategory === "all") {
+        projectsGrid.className = "portfolio-3d-root w-full";
+        projectsGrid.innerHTML = `
+          <section class="portfolio-3d-shell" aria-label="Galeri 3D portofolio">
+            <div class="portfolio-3d-stage" tabindex="0" role="region" aria-label="Galeri 3D interaktif">
+              <div class="portfolio-3d-canvas"></div>
+              <div class="portfolio-3d-spinner" data-portfolio-loader aria-hidden="true">
+                <div class="portfolio-3d-spinner-ring"></div>
+              </div>
+              <button type="button" class="portfolio-3d-nav-btn portfolio-3d-nav-prev" data-portfolio-prev aria-label="Sebelumnya">
+                <i class="ri-arrow-left-s-line" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="portfolio-3d-nav-btn portfolio-3d-nav-next" data-portfolio-next aria-label="Berikutnya">
+                <i class="ri-arrow-right-s-line" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="portfolio-3d-fullscreen-btn" data-portfolio-fullscreen aria-label="Layar penuh">
+                <i class="ri-fullscreen-line" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="portfolio-3d-case-study-btn" data-portfolio-case-study>
+                <i class="ri-book-open-line" aria-hidden="true"></i>
+                <span>Baca Case Study</span>
+              </button>
+            </div>
+          </section>
+        `;
+
+        if (viewAllBtn) viewAllBtn.style.display = "none";
+        disposePortfolio3D = createPortfolio3D(projectsGrid, {
+          onComplete: () => document.getElementById("organisasi")?.scrollIntoView({ behavior: "smooth", block: "start" }),
+          onStart: () => document.getElementById("pengalaman")?.scrollIntoView({ behavior: "smooth", block: "start" }),
+          onCaseStudy: (slug) => openCaseStudy(slug)
+        });
+      } else if (currentCategory === "devops") {
         // Prepare container for full-width DevOps layout
         projectsGrid.className = "block w-full space-y-12";
         projectsGrid.innerHTML = buildDevOpsViewHTML();
@@ -83,7 +139,7 @@ function initPortfolioApp() {
 
         setupDevOpsEventListeners();
       } else {
-        // Restore standard 3-column project grid layout for "all", "mobile", and "web"
+        // Restore the standard card grid for the filtered Mobile and Web views.
         projectsGrid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8";
 
         const filtered = getFilteredProjects();
@@ -829,6 +885,13 @@ function initPortfolioApp() {
     if (hash.startsWith("#case-study/")) {
       const slug = hash.replace("#case-study/", "");
       openCaseStudy(slug, false);
+    } else if (hash === "#projek" && currentCategory === "all") {
+      const stage = document.querySelector('.portfolio-3d-stage');
+      if (stage) {
+        setTimeout(() => {
+          stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 150);
+      }
     } else if (caseStudyModal && caseStudyModal.classList.contains("active")) {
       closeCaseStudy(false);
     }

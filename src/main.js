@@ -6,6 +6,7 @@
 
 // Styles
 import '../styles/tailwind.css';
+import '../styles/portfolio-3d.css';
 
 // Vendor libraries
 import '../js/aos.js';
