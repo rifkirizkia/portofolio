@@ -2,16 +2,17 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const PROJECT_STOPS = [
-  { id: '07', name: 'TNI 3D TERRAIN', slug: 'tni-3d-tactical-scan-viewer' },
-  { id: '06', name: 'SPENDORA', slug: 'spendora-finance-app' },
-  { id: '05', name: 'NAIQ DRIVER', slug: 'naiq-shuttle-app' },
-  { id: '01', name: 'EVILLAGE', slug: 'evillage-smart-village' },
-  { id: '02', name: 'ELKOPRA', slug: 'elkopra-financial-system' },
-  { id: '03', name: 'MY KOPKAR', slug: 'kopkar-toyota' },
-  { id: '04', name: 'NAIQ USER', slug: 'naiq-shuttle-app' },
+  { id: '08', name: 'WEB 3D LIDAR', slug: 'tni-3d-tactical-scan-viewer' },
+  { id: '06', name: 'WEB DEVOPS', slug: 'website-monitoring-platform' },
+  { id: '05', name: 'MY KOPKAR', slug: 'kopkar-toyota' },
+  { id: '01', name: 'SPENDORA', slug: 'spendora-finance-app' },
+  { id: '02', name: 'NAIQ USER', slug: 'naiq-shuttle-app' },
+  { id: '03', name: 'EVILLAGE', slug: 'evillage-smart-village' },
+  { id: '04', name: 'ELKOPRA', slug: 'elkopra-financial-system' },
+  { id: '07', name: 'NAIQ DRIVER', slug: 'naiq-shuttle-app' },
 ];
 
-export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecOps } = {}) {
+export function createPortfolio3D(root, { onComplete, onExit, onCaseStudy, onOpenDevSecOps } = {}) {
   const stage = root.querySelector('.portfolio-3d-stage');
   const canvasHost = root.querySelector('.portfolio-3d-canvas');
   const loaderEl = root.querySelector('[data-portfolio-loader]');
@@ -20,29 +21,31 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
   const fullscreenBtn = root.querySelector('[data-portfolio-fullscreen]');
   const caseStudyBtn = root.querySelector('[data-portfolio-case-study]');
   const devSecOpsBtn = root.querySelector('[data-portfolio-devsecops]');
+  const mobileMoveButtons = [...root.querySelectorAll('[data-mobile-move]')];
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
 
   const loader = new GLTFLoader();
   const scene = new THREE.Scene();
   scene.background = new THREE.Color('#07111d');
 
   const camera = new THREE.PerspectiveCamera(48, 1, 0.08, 120);
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
+  const renderer = new THREE.WebGLRenderer({ antialias: !isTouchDevice, alpha: false, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isTouchDevice ? 1.35 : 1.7));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 0.72;
-  renderer.shadowMap.enabled = true;
+  renderer.toneMappingExposure = 0.66;
+  renderer.shadowMap.enabled = !isTouchDevice;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   canvasHost.appendChild(renderer.domElement);
   renderer.domElement.setAttribute('aria-label', 'Galeri 3D interaktif');
   stage.tabIndex = 0;
 
   // Soft fill keeps the gallery readable while preserving detail in bright artwork.
-  scene.add(new THREE.HemisphereLight(0xdceaff, 0x221a14, 0.3));
-  scene.add(new THREE.AmbientLight(0xffffff, 0.18));
-  const galleryFill = new THREE.DirectionalLight(0xffe6c8, 0.2);
+  scene.add(new THREE.HemisphereLight(0xdceaff, 0x221a14, 0.42));
+  scene.add(new THREE.AmbientLight(0xffffff, 0.22));
+  const galleryFill = new THREE.DirectionalLight(0xffe6c8, 0.24);
   galleryFill.position.set(1.5, 5.8, 3.0);
-  galleryFill.castShadow = true;
+  galleryFill.castShadow = !isTouchDevice;
   galleryFill.shadow.mapSize.set(1024, 1024);
   scene.add(galleryFill);
 
@@ -53,7 +56,17 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
   const NORMAL_SETTLE_DELAY = 280;
   const BOUNDARY_SETTLE_DELAY = 1200;
   const cameraGoal = { position: new THREE.Vector3(), lookAt: new THREE.Vector3(), quaternion: new THREE.Quaternion() };
-  const transition = { active: false, startedAt: 0, duration: TRANSITION_DURATION, fromPosition: new THREE.Vector3(), fromQuaternion: new THREE.Quaternion() };
+  const transition = {
+    active: false, startedAt: 0, duration: TRANSITION_DURATION,
+    fromPosition: new THREE.Vector3(), fromQuaternion: new THREE.Quaternion(),
+    path: null, finalLookAt: null, lookBackward: false, cameraDelay: 0,
+    doorFrom: 0, doorTo: 0, doorStart: 0, doorEnd: 1, onFinish: null,
+  };
+  const doorPivots = [];
+  let doorThreshold = null;
+  let exteriorCameraPosition = null;
+  let pendingEntryIndex = null;
+  let doorProgress = 0;
   let selectedIndex = 0;
   let lastWheelAt = 0;
   let yaw = 0;
@@ -63,8 +76,8 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
   let disposed = false;
   let lastTime = performance.now();
   let isPageScrolling = false;
-  let lastScrollY = window.scrollY;
   let wasInViewport = false;
+  let museumExitActive = false;
   let arrivedAtTargetTime = 0;
 
   function resize() {
@@ -76,19 +89,24 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
     renderer.setSize(width, height, false);
   }
 
-  function focusProject(index, animate = true) {
-    if (!targets[index]) return;
-    selectedIndex = index;
+  function getProjectCameraPose(index) {
     const target = targets[index];
+    if (!target) return null;
     const cameraPosition = target.center.clone().addScaledVector(target.normal, 2.9);
     cameraPosition.y += 0.08;
-    cameraGoal.position.copy(cameraPosition);
-    cameraGoal.lookAt.copy(target.center);
-
     const lookCam = new THREE.PerspectiveCamera();
     lookCam.position.copy(cameraPosition);
     lookCam.lookAt(target.center);
-    cameraGoal.quaternion.copy(lookCam.quaternion);
+    return { position: cameraPosition, lookAt: target.center.clone(), quaternion: lookCam.quaternion.clone() };
+  }
+
+  function focusProject(index, animate = true) {
+    const pose = getProjectCameraPose(index);
+    if (!pose) return;
+    selectedIndex = index;
+    cameraGoal.position.copy(pose.position);
+    cameraGoal.lookAt.copy(pose.lookAt);
+    cameraGoal.quaternion.copy(pose.quaternion);
 
     if (!animate || !modelLoaded) {
       camera.position.copy(cameraGoal.position);
@@ -103,25 +121,143 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
 
     transition.fromPosition.copy(camera.position);
     transition.fromQuaternion.copy(camera.quaternion);
+    transition.path = null;
+    transition.onFinish = null;
     transition.startedAt = performance.now();
     transition.duration = TRANSITION_DURATION;
     transition.active = true;
     arrivedAtTargetTime = performance.now() + transition.duration;
   }
 
+  function setDoorProgress(progress) {
+    doorProgress = THREE.MathUtils.clamp(progress, 0, 1);
+    doorPivots.forEach(({ pivot, closedAngle }) => {
+      pivot.rotation.y = closedAngle * (1 - doorProgress);
+    });
+  }
+
+  function startCameraRoute({ points, finalLookAt, duration, doorFrom, doorTo, cameraDelay = 0, doorStart = 0, doorEnd = 1, lookBackward = false, onFinish }) {
+    if (transition.active || points.length < 2) return;
+    transition.path = new THREE.CatmullRomCurve3(points, false, 'centripetal');
+    transition.finalLookAt = finalLookAt.clone();
+    transition.lookBackward = lookBackward;
+    transition.cameraDelay = cameraDelay;
+    transition.doorFrom = doorFrom;
+    transition.doorTo = doorTo;
+    transition.doorStart = doorStart;
+    transition.doorEnd = doorEnd;
+    transition.onFinish = onFinish;
+    transition.startedAt = performance.now();
+    transition.duration = duration;
+    transition.active = true;
+    arrivedAtTargetTime = transition.startedAt + duration;
+    const routeStartedAt = transition.startedAt;
+    setTimeout(() => {
+      if (!transition.active || transition.startedAt !== routeStartedAt || !transition.path) return;
+      camera.position.copy(points[points.length - 1]);
+      camera.lookAt(finalLookAt);
+      setDoorProgress(doorTo);
+      transition.active = false;
+      transition.path = null;
+      const finish = transition.onFinish;
+      transition.onFinish = null;
+      arrivedAtTargetTime = performance.now();
+      isPageScrolling = false;
+      finish?.();
+    }, duration + 1200);
+  }
+
+  function startMuseumEntry(index) {
+    if (transition.active || museumExitActive) return;
+    if (!modelLoaded || !targets[index]) {
+      pendingEntryIndex = index;
+      if (modelLoaded) isPageScrolling = false;
+      return;
+    }
+    pendingEntryIndex = null;
+    selectedIndex = index;
+    wasInViewport = true;
+    if (!doorThreshold || !exteriorCameraPosition) {
+      setDoorProgress(1);
+      focusProject(index, false);
+      isPageScrolling = false;
+      return;
+    }
+    const pose = getProjectCameraPose(index);
+    const insideDoor = doorThreshold.clone().add(new THREE.Vector3(0, 1.62, -1.9));
+    const innerAisle = doorThreshold.clone().add(new THREE.Vector3(0, 1.62, -4.1));
+    setDoorProgress(0);
+    camera.position.copy(exteriorCameraPosition);
+    camera.lookAt(doorThreshold.clone().add(new THREE.Vector3(0, 1.62, -1.4)));
+    yaw = new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ').y;
+    pitch = new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ').x;
+    startCameraRoute({
+      points: [exteriorCameraPosition.clone(), doorThreshold.clone().add(new THREE.Vector3(0, 1.62, 0.8)), insideDoor, innerAisle, pose.position],
+      finalLookAt: pose.lookAt,
+      duration: 2700,
+      doorFrom: 0,
+      doorTo: 1,
+      cameraDelay: 0.08,
+      doorStart: 0,
+      doorEnd: 0.18,
+      onFinish: () => { isPageScrolling = false; },
+    });
+  }
+
+  function startMuseumExit(onFinish) {
+    if (transition.active) return;
+    museumExitActive = true;
+    if (!modelLoaded || !doorThreshold) {
+      onFinish?.();
+      return;
+    }
+    const insideAisle = doorThreshold.clone().add(new THREE.Vector3(0, 1.62, -4.1));
+    const insideDoor = doorThreshold.clone().add(new THREE.Vector3(0, 1.62, -1.4));
+    const outsideDoor = doorThreshold.clone().add(new THREE.Vector3(0, 1.62, 1.0));
+    const outside = exteriorCameraPosition || doorThreshold.clone().add(new THREE.Vector3(0, 1.62, 3.8));
+    startCameraRoute({
+      points: [camera.position.clone(), insideAisle, insideDoor, outsideDoor, outside],
+      finalLookAt: doorThreshold.clone().add(new THREE.Vector3(0, 1.62, -0.8)),
+      duration: 2900,
+      doorFrom: 1,
+      doorTo: 0,
+      doorStart: 0.76,
+      doorEnd: 1,
+      cameraDelay: 0,
+      lookBackward: true,
+      onFinish,
+    });
+  }
+
   function moveSelection(direction) {
     if (targets.length === 0 || isPageScrolling) return;
     const now = performance.now();
 
-    // Bottom boundary (Portfolio 7):
+    if (direction < 0 && selectedIndex === 0) {
+      if (transition.active || now < arrivedAtTargetTime + BOUNDARY_SETTLE_DELAY) return;
+      if (typeof onExit === 'function') {
+        isPageScrolling = true;
+        startMuseumExit(() => {
+          wasInViewport = false;
+          onExit();
+          setTimeout(() => { isPageScrolling = false; }, 1000);
+        });
+      }
+      return;
+    }
+
+    // Bottom boundary at the last artwork:
     if (direction > 0 && selectedIndex === targets.length - 1) {
       if (transition.active || now < arrivedAtTargetTime + BOUNDARY_SETTLE_DELAY) {
         return;
       }
       if (typeof onComplete === 'function') {
         isPageScrolling = true;
-        onComplete();
-        setTimeout(() => { isPageScrolling = false; }, 1000);
+        startMuseumExit(() => {
+          wasInViewport = false;
+          onComplete();
+          setTimeout(() => { isPageScrolling = false; }, 1000);
+        });
       }
       return;
     }
@@ -140,7 +276,7 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
     if (!stage || disposed) return false;
     const rect = stage.getBoundingClientRect();
     const vh = window.innerHeight;
-    return rect.top < vh * 0.65 && rect.bottom > vh * 0.35;
+    return rect.top < vh && rect.bottom > 0;
   }
 
   function onWheel(event) {
@@ -160,11 +296,10 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
         event.preventDefault();
         isPageScrolling = true;
         stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        if (targets.length > 0) {
-          focusProject(targets.length - 1, false);
-          arrivedAtTargetTime = performance.now();
-        }
-        setTimeout(() => { isPageScrolling = false; }, 850);
+        const index = targets.length > 0 ? targets.length - 1 : PROJECT_STOPS.length - 1;
+        pendingEntryIndex = index;
+        if (targets.length > 0) startMuseumEntry(index);
+        else setTimeout(() => { isPageScrolling = false; }, 850);
         return;
       }
     }
@@ -182,10 +317,10 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
         event.preventDefault();
         isPageScrolling = true;
         stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        focusProject(0, false);
-        arrivedAtTargetTime = now;
+        pendingEntryIndex = 0;
+        if (modelLoaded) startMuseumEntry(0);
         lastWheelAt = now + 400;
-        setTimeout(() => { isPageScrolling = false; }, 700);
+        if (!modelLoaded) setTimeout(() => { isPageScrolling = false; }, 700);
         return;
       }
 
@@ -194,10 +329,11 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
         event.preventDefault();
         isPageScrolling = true;
         stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        if (targets.length > 0) focusProject(targets.length - 1, false);
-        arrivedAtTargetTime = now;
+        const index = targets.length > 0 ? targets.length - 1 : PROJECT_STOPS.length - 1;
+        pendingEntryIndex = index;
+        if (modelLoaded) startMuseumEntry(index);
         lastWheelAt = now + 400;
-        setTimeout(() => { isPageScrolling = false; }, 700);
+        if (!modelLoaded) setTimeout(() => { isPageScrolling = false; }, 700);
         return;
       }
     }
@@ -207,15 +343,23 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
       return;
     }
 
-    // At the first artwork, let upward wheel input return to the page so the
-    // portfolio tabs remain easy to reach. The DevSecOps shortcut is also in-view.
+    // At the first artwork, upward input returns to normal page scrolling so
+    // the visitor can continue to the Experience section above the gallery.
     const direction = event.deltaY > 0 ? 1 : -1;
     if (direction < 0 && selectedIndex === 0) {
       if (transition.active || now < arrivedAtTargetTime + NORMAL_SETTLE_DELAY) {
         event.preventDefault();
         return;
       }
-      wasInViewport = false;
+      if (typeof onExit === 'function') {
+        event.preventDefault();
+        isPageScrolling = true;
+        startMuseumExit(() => {
+          wasInViewport = false;
+          onExit();
+          setTimeout(() => { isPageScrolling = false; }, 1000);
+        });
+      }
       return;
     }
 
@@ -236,7 +380,7 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
       return;
     }
 
-    // Bottom boundary (Portfolio 7): must stay still ("diam dulu") before exiting down to #organisasi
+    // At the last artwork, pause before continuing down to #organisasi.
     if (direction > 0 && selectedIndex === targets.length - 1) {
       if (now < arrivedAtTargetTime + BOUNDARY_SETTLE_DELAY) {
         return;
@@ -256,38 +400,55 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
     moveSelection(direction);
   }
 
-  function onWindowScroll() {
-    const currentScrollY = window.scrollY;
-    const isScrollingUp = currentScrollY < lastScrollY;
-    lastScrollY = currentScrollY;
-
-    if (!modelLoaded || targets.length === 0 || isPageScrolling) return;
-
-    const rect = stage.getBoundingClientRect();
-    // When scrolling UP from below into the stage, prepare from the last project
-    if (isScrollingUp && rect.bottom > 100 && rect.bottom < window.innerHeight + 200 && rect.top < 0) {
-      if (selectedIndex === 0) {
-        selectedIndex = targets.length - 1;
-        focusProject(selectedIndex, false);
-      }
+  const touchGesture = { active: false, startX: 0, startY: 0, lastX: 0, lastY: 0, axis: null };
+  function onTouchStart(e) {
+    if (e.target.closest?.('button')) return;
+    if (e.touches.length !== 1) {
+      touchGesture.active = false;
+      return;
     }
+    const touch = e.touches[0];
+    touchGesture.active = true;
+    touchGesture.axis = null;
+    touchGesture.startX = touchGesture.lastX = touch.clientX;
+    touchGesture.startY = touchGesture.lastY = touch.clientY;
   }
 
-  let touchStartY = 0;
-  function onTouchStart(e) {
-    if (e.touches.length === 1) {
-      touchStartY = e.touches[0].clientY;
+  function onTouchMove(e) {
+    if (!touchGesture.active || e.touches.length !== 1) return;
+    if (transition.active) {
+      e.preventDefault();
+      return;
     }
+    const touch = e.touches[0];
+    const dx = touch.clientX - touchGesture.startX;
+    const dy = touch.clientY - touchGesture.startY;
+    if (!touchGesture.axis && Math.max(Math.abs(dx), Math.abs(dy)) > 8) {
+      touchGesture.axis = Math.abs(dx) > Math.abs(dy) ? 'look' : 'project';
+    }
+
+    if (touchGesture.axis === 'look') {
+      e.preventDefault();
+      yaw -= (touch.clientX - touchGesture.lastX) * 0.0042;
+      pitch = THREE.MathUtils.clamp(pitch - (touch.clientY - touchGesture.lastY) * 0.0036, -0.78, 0.78);
+      camera.rotation.order = 'YXZ';
+      camera.rotation.set(pitch, yaw, 0);
+    } else if (touchGesture.axis === 'project') {
+      const direction = dy < 0 ? 1 : -1;
+      // Page boundaries are handled by the animated museum exit route.
+      e.preventDefault();
+    }
+
+    touchGesture.lastX = touch.clientX;
+    touchGesture.lastY = touch.clientY;
   }
 
   function onTouchEnd(e) {
-    if (e.changedTouches.length === 1) {
-      const touchEndY = e.changedTouches[0].clientY;
-      const diffY = touchStartY - touchEndY;
-      if (Math.abs(diffY) > 35) {
-        moveSelection(diffY > 0 ? 1 : -1);
-      }
-    }
+    if (!touchGesture.active || e.changedTouches.length !== 1) return;
+    const touchEnd = e.changedTouches[0];
+    const diffY = touchGesture.startY - touchEnd.clientY;
+    touchGesture.active = false;
+    if (touchGesture.axis === 'project' && Math.abs(diffY) > 42) moveSelection(diffY > 0 ? 1 : -1);
   }
 
   function onKeyDown(event) {
@@ -350,9 +511,22 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
 
   function onCanvasClick() {
     stage.focus({ preventScroll: true });
+    if (isTouchDevice) return;
     if (document.pointerLockElement !== renderer.domElement && renderer.domElement.requestPointerLock) {
       renderer.domElement.requestPointerLock();
     }
+  }
+
+  function onMobileMoveStart(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const code = event.currentTarget.dataset.mobileMove;
+    keys.add(code);
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+  }
+
+  function onMobileMoveEnd(event) {
+    keys.delete(event.currentTarget.dataset.mobileMove);
   }
 
   function onNextClick(e) {
@@ -416,14 +590,34 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
     if (transition.active) {
       const t = THREE.MathUtils.clamp((now - transition.startedAt) / transition.duration, 0, 1);
       const eased = t * t * (3 - 2 * t);
-      camera.position.lerpVectors(transition.fromPosition, cameraGoal.position, eased);
-      camera.quaternion.slerpQuaternions(transition.fromQuaternion, cameraGoal.quaternion, eased);
+      if (transition.path) {
+        const routeT = THREE.MathUtils.clamp((eased - transition.cameraDelay) / (1 - transition.cameraDelay), 0, 1);
+        camera.position.copy(transition.path.getPoint(routeT));
+        const tangent = transition.path.getTangent(routeT).normalize();
+        if (transition.lookBackward) tangent.negate();
+        const lookPoint = camera.position.clone().addScaledVector(tangent, 3.2);
+        const finalBlend = THREE.MathUtils.smoothstep(routeT, 0.7, 1);
+        lookPoint.lerp(transition.finalLookAt, finalBlend);
+        camera.lookAt(lookPoint);
+
+        const doorT = THREE.MathUtils.clamp((t - transition.doorStart) / Math.max(0.001, transition.doorEnd - transition.doorStart), 0, 1);
+        const doorEase = doorT * doorT * (3 - 2 * doorT);
+        setDoorProgress(THREE.MathUtils.lerp(transition.doorFrom, transition.doorTo, doorEase));
+      } else {
+        camera.position.lerpVectors(transition.fromPosition, cameraGoal.position, eased);
+        camera.quaternion.slerpQuaternions(transition.fromQuaternion, cameraGoal.quaternion, eased);
+      }
       if (t >= 1) {
         transition.active = false;
         const euler = new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ');
         yaw = euler.y;
         pitch = euler.x;
         arrivedAtTargetTime = now;
+        const onFinish = transition.onFinish;
+        transition.path = null;
+        transition.onFinish = null;
+        if (!onFinish) isPageScrolling = false;
+        onFinish?.();
       }
     } else if (keys.size > 0) {
       const direction = new THREE.Vector3();
@@ -448,31 +642,92 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
     renderer.render(scene, camera);
   }
 
+  function findGalleryObject(gallery, nameFragment) {
+    let match = null;
+    gallery.traverse((object) => {
+      if (!match && object.name.includes(nameFragment)) match = object;
+    });
+    return match;
+  }
+
+  function setupMuseumEntrance(gallery) {
+    const threshold = findGalleryObject(gallery, 'Stone door threshold');
+    if (threshold) {
+      threshold.updateWorldMatrix(true, false);
+      doorThreshold = threshold.getWorldPosition(new THREE.Vector3());
+      exteriorCameraPosition = doorThreshold.clone().add(new THREE.Vector3(0, 1.62, 3.8));
+    }
+
+    ['left', 'right'].forEach((side) => {
+      const door = findGalleryObject(gallery, `Open walnut door | ${side}`);
+      const hinge = findGalleryObject(gallery, `Door hinge | ${side} | 1.35`);
+      if (!door || !hinge) return;
+
+      door.updateWorldMatrix(true, false);
+      hinge.updateWorldMatrix(true, false);
+      const worldPosition = door.getWorldPosition(new THREE.Vector3());
+      const worldQuaternion = door.getWorldQuaternion(new THREE.Quaternion());
+      const worldScale = door.getWorldScale(new THREE.Vector3());
+      const hingePosition = hinge.getWorldPosition(new THREE.Vector3());
+      const hingeToDoor = worldPosition.clone().sub(hingePosition);
+      const currentAngle = Math.atan2(hingeToDoor.z, hingeToDoor.x);
+      const closedDirection = side === 'left' ? 0 : Math.PI;
+      let closedAngle = currentAngle - closedDirection;
+      while (closedAngle > Math.PI) closedAngle -= Math.PI * 2;
+      while (closedAngle < -Math.PI) closedAngle += Math.PI * 2;
+
+      door.parent?.remove(door);
+      const pivot = new THREE.Group();
+      pivot.name = `Museum door pivot | ${side}`;
+      pivot.position.copy(hingePosition);
+      scene.add(pivot);
+      pivot.add(door);
+      door.position.copy(worldPosition).sub(hingePosition);
+      door.quaternion.copy(worldQuaternion);
+      door.scale.copy(worldScale);
+      doorPivots.push({ pivot, closedAngle });
+    });
+
+    setDoorProgress(0);
+    if (exteriorCameraPosition && doorThreshold) {
+      camera.position.copy(exteriorCameraPosition);
+      camera.lookAt(doorThreshold.clone().add(new THREE.Vector3(0, 1.62, -1.4)));
+      const euler = new THREE.Euler().setFromQuaternion(camera.quaternion, 'YXZ');
+      yaw = euler.y;
+      pitch = euler.x;
+    }
+  }
+
   function onModelLoaded(gltf) {
     if (disposed) return;
     const gallery = gltf.scene;
-    // Blender's spotlights export at roughly 24,000 cd each. A small cap keeps
-    // their pools visible without bleaching the artwork textures in WebGL.
+    // Keep exported Blender lights restrained, while giving the six ceiling
+    // fixtures enough output to visibly wash the gallery floor and artwork.
     gallery.traverse((object) => {
-      if (object.isLight) object.intensity = Math.min(object.intensity * 0.006, 120);
+      if (!object.isLight) return;
+      if (object.name.includes('Modern ceiling wash')) {
+        // The exported spot direction can vary by renderer, so the web viewer
+        // adds a broad, explicitly downward beam from each visible fixture.
+        object.intensity = 0;
+      } else {
+        object.intensity = Math.min(object.intensity * 0.0048, 95);
+      }
     });
-    // DevSecOps is shown in its dedicated 2D view. Reuse the seventh frame for
-    // the web-based TNI project so this gallery stays focused on Web & Mobile.
-    const oldDevOpsTitle = gallery.getObjectByName('DEVOPS MONITORING');
-    if (oldDevOpsTitle) oldDevOpsTitle.visible = false;
-    const tniPrint = gallery.getObjectByName('Portfolio print | 07');
-    if (tniPrint?.isMesh) {
-      const tniTexture = new THREE.TextureLoader().load('/asset/tni.webp');
-      tniTexture.colorSpace = THREE.SRGBColorSpace;
-      const materials = Array.isArray(tniPrint.material) ? tniPrint.material : [tniPrint.material];
-      materials.forEach((material) => {
-        material.map = tniTexture;
-        material.color?.set(0xffffff);
-        material.needsUpdate = true;
-      });
-    }
     scene.add(gallery);
     gallery.updateMatrixWorld(true);
+    setupMuseumEntrance(gallery);
+
+    gallery.traverse((object) => {
+      if (!object.isMesh || !object.name.includes('recessed graphite housing')) return;
+      const position = object.getWorldPosition(new THREE.Vector3());
+      const lamp = new THREE.SpotLight(0xffe7c7, 38, 10, Math.PI / 2.35, 0.9, 1.5);
+      lamp.position.copy(position).add(new THREE.Vector3(0, -0.08, 0));
+      lamp.target.position.copy(position).add(new THREE.Vector3(0, -5, 0));
+      lamp.castShadow = false;
+      lamp.name = `Web ceiling wash | ${object.name}`;
+      lamp.target.name = `Web ceiling wash target | ${object.name}`;
+      scene.add(lamp, lamp.target);
+    });
 
     PROJECT_STOPS.forEach((project) => {
       const sanitizedName = THREE.PropertyBinding?.sanitizeNodeName
@@ -510,6 +765,21 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
       targets.push({ ...project, center, normal, object: print });
     });
 
+    // glTF may omit Blender spotlights depending on export settings. Add a
+    // warm, restrained spot at each actual artwork position so every wall is
+    // visibly lit in the web viewer as well as in Blender.
+    targets.forEach((target) => {
+      const lamp = new THREE.SpotLight(0xffd9a6, 78, 8.5, Math.PI / 5.4, 0.78, 2);
+      lamp.position.copy(target.center)
+        .addScaledVector(target.normal, 2.25)
+        .add(new THREE.Vector3(0, 1.35, 0));
+      lamp.target.position.copy(target.center);
+      lamp.castShadow = false;
+      lamp.name = `Web artwork spotlight | ${target.id}`;
+      lamp.target.name = `Web artwork spotlight target | ${target.id}`;
+      scene.add(lamp, lamp.target);
+    });
+
     if (loaderEl) {
       loaderEl.hidden = true;
     }
@@ -520,21 +790,27 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
     }
 
     modelLoaded = true;
-    focusProject(0, false);
+    const shouldEnter = pendingEntryIndex !== null || isStageInViewport();
+    if (shouldEnter) startMuseumEntry(pendingEntryIndex ?? 0);
   }
 
   function onModelError(error) {
     console.error('Could not load the Blender portfolio gallery:', error);
+    isPageScrolling = false;
+    transition.active = false;
     if (loaderEl) loaderEl.hidden = true;
   }
 
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(canvasHost);
-  stage.addEventListener('wheel', onWheel, { passive: false });
+  // Listen once at the window level. A stage listener here would receive the
+  // same bubbling wheel event a second time and could reset the gallery index
+  // while the page is leaving the first artwork.
   window.addEventListener('wheel', onWheel, { passive: false });
   stage.addEventListener('touchstart', onTouchStart, { passive: true });
+  stage.addEventListener('touchmove', onTouchMove, { passive: false });
   stage.addEventListener('touchend', onTouchEnd, { passive: true });
-  window.addEventListener('scroll', onWindowScroll, { passive: true });
+  stage.addEventListener('touchcancel', onTouchEnd, { passive: true });
   canvasHost.addEventListener('mousedown', onMouseDown);
   window.addEventListener('mouseup', onMouseUp);
   canvasHost.addEventListener('click', onCanvasClick);
@@ -542,11 +818,34 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
 
   const visibilityObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
-        stage.focus({ preventScroll: true });
+      if (!entry.isIntersecting) {
+        wasInViewport = false;
+        if (museumExitActive) museumExitActive = false;
+        return;
+      }
+
+      stage.focus({ preventScroll: true });
+      if (wasInViewport || museumExitActive || transition.active) return;
+
+      // Catch trackpad, touch, and programmatic page movement as well as wheel events.
+      // The side from which the section enters the viewport determines the first artwork.
+      const enteringFromAbove = entry.boundingClientRect.top >= 0;
+      const index = enteringFromAbove ? 0 : Math.max(0, targets.length - 1);
+      wasInViewport = true;
+      isPageScrolling = true;
+      pendingEntryIndex = index;
+      stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      if (modelLoaded) {
+        startMuseumEntry(index);
+      } else {
+        // Model loading may take longer; onModelLoaded will start the pending route.
+        setTimeout(() => {
+          if (!modelLoaded && !transition.active) isPageScrolling = false;
+        }, 2500);
       }
     });
-  }, { threshold: [0.4] });
+  }, { threshold: [0, 0.4] });
   visibilityObserver.observe(stage);
 
   if (previous) previous.addEventListener('click', onPreviousClick);
@@ -554,6 +853,12 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
   if (fullscreenBtn) fullscreenBtn.addEventListener('click', toggleFullscreen);
   if (caseStudyBtn) caseStudyBtn.addEventListener('click', onCaseStudyClick);
   if (devSecOpsBtn) devSecOpsBtn.addEventListener('click', onDevSecOpsClick);
+  mobileMoveButtons.forEach((button) => {
+    button.addEventListener('pointerdown', onMobileMoveStart);
+    button.addEventListener('pointerup', onMobileMoveEnd);
+    button.addEventListener('pointercancel', onMobileMoveEnd);
+    button.addEventListener('lostpointercapture', onMobileMoveEnd);
+  });
 
   window.addEventListener('keydown', onKeyDown);
   window.addEventListener('keyup', onKeyUp);
@@ -575,11 +880,11 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
     cancelAnimationFrame(animationFrame);
     resizeObserver.disconnect();
     visibilityObserver.disconnect();
-    stage.removeEventListener('wheel', onWheel);
     window.removeEventListener('wheel', onWheel);
     stage.removeEventListener('touchstart', onTouchStart);
+    stage.removeEventListener('touchmove', onTouchMove);
     stage.removeEventListener('touchend', onTouchEnd);
-    window.removeEventListener('scroll', onWindowScroll);
+    stage.removeEventListener('touchcancel', onTouchEnd);
     canvasHost.removeEventListener('mousedown', onMouseDown);
     window.removeEventListener('mouseup', onMouseUp);
     canvasHost.removeEventListener('click', onCanvasClick);
@@ -589,6 +894,12 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
     if (fullscreenBtn) fullscreenBtn.removeEventListener('click', toggleFullscreen);
     if (caseStudyBtn) caseStudyBtn.removeEventListener('click', onCaseStudyClick);
     if (devSecOpsBtn) devSecOpsBtn.removeEventListener('click', onDevSecOpsClick);
+    mobileMoveButtons.forEach((button) => {
+      button.removeEventListener('pointerdown', onMobileMoveStart);
+      button.removeEventListener('pointerup', onMobileMoveEnd);
+      button.removeEventListener('pointercancel', onMobileMoveEnd);
+      button.removeEventListener('lostpointercapture', onMobileMoveEnd);
+    });
     window.removeEventListener('keydown', onKeyDown);
     window.removeEventListener('keyup', onKeyUp);
     window.removeEventListener('blur', onWindowBlur);

@@ -42,6 +42,7 @@
 .portfolio-3d-canvas {
   z-index: 0;
   cursor: grab;
+  touch-action: pan-y;
 }
 
 .portfolio-3d-canvas:active {
@@ -225,6 +226,10 @@
   right: 24px;
 }
 
+.portfolio-3d-mobile-pad {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .portfolio-3d-case-study-btn {
     top: 80px;
@@ -257,5 +262,56 @@
   }
   .portfolio-3d-nav-next {
     right: 12px;
+  }
+}
+
+@media (pointer: coarse) {
+  .portfolio-3d-mobile-pad {
+    position: absolute;
+    z-index: 12;
+    left: 12px;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    display: grid;
+    grid-template-columns: repeat(3, 42px);
+    grid-template-rows: repeat(2, 42px);
+    gap: 4px;
+    padding: 7px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 18px;
+    background: rgba(6, 14, 25, 0.58);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .portfolio-3d-mobile-pad button {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid rgba(95, 244, 208, 0.34);
+    border-radius: 13px;
+    color: #eafffa;
+    background: rgba(95, 244, 208, 0.12);
+    font-size: 24px;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .portfolio-3d-mobile-pad button:active {
+    color: #06121d;
+    background: #5ff4d0;
+  }
+
+  .portfolio-3d-mobile-pad .move-up { grid-column: 2; grid-row: 1; }
+  .portfolio-3d-mobile-pad .move-left { grid-column: 1; grid-row: 2; }
+  .portfolio-3d-mobile-pad .move-down { grid-column: 2; grid-row: 2; }
+  .portfolio-3d-mobile-pad .move-right { grid-column: 3; grid-row: 2; }
+
+  .portfolio-3d-nav-btn {
+    width: 44px;
+    height: 44px;
+    opacity: 0.82;
   }
 }

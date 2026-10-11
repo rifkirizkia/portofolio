@@ -9,7 +9,11 @@ import '../styles/tailwind.css';
 import '../styles/portfolio-3d.css';
 
 // Vendor libraries
-import '../js/aos.js';
+import AOS from '../js/aos.js';
+
+if (typeof window !== 'undefined') {
+  window.AOS = window.AOS || (AOS && typeof AOS.init === 'function' ? AOS : AOS?.default);
+}
 
 // Application data & components
 import '../js/projects-data.js';

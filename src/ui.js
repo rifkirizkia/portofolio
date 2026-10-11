@@ -1,7 +1,4 @@
-/**
- * Interactive UI effects and component behaviors.
- * Replaces previously inline scripts to enable strict Content Security Policy (no 'unsafe-inline').
- */
+import AOS from '../js/aos.js';
 
 export function initUI() {
   const html = document.documentElement;
@@ -120,6 +117,9 @@ export function initUI() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('active');
+            if (window.AOS && typeof window.AOS.refresh === 'function') {
+              window.AOS.refresh();
+            }
           } else {
             entry.target.classList.remove('active');
           }
@@ -135,6 +135,35 @@ export function initUI() {
     revealSections.forEach((section) => {
       revealObserver.observe(section);
     });
+  }
+
+  // --- Parallax Ambient Orbs Scroll Effect ---
+  const parallaxElements = document.querySelectorAll('[data-parallax-speed]');
+  if (parallaxElements.length > 0) {
+    let ticking = false;
+    function updateParallax() {
+      const vh = window.innerHeight;
+      parallaxElements.forEach((el) => {
+        const speed = parseFloat(el.getAttribute('data-parallax-speed')) || 0;
+        const parent = el.parentElement;
+        if (!parent) return;
+        const rect = parent.getBoundingClientRect();
+        if (rect.bottom >= -150 && rect.top <= vh + 150) {
+          const progress = (vh - rect.top) / (vh + rect.height);
+          const offset = (progress - 0.5) * 90 * speed;
+          el.style.transform = `translate3d(0, ${offset.toFixed(1)}px, 0)`;
+        }
+      });
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    }, { passive: true });
+    updateParallax();
   }
 
   // --- Background Theme Dynamic Observer ---
@@ -233,14 +262,26 @@ export function initUI() {
   window.addEventListener('resize', updateWhatsappFabVisibility, { passive: true });
   updateWhatsappFabVisibility();
 
-  // --- AOS Initialization ---
-  if (window.AOS) {
-    window.AOS.init({
-      once: true,
-      offset: 60,
-      duration: 650,
+  // --- AOS Initialization with Bidirectional Transitions ---
+  const aosInstance = window.AOS || (AOS && typeof AOS.init === 'function' ? AOS : AOS?.default);
+  if (aosInstance && typeof aosInstance.init === 'function') {
+    html.classList.add('aos-ready');
+    aosInstance.init({
+      once: false,
+      mirror: true,
+      offset: 80,
+      duration: 750,
       easing: 'ease-out-cubic',
+      anchorPlacement: 'top-bottom',
     });
+    setTimeout(() => {
+      if (typeof aosInstance.refreshHard === 'function') {
+        aosInstance.refreshHard();
+      } else if (typeof aosInstance.refresh === 'function') {
+        aosInstance.refresh();
+      }
+    }, 120);
+  } else {
     html.classList.add('aos-ready');
   }
 }

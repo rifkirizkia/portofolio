@@ -23,15 +23,22 @@ function initPortfolioApp() {
   let currentCategory = "all";
   let showOnlyFeatured = true;
   let disposePortfolio3D = null;
+  const desktop3DQuery = window.matchMedia("(min-width: 768px)");
+  let renderTimeout = null;
 
   // Initialize Portfolio UI
   function initPortfolio() {
-    renderProjects();
+    renderProjects(true);
     setupTabListeners();
     setupHashRouting();
     setupLightboxListeners();
     setupLanguageListener();
     setupNavLinks();
+    const onViewportChange = () => {
+      if (currentCategory === "all") renderProjects(true);
+    };
+    desktop3DQuery.addEventListener?.("change", onViewportChange);
+    if (!desktop3DQuery.addEventListener) desktop3DQuery.addListener?.(onViewportChange);
   }
 
   function setupNavLinks() {
@@ -96,7 +103,7 @@ function initPortfolioApp() {
         disposePortfolio3D = null;
       }
 
-      if (currentCategory === "all") {
+      if (currentCategory === "all" && desktop3DQuery.matches) {
         projectsGrid.className = "portfolio-3d-root w-full";
         projectsGrid.innerHTML = `
           <section class="portfolio-3d-shell" aria-label="Galeri 3D portofolio">
@@ -114,6 +121,12 @@ function initPortfolioApp() {
               <button type="button" class="portfolio-3d-fullscreen-btn" data-portfolio-fullscreen aria-label="Layar penuh">
                 <i class="ri-fullscreen-line" aria-hidden="true"></i>
               </button>
+              <div class="portfolio-3d-mobile-pad" role="group" aria-label="Kontrol gerak galeri">
+                <button type="button" data-mobile-move="KeyW" class="move-up" aria-label="Maju"><i class="ri-arrow-up-s-line" aria-hidden="true"></i></button>
+                <button type="button" data-mobile-move="KeyA" class="move-left" aria-label="Geser kiri"><i class="ri-arrow-left-s-line" aria-hidden="true"></i></button>
+                <button type="button" data-mobile-move="KeyS" class="move-down" aria-label="Mundur"><i class="ri-arrow-down-s-line" aria-hidden="true"></i></button>
+                <button type="button" data-mobile-move="KeyD" class="move-right" aria-label="Geser kanan"><i class="ri-arrow-right-s-line" aria-hidden="true"></i></button>
+              </div>
               <button type="button" class="portfolio-3d-case-study-btn" data-portfolio-case-study>
                 <i class="ri-book-open-line" aria-hidden="true"></i>
                 <span>Baca Case Study</span>
@@ -130,6 +143,7 @@ function initPortfolioApp() {
         if (viewAllBtn) viewAllBtn.style.display = "none";
         disposePortfolio3D = createPortfolio3D(projectsGrid, {
           onComplete: () => document.getElementById("organisasi")?.scrollIntoView({ behavior: "smooth", block: "start" }),
+          onExit: () => document.getElementById("pengalaman")?.scrollIntoView({ behavior: "smooth", block: "start" }),
           onCaseStudy: (slug) => openCaseStudy(slug),
           onOpenDevSecOps: () => {
             const devSecOpsTab = Array.from(tabButtons).find((button) => button.dataset.category === "devops");
@@ -188,10 +202,13 @@ function initPortfolioApp() {
       }
 
       if (animate) {
-        requestAnimationFrame(() => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
           projectsGrid.style.opacity = "1";
-          projectsGrid.style.transform = "translateY(0)";
-        });
+          projectsGrid.style.transform = "translateY(0) scale(1)";
+        }));
+      } else {
+        projectsGrid.style.opacity = "1";
+        projectsGrid.style.transform = "none";
       }
 
       // Refresh AOS animations if active
@@ -207,9 +224,13 @@ function initPortfolioApp() {
     };
 
     if (animate) {
+      projectsGrid.style.transition = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "none"
+        : "opacity 320ms ease, transform 320ms cubic-bezier(.22,.68,0,1)";
       projectsGrid.style.opacity = "0";
-      projectsGrid.style.transform = "translateY(12px)";
-      setTimeout(doRender, 180);
+      projectsGrid.style.transform = "translateY(10px) scale(.99)";
+      clearTimeout(renderTimeout);
+      renderTimeout = setTimeout(doRender, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 180);
     } else {
       doRender();
     }
