@@ -21,18 +21,20 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
   const fullscreenBtn = root.querySelector('[data-portfolio-fullscreen]');
   const caseStudyBtn = root.querySelector('[data-portfolio-case-study]');
   const devSecOpsBtn = root.querySelector('[data-portfolio-devsecops]');
+  const mobileMoveButtons = [...root.querySelectorAll('[data-mobile-move]')];
+  const isTouchDevice = window.matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0;
 
   const loader = new GLTFLoader();
   const scene = new THREE.Scene();
   scene.background = new THREE.Color('#07111d');
 
   const camera = new THREE.PerspectiveCamera(48, 1, 0.08, 120);
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
+  const renderer = new THREE.WebGLRenderer({ antialias: !isTouchDevice, alpha: false, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isTouchDevice ? 1.35 : 1.7));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 0.72;
-  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.enabled = !isTouchDevice;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   canvasHost.appendChild(renderer.domElement);
   renderer.domElement.setAttribute('aria-label', 'Galeri 3D interaktif');
@@ -43,7 +45,7 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
   scene.add(new THREE.AmbientLight(0xffffff, 0.2));
   const galleryFill = new THREE.DirectionalLight(0xffe6c8, 0.27);
   galleryFill.position.set(1.5, 5.8, 3.0);
-  galleryFill.castShadow = true;
+  galleryFill.castShadow = !isTouchDevice;
   galleryFill.shadow.mapSize.set(1024, 1024);
   scene.add(galleryFill);
 
@@ -255,21 +257,53 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
     moveSelection(direction);
   }
 
-  let touchStartY = 0;
+  const touchGesture = { active: false, startX: 0, startY: 0, lastX: 0, lastY: 0, axis: null };
   function onTouchStart(e) {
-    if (e.touches.length === 1) {
-      touchStartY = e.touches[0].clientY;
+    if (e.target.closest?.('button')) return;
+    if (e.touches.length !== 1) {
+      touchGesture.active = false;
+      return;
     }
+    const touch = e.touches[0];
+    touchGesture.active = true;
+    touchGesture.axis = null;
+    touchGesture.startX = touchGesture.lastX = touch.clientX;
+    touchGesture.startY = touchGesture.lastY = touch.clientY;
+  }
+
+  function onTouchMove(e) {
+    if (!touchGesture.active || e.touches.length !== 1 || transition.active) return;
+    const touch = e.touches[0];
+    const dx = touch.clientX - touchGesture.startX;
+    const dy = touch.clientY - touchGesture.startY;
+    if (!touchGesture.axis && Math.max(Math.abs(dx), Math.abs(dy)) > 8) {
+      touchGesture.axis = Math.abs(dx) > Math.abs(dy) ? 'look' : 'project';
+    }
+
+    if (touchGesture.axis === 'look') {
+      e.preventDefault();
+      yaw -= (touch.clientX - touchGesture.lastX) * 0.0042;
+      pitch = THREE.MathUtils.clamp(pitch - (touch.clientY - touchGesture.lastY) * 0.0036, -0.78, 0.78);
+      camera.rotation.order = 'YXZ';
+      camera.rotation.set(pitch, yaw, 0);
+    } else if (touchGesture.axis === 'project') {
+      const direction = dy < 0 ? 1 : -1;
+      const leavingAtFirst = selectedIndex === 0 && direction < 0;
+      const leavingAtLast = selectedIndex === targets.length - 1 && direction > 0;
+      // Keep native page scrolling available at both ends of the gallery.
+      if (!leavingAtFirst && !leavingAtLast) e.preventDefault();
+    }
+
+    touchGesture.lastX = touch.clientX;
+    touchGesture.lastY = touch.clientY;
   }
 
   function onTouchEnd(e) {
-    if (e.changedTouches.length === 1) {
-      const touchEndY = e.changedTouches[0].clientY;
-      const diffY = touchStartY - touchEndY;
-      if (Math.abs(diffY) > 35) {
-        moveSelection(diffY > 0 ? 1 : -1);
-      }
-    }
+    if (!touchGesture.active || e.changedTouches.length !== 1) return;
+    const touchEnd = e.changedTouches[0];
+    const diffY = touchGesture.startY - touchEnd.clientY;
+    touchGesture.active = false;
+    if (touchGesture.axis === 'project' && Math.abs(diffY) > 42) moveSelection(diffY > 0 ? 1 : -1);
   }
 
   function onKeyDown(event) {
@@ -332,9 +366,22 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
 
   function onCanvasClick() {
     stage.focus({ preventScroll: true });
+    if (isTouchDevice) return;
     if (document.pointerLockElement !== renderer.domElement && renderer.domElement.requestPointerLock) {
       renderer.domElement.requestPointerLock();
     }
+  }
+
+  function onMobileMoveStart(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const code = event.currentTarget.dataset.mobileMove;
+    keys.add(code);
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+  }
+
+  function onMobileMoveEnd(event) {
+    keys.delete(event.currentTarget.dataset.mobileMove);
   }
 
   function onNextClick(e) {
@@ -517,7 +564,9 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
   // while the page is leaving the first artwork.
   window.addEventListener('wheel', onWheel, { passive: false });
   stage.addEventListener('touchstart', onTouchStart, { passive: true });
+  stage.addEventListener('touchmove', onTouchMove, { passive: false });
   stage.addEventListener('touchend', onTouchEnd, { passive: true });
+  stage.addEventListener('touchcancel', onTouchEnd, { passive: true });
   canvasHost.addEventListener('mousedown', onMouseDown);
   window.addEventListener('mouseup', onMouseUp);
   canvasHost.addEventListener('click', onCanvasClick);
@@ -537,6 +586,12 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
   if (fullscreenBtn) fullscreenBtn.addEventListener('click', toggleFullscreen);
   if (caseStudyBtn) caseStudyBtn.addEventListener('click', onCaseStudyClick);
   if (devSecOpsBtn) devSecOpsBtn.addEventListener('click', onDevSecOpsClick);
+  mobileMoveButtons.forEach((button) => {
+    button.addEventListener('pointerdown', onMobileMoveStart);
+    button.addEventListener('pointerup', onMobileMoveEnd);
+    button.addEventListener('pointercancel', onMobileMoveEnd);
+    button.addEventListener('lostpointercapture', onMobileMoveEnd);
+  });
 
   window.addEventListener('keydown', onKeyDown);
   window.addEventListener('keyup', onKeyUp);
@@ -560,7 +615,9 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
     visibilityObserver.disconnect();
     window.removeEventListener('wheel', onWheel);
     stage.removeEventListener('touchstart', onTouchStart);
+    stage.removeEventListener('touchmove', onTouchMove);
     stage.removeEventListener('touchend', onTouchEnd);
+    stage.removeEventListener('touchcancel', onTouchEnd);
     canvasHost.removeEventListener('mousedown', onMouseDown);
     window.removeEventListener('mouseup', onMouseUp);
     canvasHost.removeEventListener('click', onCanvasClick);
@@ -570,6 +627,12 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
     if (fullscreenBtn) fullscreenBtn.removeEventListener('click', toggleFullscreen);
     if (caseStudyBtn) caseStudyBtn.removeEventListener('click', onCaseStudyClick);
     if (devSecOpsBtn) devSecOpsBtn.removeEventListener('click', onDevSecOpsClick);
+    mobileMoveButtons.forEach((button) => {
+      button.removeEventListener('pointerdown', onMobileMoveStart);
+      button.removeEventListener('pointerup', onMobileMoveEnd);
+      button.removeEventListener('pointercancel', onMobileMoveEnd);
+      button.removeEventListener('lostpointercapture', onMobileMoveEnd);
+    });
     window.removeEventListener('keydown', onKeyDown);
     window.removeEventListener('keyup', onKeyUp);
     window.removeEventListener('blur', onWindowBlur);

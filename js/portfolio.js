@@ -114,6 +114,12 @@ function initPortfolioApp() {
               <button type="button" class="portfolio-3d-fullscreen-btn" data-portfolio-fullscreen aria-label="Layar penuh">
                 <i class="ri-fullscreen-line" aria-hidden="true"></i>
               </button>
+              <div class="portfolio-3d-mobile-pad" role="group" aria-label="Kontrol gerak galeri">
+                <button type="button" data-mobile-move="KeyW" class="move-up" aria-label="Maju"><i class="ri-arrow-up-s-line" aria-hidden="true"></i></button>
+                <button type="button" data-mobile-move="KeyA" class="move-left" aria-label="Geser kiri"><i class="ri-arrow-left-s-line" aria-hidden="true"></i></button>
+                <button type="button" data-mobile-move="KeyS" class="move-down" aria-label="Mundur"><i class="ri-arrow-down-s-line" aria-hidden="true"></i></button>
+                <button type="button" data-mobile-move="KeyD" class="move-right" aria-label="Geser kanan"><i class="ri-arrow-right-s-line" aria-hidden="true"></i></button>
+              </div>
               <button type="button" class="portfolio-3d-case-study-btn" data-portfolio-case-study>
                 <i class="ri-book-open-line" aria-hidden="true"></i>
                 <span>Baca Case Study</span>
