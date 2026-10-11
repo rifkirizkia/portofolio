@@ -2,13 +2,14 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const PROJECT_STOPS = [
-  { id: '07', name: 'TNI 3D TERRAIN', slug: 'tni-3d-tactical-scan-viewer' },
-  { id: '06', name: 'SPENDORA', slug: 'spendora-finance-app' },
-  { id: '05', name: 'NAIQ DRIVER', slug: 'naiq-shuttle-app' },
-  { id: '01', name: 'EVILLAGE', slug: 'evillage-smart-village' },
-  { id: '02', name: 'ELKOPRA', slug: 'elkopra-financial-system' },
-  { id: '03', name: 'MY KOPKAR', slug: 'kopkar-toyota' },
-  { id: '04', name: 'NAIQ USER', slug: 'naiq-shuttle-app' },
+  { id: '08', name: 'WEB 3D LIDAR', slug: 'tni-3d-tactical-scan-viewer' },
+  { id: '06', name: 'WEB DEVOPS', slug: 'website-monitoring-platform' },
+  { id: '05', name: 'MY KOPKAR', slug: 'kopkar-toyota' },
+  { id: '01', name: 'SPENDORA', slug: 'spendora-finance-app' },
+  { id: '02', name: 'NAIQ USER', slug: 'naiq-shuttle-app' },
+  { id: '03', name: 'EVILLAGE', slug: 'evillage-smart-village' },
+  { id: '04', name: 'ELKOPRA', slug: 'elkopra-financial-system' },
+  { id: '07', name: 'NAIQ DRIVER', slug: 'naiq-shuttle-app' },
 ];
 
 export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecOps } = {}) {
@@ -38,9 +39,9 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
   stage.tabIndex = 0;
 
   // Soft fill keeps the gallery readable while preserving detail in bright artwork.
-  scene.add(new THREE.HemisphereLight(0xdceaff, 0x221a14, 0.3));
-  scene.add(new THREE.AmbientLight(0xffffff, 0.18));
-  const galleryFill = new THREE.DirectionalLight(0xffe6c8, 0.2);
+  scene.add(new THREE.HemisphereLight(0xdceaff, 0x221a14, 0.43));
+  scene.add(new THREE.AmbientLight(0xffffff, 0.2));
+  const galleryFill = new THREE.DirectionalLight(0xffe6c8, 0.27);
   galleryFill.position.set(1.5, 5.8, 3.0);
   galleryFill.castShadow = true;
   galleryFill.shadow.mapSize.set(1024, 1024);
@@ -63,7 +64,6 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
   let disposed = false;
   let lastTime = performance.now();
   let isPageScrolling = false;
-  let lastScrollY = window.scrollY;
   let wasInViewport = false;
   let arrivedAtTargetTime = 0;
 
@@ -113,7 +113,7 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
     if (targets.length === 0 || isPageScrolling) return;
     const now = performance.now();
 
-    // Bottom boundary (Portfolio 7):
+    // Bottom boundary at the last artwork:
     if (direction > 0 && selectedIndex === targets.length - 1) {
       if (transition.active || now < arrivedAtTargetTime + BOUNDARY_SETTLE_DELAY) {
         return;
@@ -207,15 +207,14 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
       return;
     }
 
-    // At the first artwork, let upward wheel input return to the page so the
-    // portfolio tabs remain easy to reach. The DevSecOps shortcut is also in-view.
+    // At the first artwork, upward input returns to normal page scrolling so
+    // the visitor can continue to the Experience section above the gallery.
     const direction = event.deltaY > 0 ? 1 : -1;
     if (direction < 0 && selectedIndex === 0) {
       if (transition.active || now < arrivedAtTargetTime + NORMAL_SETTLE_DELAY) {
         event.preventDefault();
         return;
       }
-      wasInViewport = false;
       return;
     }
 
@@ -236,7 +235,7 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
       return;
     }
 
-    // Bottom boundary (Portfolio 7): must stay still ("diam dulu") before exiting down to #organisasi
+    // At the last artwork, pause before continuing down to #organisasi.
     if (direction > 0 && selectedIndex === targets.length - 1) {
       if (now < arrivedAtTargetTime + BOUNDARY_SETTLE_DELAY) {
         return;
@@ -254,23 +253,6 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
     lastWheelAt = now;
 
     moveSelection(direction);
-  }
-
-  function onWindowScroll() {
-    const currentScrollY = window.scrollY;
-    const isScrollingUp = currentScrollY < lastScrollY;
-    lastScrollY = currentScrollY;
-
-    if (!modelLoaded || targets.length === 0 || isPageScrolling) return;
-
-    const rect = stage.getBoundingClientRect();
-    // When scrolling UP from below into the stage, prepare from the last project
-    if (isScrollingUp && rect.bottom > 100 && rect.bottom < window.innerHeight + 200 && rect.top < 0) {
-      if (selectedIndex === 0) {
-        selectedIndex = targets.length - 1;
-        focusProject(selectedIndex, false);
-      }
-    }
   }
 
   let touchStartY = 0;
@@ -451,26 +433,11 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
   function onModelLoaded(gltf) {
     if (disposed) return;
     const gallery = gltf.scene;
-    // Blender's spotlights export at roughly 24,000 cd each. A small cap keeps
-    // their pools visible without bleaching the artwork textures in WebGL.
+    // Keep exported Blender lights at a restrained level; per-artwork WebGL
+    // spotlights below provide predictable illumination across browsers.
     gallery.traverse((object) => {
       if (object.isLight) object.intensity = Math.min(object.intensity * 0.006, 120);
     });
-    // DevSecOps is shown in its dedicated 2D view. Reuse the seventh frame for
-    // the web-based TNI project so this gallery stays focused on Web & Mobile.
-    const oldDevOpsTitle = gallery.getObjectByName('DEVOPS MONITORING');
-    if (oldDevOpsTitle) oldDevOpsTitle.visible = false;
-    const tniPrint = gallery.getObjectByName('Portfolio print | 07');
-    if (tniPrint?.isMesh) {
-      const tniTexture = new THREE.TextureLoader().load('/asset/tni.webp');
-      tniTexture.colorSpace = THREE.SRGBColorSpace;
-      const materials = Array.isArray(tniPrint.material) ? tniPrint.material : [tniPrint.material];
-      materials.forEach((material) => {
-        material.map = tniTexture;
-        material.color?.set(0xffffff);
-        material.needsUpdate = true;
-      });
-    }
     scene.add(gallery);
     gallery.updateMatrixWorld(true);
 
@@ -510,6 +477,21 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
       targets.push({ ...project, center, normal, object: print });
     });
 
+    // glTF may omit Blender spotlights depending on export settings. Add a
+    // warm, restrained spot at each actual artwork position so every wall is
+    // visibly lit in the web viewer as well as in Blender.
+    targets.forEach((target) => {
+      const lamp = new THREE.SpotLight(0xffd9a6, 115, 8.5, Math.PI / 5.4, 0.78, 2);
+      lamp.position.copy(target.center)
+        .addScaledVector(target.normal, 2.25)
+        .add(new THREE.Vector3(0, 1.35, 0));
+      lamp.target.position.copy(target.center);
+      lamp.castShadow = false;
+      lamp.name = `Web artwork spotlight | ${target.id}`;
+      lamp.target.name = `Web artwork spotlight target | ${target.id}`;
+      scene.add(lamp, lamp.target);
+    });
+
     if (loaderEl) {
       loaderEl.hidden = true;
     }
@@ -530,11 +512,12 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
 
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(canvasHost);
-  stage.addEventListener('wheel', onWheel, { passive: false });
+  // Listen once at the window level. A stage listener here would receive the
+  // same bubbling wheel event a second time and could reset the gallery index
+  // while the page is leaving the first artwork.
   window.addEventListener('wheel', onWheel, { passive: false });
   stage.addEventListener('touchstart', onTouchStart, { passive: true });
   stage.addEventListener('touchend', onTouchEnd, { passive: true });
-  window.addEventListener('scroll', onWindowScroll, { passive: true });
   canvasHost.addEventListener('mousedown', onMouseDown);
   window.addEventListener('mouseup', onMouseUp);
   canvasHost.addEventListener('click', onCanvasClick);
@@ -575,11 +558,9 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
     cancelAnimationFrame(animationFrame);
     resizeObserver.disconnect();
     visibilityObserver.disconnect();
-    stage.removeEventListener('wheel', onWheel);
     window.removeEventListener('wheel', onWheel);
     stage.removeEventListener('touchstart', onTouchStart);
     stage.removeEventListener('touchend', onTouchEnd);
-    window.removeEventListener('scroll', onWindowScroll);
     canvasHost.removeEventListener('mousedown', onMouseDown);
     window.removeEventListener('mouseup', onMouseUp);
     canvasHost.removeEventListener('click', onCanvasClick);
