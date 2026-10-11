@@ -957,3 +957,6 @@
     PROJECTS_EN: PROJECTS_EN_TRANSLATIONS
   };
 })();
+
+export default (typeof window !== "undefined" ? window.i18n : null);
+

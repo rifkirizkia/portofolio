@@ -5,7 +5,7 @@
  * CSS architecture diagrams, and gallery lightboxes.
  */
 
-document.addEventListener("DOMContentLoaded", function () {
+function initPortfolioApp() {
   const projectsData = window.PROJECTS_DATA || [];
   
   // Elements
@@ -1214,4 +1214,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Start initialization
   initPortfolio();
-});
+}
+
+if (typeof document !== "undefined") {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initPortfolioApp);
+  } else {
+    initPortfolioApp();
+  }
+}
+
+export default initPortfolioApp;
+

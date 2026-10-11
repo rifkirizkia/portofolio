@@ -1,0 +1,24 @@
+# Rifki Rizkia — DevOps Engineer & Software Developer
+
+> Official portfolio, case studies, and engineering documentation of Rifki Rizkia. Specializing in DevSecOps pipelines, automated CI/CD workflows, Docker Swarm containerization, cloud infrastructure (GCP & AWS), and fullstack/mobile application development.
+
+## Core Navigation
+- [Tentang (About)](https://portofolio.rifkirizkia.site/#tentang): Ringkasan profil, biografi singkat, dan kompetensi teknis.
+- [Pengalaman (Experience)](https://portofolio.rifkirizkia.site/#pengalaman): Rekam jejak karier di bidang DevSecOps, Web, dan Mobile Development.
+- [Projek & Studi Kasus (Projects)](https://portofolio.rifkirizkia.site/#projek): Showcase proyek web 3D interaktif, aplikasi mobile Flutter, dan sistem enterprise.
+- [Kontak (Contact)](https://portofolio.rifkirizkia.site/#kontak): Hubungi untuk peluang kolaborasi, konsultasi infrastruktur cloud, dan rekayasa perangkat lunak.
+
+## Featured Engineering Case Studies
+- [TNI Tactical 3D Scan & Simulation Viewer](https://portofolio.rifkirizkia.site/#case-study/tni-3d-tactical-scan-viewer): Platform web 3D visualisasi fotogrametri & LiDAR untuk analisis taktis militer menggunakan Three.js dan kompresi Draco.
+- [CI/CD Automation & Docker Swarm Cluster](https://portofolio.rifkirizkia.site/#case-study/cicd-swarm-infrastructure): Alur deployment otomatis tanpa downtime dengan GitHub Actions dan kluster Docker Swarm.
+- [SonarQube & OWASP ZAP Security Gate](https://portofolio.rifkirizkia.site/#case-study/sonarqube-code-quality-gate): Pengujian keamanan kode statis (SAST) dan pemindaian kerentanan web dinamis (DAST) terintegrasi pada pipeline CI/CD.
+- [NetMon - Server & Network Monitoring](https://portofolio.rifkirizkia.site/#case-study/website-monitoring-platform): Platform pemantauan ketersediaan multi-node dengan alert otomatis via Telegram dan WhatsApp.
+- [NAIQ - Smart Campus Shuttle & Live Tracking](https://portofolio.rifkirizkia.site/#case-study/naiq-shuttle-app): Aplikasi mobile pemesanan shuttle kampus dengan pelacakan armada real-time via Flutter dan WebSocket.
+- [Kopkar Toyota Mobile Member & IoT Smart Vending](https://portofolio.rifkirizkia.site/#case-study/kopkar-toyota): Aplikasi koperasi karyawan terintegrasi API mesin vending otomatis berbasis IoT.
+- [Elkopra - Financial System](https://portofolio.rifkirizkia.site/#case-study/elkopra-financial-system): Sistem PWA koperasi simpan pinjam dengan transaksi aman dan laporan keuangan terpusat.
+- [Spendora - Personal Finance & Multi-Currency Tracker](https://portofolio.rifkirizkia.site/#case-study/spendora-finance-app): Aplikasi pengelola keuangan pribadi dengan analitik pengeluaran multi-mata uang.
+
+## Professional Links & Profiles
+- [GitHub Profile](https://github.com/rifkirizkia): Repositori kode sumber, pipeline CI/CD, dan proyek open-source.
+- [LinkedIn Profile](https://linkedin.com/in/rifki-rizkia): Profil profesional dan riwayat karier.
+- [Email Contact](mailto:rifkirizkia45@gmail.com): Komunikasi dan penawaran kerja sama langsung via email.

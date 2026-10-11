@@ -96,4 +96,10 @@
   }
 
 
-if (typeof module !== "undefined") module.exports = createProjectCardHTML;
+if (typeof window !== "undefined") {
+  window.createProjectCardHTML = createProjectCardHTML;
+}
+
+export default createProjectCardHTML;
+export { createProjectCardHTML };
+
