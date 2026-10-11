@@ -33,7 +33,7 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isTouchDevice ? 1.35 : 1.7));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 0.72;
+  renderer.toneMappingExposure = 0.66;
   renderer.shadowMap.enabled = !isTouchDevice;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   canvasHost.appendChild(renderer.domElement);
@@ -41,9 +41,9 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
   stage.tabIndex = 0;
 
   // Soft fill keeps the gallery readable while preserving detail in bright artwork.
-  scene.add(new THREE.HemisphereLight(0xdceaff, 0x221a14, 0.43));
-  scene.add(new THREE.AmbientLight(0xffffff, 0.2));
-  const galleryFill = new THREE.DirectionalLight(0xffe6c8, 0.27);
+  scene.add(new THREE.HemisphereLight(0xdceaff, 0x221a14, 0.42));
+  scene.add(new THREE.AmbientLight(0xffffff, 0.22));
+  const galleryFill = new THREE.DirectionalLight(0xffe6c8, 0.24);
   galleryFill.position.set(1.5, 5.8, 3.0);
   galleryFill.castShadow = !isTouchDevice;
   galleryFill.shadow.mapSize.set(1024, 1024);
@@ -480,13 +480,32 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
   function onModelLoaded(gltf) {
     if (disposed) return;
     const gallery = gltf.scene;
-    // Keep exported Blender lights at a restrained level; per-artwork WebGL
-    // spotlights below provide predictable illumination across browsers.
+    // Keep exported Blender lights restrained, while giving the six ceiling
+    // fixtures enough output to visibly wash the gallery floor and artwork.
     gallery.traverse((object) => {
-      if (object.isLight) object.intensity = Math.min(object.intensity * 0.006, 120);
+      if (!object.isLight) return;
+      if (object.name.includes('Modern ceiling wash')) {
+        // The exported spot direction can vary by renderer, so the web viewer
+        // adds a broad, explicitly downward beam from each visible fixture.
+        object.intensity = 0;
+      } else {
+        object.intensity = Math.min(object.intensity * 0.0048, 95);
+      }
     });
     scene.add(gallery);
     gallery.updateMatrixWorld(true);
+
+    gallery.traverse((object) => {
+      if (!object.isMesh || !object.name.includes('recessed graphite housing')) return;
+      const position = object.getWorldPosition(new THREE.Vector3());
+      const lamp = new THREE.SpotLight(0xffe7c7, 38, 10, Math.PI / 2.35, 0.9, 1.5);
+      lamp.position.copy(position).add(new THREE.Vector3(0, -0.08, 0));
+      lamp.target.position.copy(position).add(new THREE.Vector3(0, -5, 0));
+      lamp.castShadow = false;
+      lamp.name = `Web ceiling wash | ${object.name}`;
+      lamp.target.name = `Web ceiling wash target | ${object.name}`;
+      scene.add(lamp, lamp.target);
+    });
 
     PROJECT_STOPS.forEach((project) => {
       const sanitizedName = THREE.PropertyBinding?.sanitizeNodeName
@@ -528,7 +547,7 @@ export function createPortfolio3D(root, { onComplete, onCaseStudy, onOpenDevSecO
     // warm, restrained spot at each actual artwork position so every wall is
     // visibly lit in the web viewer as well as in Blender.
     targets.forEach((target) => {
-      const lamp = new THREE.SpotLight(0xffd9a6, 115, 8.5, Math.PI / 5.4, 0.78, 2);
+      const lamp = new THREE.SpotLight(0xffd9a6, 78, 8.5, Math.PI / 5.4, 0.78, 2);
       lamp.position.copy(target.center)
         .addScaledVector(target.normal, 2.25)
         .add(new THREE.Vector3(0, 1.35, 0));

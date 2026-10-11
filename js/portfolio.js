@@ -23,15 +23,22 @@ function initPortfolioApp() {
   let currentCategory = "all";
   let showOnlyFeatured = true;
   let disposePortfolio3D = null;
+  const desktop3DQuery = window.matchMedia("(min-width: 768px)");
+  let renderTimeout = null;
 
   // Initialize Portfolio UI
   function initPortfolio() {
-    renderProjects();
+    renderProjects(true);
     setupTabListeners();
     setupHashRouting();
     setupLightboxListeners();
     setupLanguageListener();
     setupNavLinks();
+    const onViewportChange = () => {
+      if (currentCategory === "all") renderProjects(true);
+    };
+    desktop3DQuery.addEventListener?.("change", onViewportChange);
+    if (!desktop3DQuery.addEventListener) desktop3DQuery.addListener?.(onViewportChange);
   }
 
   function setupNavLinks() {
@@ -96,7 +103,7 @@ function initPortfolioApp() {
         disposePortfolio3D = null;
       }
 
-      if (currentCategory === "all") {
+      if (currentCategory === "all" && desktop3DQuery.matches) {
         projectsGrid.className = "portfolio-3d-root w-full";
         projectsGrid.innerHTML = `
           <section class="portfolio-3d-shell" aria-label="Galeri 3D portofolio">
@@ -194,10 +201,13 @@ function initPortfolioApp() {
       }
 
       if (animate) {
-        requestAnimationFrame(() => {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
           projectsGrid.style.opacity = "1";
-          projectsGrid.style.transform = "translateY(0)";
-        });
+          projectsGrid.style.transform = "translateY(0) scale(1)";
+        }));
+      } else {
+        projectsGrid.style.opacity = "1";
+        projectsGrid.style.transform = "none";
       }
 
       // Refresh AOS animations if active
@@ -213,9 +223,13 @@ function initPortfolioApp() {
     };
 
     if (animate) {
+      projectsGrid.style.transition = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "none"
+        : "opacity 320ms ease, transform 320ms cubic-bezier(.22,.68,0,1)";
       projectsGrid.style.opacity = "0";
-      projectsGrid.style.transform = "translateY(12px)";
-      setTimeout(doRender, 180);
+      projectsGrid.style.transform = "translateY(10px) scale(.99)";
+      clearTimeout(renderTimeout);
+      renderTimeout = setTimeout(doRender, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 180);
     } else {
       doRender();
     }
